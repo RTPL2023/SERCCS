@@ -1,0 +1,371 @@
+﻿@model SERCCS.Models.Views.AuMasterViewModel
+@{
+    ViewData["Title"] = "AuMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .heading {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color: saddlebrown;
+        font-size: 30px;
+        text-align: center;
+    }
+
+    body {
+        /*font-weight:bold;*/
+        color: darkslategrey;
+        /*font-size: 12px*/
+    }
+
+    .size {
+        height: 30px;
+        width: 138px;
+    }
+
+    .sizeM {
+        height: 30px;
+        width: 180px;
+    }
+
+    .size2 {
+        height: 40px;
+        width: 320px;
+    }
+
+    .size1 {
+        height: 35px;
+        width: 270px;
+    }
+
+    .bsizetxt {
+        height: 25px;
+        width: 200px;
+    }
+
+    .sizegap {
+        height: 10px;
+        width: 30px;
+    }
+
+    .image {
+        height: 130px;
+        width: 100px;
+    }
+
+    .zoomimage {
+        height: 260px;
+        width: 200px;
+    }
+
+    .sign {
+        height: 40px;
+        width: 170px;
+    }
+
+    .zoomsign {
+        height: 100px;
+        width: 300px;
+    }
+
+    .fixed_header {
+        width: 700px;
+        table-layout: fixed;
+        border-collapse: collapse;
+    }
+
+        .fixed_header tbody {
+            display: block;
+            width: 100%;
+            overflow: auto;
+            height: 300px;
+        }
+
+        .fixed_header thead tr {
+            display: block;
+        }
+
+        .fixed_header thead {
+            background: #00008B;
+            color: #fff;
+        }
+
+        .fixed_header th,
+        .fixed_header td {
+            padding: 5px;
+            text-align: left;
+            width: 200px;
+        }
+
+    .rounded-corners {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid green;
+    }
+
+    .rounded-corners_tr {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid;
+        border-color: transparent
+    }
+
+    .rounded-corners1 {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid brown;
+        background-color: rgb(247,217,211,0.3);
+        color: #ac371f;
+    }
+    /*.heading {
+        background-color: #4361b7;
+        text-align: center;
+        padding-bottom: 05px;
+        margin-top: 05px;
+        color: #fff;
+    }*/
+
+    table.bordered {
+        border-collapse: collapse;
+        font-size: 12px;
+    }
+
+        table.bordered td, table.bordered th {
+            border: 1px solid black;
+            text-align: center;
+            padding: 8px;
+        }
+
+    .outer-wrapper {
+        margin: 10px;
+        margin-left: 20px;
+        margin-right: 20px;
+        max-height: fit-content;
+    }
+
+    .table-wrapper {
+        overflow-y: scroll;
+        overflow-x: scroll;
+        height: fit-content;
+        max-height: 66.4vh;
+    }
+
+    .outer-wrapper2 {
+        margin: 10px;
+        max-height: fit-content;
+    }
+
+    .table-wrapper2 {
+        overflow-y: scroll;
+        overflow-x: scroll;
+        height: fit-content;
+        max-height: 66.4vh;
+    }
+
+    input {
+        background-color: rgba( 173,216,230, 0.4);
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    select {
+        background-color: rgba( 173,216,230, 0.4);
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    input:focus {
+        background-color: rgba(249,98,159, 0.4);
+    }
+
+    select:focus {
+        background-color: rgba( 173,216,230, 0.4);
+    }
+
+    .btn_size {
+        width: 180px;
+        height: 40px;
+        font-size: 14px;
+    }
+    .tab {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        border-collapse: collapse;
+        width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: bold
+    }
+
+        .tab tbody {
+            display: block;
+            width: 800px;
+            overflow: auto;
+            height: 250px;
+            text-align: center;
+            color: #133E87;
+        }
+
+        .tab td, .tab th {
+            border: 1px solid #ddd;
+            border-collapse: collapse;
+            width: 800px;
+        }
+
+        .tab td {
+            padding: 3px;
+        }
+
+        .tab tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .tab tr:hover {
+            background-color: rgba(255, 182, 193, 0.4);
+        }
+
+        .tab th {
+            padding: 5px;
+            text-align: center;
+            /*background-color: #04AA6D;*/
+            background-color: #BC7C7C;
+            font-size: 13px;
+            color: #492929;
+            position: sticky;
+            top: 0;
+            border: 1px solid #ddd;
+            /* border-radius: 5px*/
+        }
+</style>
+
+<form asp-controller="Master" asp-action="AuMaster" method="post">
+    <div class="heading mt-4">
+        AU Master
+    </div>
+
+    <div class="container mt-1" cellpadding="0" cellspacing="0" border="1">
+        <div class="row mt-3 justify-content-md-center">
+            <div class="col-md-8 col-lg-8 col-12 pl-5 divbox">
+                <div class="row">
+
+                    <div class="col-md-4 col-sm-12 col-12 mt-3">
+                        AU:
+                    </div>
+                    <div class="col-md-8 col-sm-12 col-12 mt-3">
+                        @Html.TextBoxFor(p => p.au, new { @class = "size", @onkeypress = "javascript: return evtau(event);" })
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-md-4 col-sm-12 col-12 mt-3">
+                        Name:
+                    </div>
+                    <div class="col-md-8 col-sm-12 col-12 mt-3">
+                        @Html.TextBoxFor(p => p.name, new { @class = "sizebig", @onkeypress = "javascript: return evtname(event);" })
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-12">
+                        <input id="btnSave" type="button" name="btnSave" Height="40" Width="100" class="btn btn-primary btn-sm" value="SAVE" onclick="SaveData()" />
+                    </div>
+                    @*<div class="col-lg-2 col-md-2 col-sm-12 col-12 text-center">
+                        <input id="btnUpdate" type="button" name="btnUpdate" Height="40" Width="100" class="btn btn-primary btn-sm" value="UPDATE" onclick="UpdateData()" />
+                    </div>*@
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center">
+                <div class="table-responsive mt-1">
+                    <table id="AUList" class="tab">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="height:50px"></div>
+</form>
+
+@section scripts
+{
+    <script src="~/js/jquery-3.6.1.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#au').focus();
+            ShowTable();
+        });
+
+        function SaveData() {
+            if ($('#au').val() == null || $('#au').val() == "") {
+                alert("AU cannot Be Blanked");
+                $('#au').focus();
+            }
+            else if ($('#name').val() == null || $('#name').val() == "") {
+                alert("Name Cannot be Blank");
+                $('#name').focus();
+            }
+            else {
+                    let ModelObject = {
+                        au: $('#au').val(),
+                        name: $('#name').val(),
+                    };
+                    /*alert(JSON.stringify(ModelObject));*/
+                    $.ajax({
+                        url: '@Url.Action("SaveAuMaster", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            alert(data);                            
+                            $('#au').val("");
+                            $('#name').val("");
+                            $('#au').focus();
+                            ShowTable();                                                       
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+                 }
+        }
+
+        function ShowTable() {
+            /*let ModelObject = { caste_id: $('#caste_id').val()};*/
+                    $.ajax({
+                    type: "POST",
+                         url: '@Url.Action("GeList", "Master")',
+                        //data: ModelObject,
+                        dataType: "json",
+                    success: function (data) {
+                        document.getElementById("AUList").innerHTML = data;
+                    },
+                     error: function (err) {
+                    //alert("Error Occured");
+                     }
+                    });
+        }
+
+        function evtau(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                $('#name').focus();
+            }
+        }
+
+        function evtname(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                $('#btnSave').focus();
+            }
+        }
+    </script>
+}
+
