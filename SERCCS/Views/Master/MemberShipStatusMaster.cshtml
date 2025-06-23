@@ -1,0 +1,330 @@
+﻿@model SERCCS.Models.Views.MembershipStatusMasterViewModel
+@{
+    ViewData["title"] = "MemberShipStatusMaster";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .size {
+        width: 180px;
+        height: 25px;
+    }
+
+    .sizeS {
+        width: 60px;
+        height: 25px;
+        text-transform: uppercase;
+    }
+
+    .sizebig {
+        width: 400px;
+        height: 25px;
+        text-transform: uppercase;
+    }
+
+    .heading {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color: #4335A7;
+        font-size: 30px;
+        text-align: center;
+    }
+
+    .tab {
+        font-size: 12px;
+        border-collapse: collapse;
+        width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: bold
+    }
+
+        .tab tbody {
+            display: block;
+            width: 1000px;
+            overflow: auto;
+            height: 280px;
+            text-align: center;
+            color: #133E87;
+        }
+
+        .tab td, .tab th {
+            border: 1px solid #ddd;
+            padding: 5px;
+            border-collapse: collapse;
+            width: 1000px;
+        }
+
+        .tab tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .tab tr:hover {
+            background-color: rgba(255, 182, 193, 0.4);
+        }
+
+        .tab th {
+            padding: 7px;
+            text-align: center;
+            /*background-color: #04AA6D;*/
+            background-color: #BC7C7C;
+            font-size: 14px;
+            color: #492929;
+            position: sticky;
+            top: 0;
+            border: 1px solid #ddd;
+        }
+
+    input:focus {
+        background-color: rgba( 255, 182, 193, 0.3);
+    }
+
+    input {
+        background-color: rgba( 255, 182, 193, 0.4);
+        color: #4335A7;
+        font-weight: bold;
+        font-size: 14px;
+        padding-left: 5px;
+        padding-top: 2px;
+        padding-bottom: 2px
+    }
+
+    select {
+        background-color: rgba( 255, 182, 193, 0.4);
+        color: crimson;
+        font-weight: bold;
+        font-size: 14px;
+        padding-left: 5px;
+        padding-top: 2px;
+        padding-bottom: 2px
+    }
+
+        select:focus {
+            background-color: rgba( 255, 182, 193, 0.3);
+        }
+
+    input[readonly] {
+        background-color: whitesmoke;
+        color: gray;
+    }
+
+    .divbox {
+        background-color: #eaeef3;
+        color: #474E93;
+        border: 2px solid #474E93;
+        border-radius: 20px;
+        font-weight: bold
+    }
+
+    .divbox2 {
+        background-color: #bfc2dfe8;
+        border: 1px solid #3326e5;
+        color: #100e5a;
+    }
+
+    .divbox2_head {
+        background-color: #bfc2dfe8;
+        color: #3326e5;
+        margin-top: -8px;
+    }
+</style>
+
+
+<form asp-controller="Master" asp-action="MemberShipStatusMaster" method="post">
+    <div class="heading mt-4">
+        Membership Status Master
+    </div>
+    <div></div>
+    <div class="container mt-2" cellpadding="0" cellspacing="0" border="10">
+        <div class="row mt-3 justify-content-md-center">
+            <div class="col-md-12 col-lg-12 col-12 pl-5 divbox">
+
+                <div class="col-md-3 col-sm-12 col-12 mb-2">
+                    Code:
+                </div>
+                <div class="col-md-9 col-sm-12 col-12 mb-2">
+                    @Html.TextBoxFor(p => p.code, new { @class = "size" })
+                </div>
+                <div class="col-md-3 col-sm-12 col-12 mb-2">
+                    Description:
+                </div>
+                <div class="col-md-9 col-sm-12 col-12 mb-2">
+                    @Html.TextBoxFor(p => p.description, new { @class = "size" })
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                        <input id="btnSave" type="button" name="btnSave" Height="40" Width="100" class="btn btn-primary btn-sm pull-left" value="SAVE" onclick="savedata()" />
+                    </div>                   
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                        <input id="btnUpdate" type="button" name="btnUpdate" Height="40" Width="100" class="btn btn-primary btn-sm pull-left" value="UPDATE" onclick="update()" />
+                    </div>                  
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                        <input id="btnAddnew" type="button" name="btnAddnew" Height="40" Width="100" class="btn btn-primary btn-sm pull-left" value="Add New" onclick="AddNew()" />
+                    </div>
+                </div>
+                <div class="table-responsive mt-1 ">
+                    <table POITable class="tab">
+                        <tbody id="memberlist">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section scripts
+{
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/start/jquery-ui.css">
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#btnUpdate').hide();
+            $('#btnAddnew').hide();
+            ShowTable();
+        });
+
+        function savedata() {
+            if ($('#code').val() == null || $('#code').val() == "") {
+                alert("Code Cannot Be Blank");
+                $('#code').focus();
+            }
+            else if ($('#description').val() == null || $('#description').val() == "") {
+                alert("Description Cannot Be Blank");
+                $('#description').focus();
+            }
+            else {
+                     let ModelObject = {
+                        code: $('#code').val(),
+                        description: $('#description').val()
+                    };
+                    /*alert(JSON.stringify(ModelObject));*/
+                    $.ajax({
+                        url: '@Url.Action("SaveMembershipStatus", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            alert(data);
+                            if (data == "Saved") {
+                                    $('#code').val(""),
+                                    $('#description').val(""),
+                                    $('#id').focus(),
+                                    ShowTable();
+                            }
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+
+                        }
+                    });
+
+                 }
+        }
+
+        function ShowTable() {
+                let ModelObject = {
+                    code: $('#code').val(),
+                    description: $('#description').val(),
+                };
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetAllStudentDetailsList", "Master")',
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        document.getElementById("memberlist").innerHTML = data;
+                    },
+                    error: function (err) {
+                        alert("Error Occured");
+                    }
+                });
+
+        }
+
+        //  click to viewing table on the text box//
+
+        (function () {
+            if (window.addEventListener) {
+                window.addEventListener('load', run, false);
+            }
+            else if (window.attachEvent) {
+                window.attachEvent('onload', run);
+            }
+
+            function run() {
+                var t = document.getElementById('memberlist');
+                t.onclick = function (event) {
+                    event = event || window.event;
+                    var target = event.target || event.srcElement;
+                    while (target && target.nodeName != 'TR') {
+                        target = target.parentElement;
+                    }
+
+                    var cells = target.cells;
+                    if (!cells.length || target.parentNode.nodeName == 'THEAD') {
+                        return;
+                    }
+                    var f1 = document.getElementById('code');
+                    var f2 = document.getElementById('description');
+
+                    f1.value = cells[0].innerHTML;
+                    f2.value = cells[1].innerHTML;
+                    document.getElementById('code').readOnly = true;
+                    $('#btnUpdate').show();
+                    $('#btnSave').hide();
+                    $('#btnAddnew').show();
+                };
+            }
+        })();
+
+        function update() {
+            if ($('#code').val() == null || $('#code').val() == "") {
+                alert("Code Cannot Be Blank");
+                $('#code').focus();
+            }
+            else if ($('#description').val() == null || $('#description').val() == "") {
+                alert("Description Cannot Be Blank");
+                $('#description').focus();
+            }
+            else {
+                    let ModelObject = {
+                        code: $('#code').val(),
+                        description: $('#description').val(),
+
+                    };
+                    $.ajax({
+                        url: '@Url.Action("UpdateDetails", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            alert(data);
+                            ShowTable();
+                            $('#code').val("");
+                            $('#description').val("");
+                            AddNew();
+                        },
+                        error: function (err) {
+                            //alert("Error Occured");
+                            alert(JSON.stringify(err));
+                            //alert(JSON.stringify(ModelObject));
+                        }
+                    });
+                 }
+        }
+
+        function AddNew() {
+            $('#btnUpdate').hide();
+            $('#btnSave').show();
+            $('#btnAddnew').hide();
+            document.getElementById('code').readOnly = false;
+            $('#code').val("");
+            $('#description').val("");
+        }
+
+    </script>
+
+}
+
