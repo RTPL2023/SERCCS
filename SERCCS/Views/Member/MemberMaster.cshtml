@@ -1,0 +1,502 @@
+﻿@model FinPro.Models.Views.MemberMasterViewModel
+@{
+    Layout = "../Shared/_layout.cshtml";
+    ViewBag.Title = "Member Master";
+}
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/datepicker.css" />
+<style>
+    .heading {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color: saddlebrown;
+        font-size: 30px;
+        text-align: center;
+    }
+
+    body {
+        /*font-weight:bold;*/
+        color: darkslategrey;
+    }
+
+    input {
+        background-color: rgba( 173,216,230, 0.4);
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    select {
+        background-color: rgba( 173,216,230, 0.4);
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    input:focus {
+        background-color: rgba(249,98,159, 0.6);
+    }
+
+    select:focus {
+        background-color: rgba( 173,216,230, 0.4);
+    }
+
+    .size {
+        height: 30px;
+        width: 100px;
+    }
+
+    .sizeM {
+        height: 30px;
+        width: 170px;
+    }
+
+    .sizesmall {
+        height: 30px;
+        width: 25px;
+    }
+
+    .sizeS {
+        height: 30px;
+        width: 60px;
+    }
+
+    .sizebig {
+        height: 30px;
+        width: 250px;
+    }
+
+    .rounded-corners {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid green;
+    }
+
+    .rounded-corners1 {
+        border-spacing: 5px;
+        border-collapse: separate;
+        border-radius: 5px;
+        background-color: #f2dfb7;
+        color: #aa1f2a;
+        border: 1px solid;
+        border-color: #aa1f2a;
+        padding: 10px
+    }
+
+    .rounded-corners2 {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 5px;
+        background-color: rgb(145, 95, 109,0.2);
+        color: #5D3FD3;
+        border: 1px solid;
+        border-color: #5D3FD3;
+        padding: 10px
+    }
+</style>
+
+<form asp-controller="Member" asp-action="MemberMaster" method="post">
+   
+    <div class="heading mt-2">
+        Member Master Entry
+    </div>
+    <div class="container" style="font-weight: bold; font-size: 14px">
+        <div class="row">
+            <table>
+                <tr>
+                    <td>
+                        @*<input id="btnadd" type="button" name="btnadd" Height="25" Width="25" class="btn btn-primary pull-right" value="Add" />*@
+                        <input id="btnsave" type="button" name="btnsave" Height="25" Width="25" class="btn btn-primary" value="Save" onclick="btnSaveClick()" />
+                        @*<input id="btnclr" type="button" name="btnclr" Height="25" Width="25" class="btn btn-primary pull-right" value="Clear All" />*@
+                        <input id="btnKYC" type="button" name="btnKYC" Height="25" Width="25" class="btn btn-primary" value="KYC" onclick="KycBtnClick()" />
+                        @if (this.User.IsInRole("ADMIN"))
+                        {
+                            <input id="BtnGenQueue" type="button" name="BtnGenQueue" Height="25" Width="25" class="btn btn-primary" value="Generate Queue" onclick="BtnGenQueueoOnClick()" />
+                        }
+                       
+                    </td>
+                    <td>
+                        <input id="btnExit" type="button" name="btnExit" Height="25" Width="25" class="btn btn-primary" value="Exit" onclick="btnExitClick()" />
+
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+        <div class="row mt-2">
+            <table class="rounded-corners2">
+                <tr>
+                    <td>
+
+                        Branch<span style="color:red">*</span><br />
+                       
+                        @Html.TextBoxFor(p => p.branchid, new { @class = " sizeM", @type = "text", maxlength = "15" })
+
+                    </td>
+                    <td class="sizesmall"></td>
+                    <td align="center" class="editor-field focus">
+                        Control No<span style="color:red">*</span> :<br />
+
+                        @Html.TextBoxFor(p => p.employeeid, new { @class = " sizeM", @type = "text", maxlength = "15", @onkeypress = "javascript: return evtEmployeeId(event);" })
+                    </td>
+                   
+                    <td>
+                        Membership Date<br />
+                        @Html.TextBoxFor(p => p.memberdate, new { @class = "sizeM", @type = "text", maxlength = "10" })
+                    </td>
+                    <td class="sizesmall"></td>
+                    <td>
+                        Share Holder Type<br />
+                     
+                        @Html.DropDownListFor(p => p.shtype, new SelectList(Model.shtypes, "Value", "Text"), new { @class = "sizeM" })
+                    </td>
+                    <td class="sizesmall"></td>
+                    <td align="center">
+                        Pay Category<br />
+                        @Html.DropDownListFor(p => p.paycategory, new SelectList(Model.paycategorys, "Value", "Text"), new { @class = "sizeM" })
+                    </td>
+                    <td align="center">
+                        Member Status<br />
+                        @Html.DropDownListFor(p => p.memstatus, new SelectList(Model.memstatuss, "Value", "Text"), new { @class = "sizeM" })
+                    </td>
+                </tr>
+            </table>
+        </div>
+      
+        <div class="row mt-1">
+            <table class="rounded-corners">
+                <tr>
+                    <td>
+                        Name<span style="color:red">*</span>:
+                        @Html.TextBoxFor(p => p.membername, new { @class = " sizebig", @type = "text", maxlength = "40" })
+
+                    </td>
+                    <td></td>
+                    <td>
+                        Birth Date<span style="color:red">*</span> :
+                        @Html.TextBoxFor(p => p.birthdate, new { @class = " sizeM", @type = "text", maxlength = "10", @onkeypress = "javascript: return evtBirthDate(event);" })@*, @id = "datepicker2"*@
+                    </td>
+                    <td></td>
+                    <td align="center">
+                        Retirement Age<span style="color:red">*</span> :
+                        @Html.TextBoxFor(p => p.retirage, new { @class = " size", @type = "text", maxlength = "6" })
+                    </td>
+                    <td align="center">
+                        B/U NO<span style="color:red">*</span> :
+                        @Html.TextBoxFor(p => p.buno, new { @class = " size", @type = "text", maxlength = "6" })
+                    </td>
+
+                    <td></td>
+                    <td>
+                        Sex :
+                      
+                        @Html.DropDownListFor(p => p.sex, new SelectList(new string[] { "MALE", "FEMALE","OTHER" }), new { @class = "size" })
+                    </td>
+                </tr>
+            </table>
+            <div class="row mt-1">
+                <table class="rounded-corners">
+                    <tr>
+
+
+                        <td>
+                            Joining Date
+                            <br />
+                            @Html.TextBoxFor(p => p.dateofjoining, new { @class = " size", @type = "text", maxlength = "10" })
+                        </td>
+                        <td> </td>
+                        <td>
+                            Retirement Date
+                            <br />
+                            @Html.TextBoxFor(p => p.dateofretirement, new { @class = " size", @type = "text", maxlength = "10" })
+                        </td>
+                        <td>
+                            Re Membership Date
+                            <br />
+                            @Html.TextBoxFor(p => p.dateofremember, new { @class = " size", @type = "text", maxlength = "10" })
+                        </td>
+                        <td>
+                            50% CMTD Withdrawal Date
+                            <br />
+                            @Html.TextBoxFor(p => p.wd50dt, new { @class = " size", @type = "text", maxlength = "10" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <table class="rounded-corners">
+                <tr>
+                    <td>
+                        Gurdian Name<span style="color:red">*</span> : <br />
+                        @Html.TextBoxFor(p => p.grdnname, new { @class = "sizebig", @type = "text", maxlength = "40" })
+                    </td>
+                    <td> </td>
+                    <td>
+                        Relationship With Member :<br />
+                        @Html.DropDownListFor(p => p.relnid, new SelectList(Model.relns, "Value", "Text"), new { @class = "sizeM" })
+                    </td>
+                    <td></td>
+                    <td>
+                        Caste :<br />@Html.DropDownListFor(p => p.casteid, new SelectList(Model.castes, "Value", "Text"), new { @class = "sizeM" })
+                    </td>
+                    <td></td>
+                    <td>
+                        Religion: <br /> @Html.DropDownListFor(p => p.relgnid, new SelectList(Model.relgns, "Value", "Text"), new { @class = " sizeM" })
+                    </td>
+                    <td></td>
+                  
+                    <td>
+                        @Html.CheckBoxFor(P => P.iflti) LTI &nbsp;&nbsp;&nbsp;&nbsp;
+                        @Html.CheckBoxFor(P => P.married) Married
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="row mt-1">
+            <table class="rounded-corners1">
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td colspan="4" style="background: #7C3030; color: #fff; padding:5px">MAILING ADDRESS </td>
+                            </tr>
+                            <tr>
+                                <td>House No.</td>
+                                <td colspan="3">  @Html.TextBoxFor(p => p.mailhno, new { @class = " w-100", @type = "text", maxlength = "15" })</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="3"> @Html.TextBoxFor(p => p.mailadd1, new { @class = " w-100", @type = "text", maxlength = "60" })</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="3">   @Html.TextBoxFor(p => p.mailadd2, new { @class = " w-100", @type = "text", maxlength = "60" })</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    City:
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.mailcity, new { @class = "size", @type = "text", maxlength = "15" })
+                                </td>
+                                <td>
+                                    District :
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.maildist, new { @class = "size", @type = "text", maxlength = "15" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left">
+
+                                    State
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.mailstate, new { @class = " size", @type = "text", maxlength = "2" })
+                                </td>
+                                <td>
+                                    Pin
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.mailpin, new { @class = " size", @type = "text", maxlength = "6" })
+                                </td>
+
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <img src="/Images/right.jpg" width="30px" height="30px" onclick="copyAddressToPermanent();" />
+
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td colspan="4" style="background: #7C3030; color: #fff; padding: 5px "> PERMANENT ADDRESS </td>
+                            </tr>
+                            <tr>
+                                <td>House No.</td>
+                                <td colspan="3">  @Html.TextBoxFor(p => p.permhno, new { @class = " w-100", @type = "text", maxlength = "15" })</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="3"> @Html.TextBoxFor(p => p.permadd1, new { @class = " w-100", @type = "text", maxlength = "60" })</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="3">   @Html.TextBoxFor(p => p.permadd2, new { @class = " w-100", @type = "text", maxlength = "60" })</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    City:
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.permcity, new { @class = "size", @type = "text", maxlength = "15" })
+                                </td>
+                                <td>
+                                    District :
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.permdist, new { @class = "size", @type = "text", maxlength = "15" })
+                                </td>
+                            </tr>
+                            <tr>
+
+                                <td align="left">
+
+                                    State
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.permstate, new { @class = " size", @type = "text", maxlength = "2" })
+                                </td>
+                                <td>
+                                    Pin
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.permpin, new { @class = " size", @type = "text", maxlength = "6" })
+                                </td>
+
+                            </tr>
+                        </table>
+
+                    </td>
+                  
+                </tr>
+
+            </table>
+        </div>
+      
+        <div class="row mt-1">
+            <table>
+                <tr>
+                   
+                    <td valign="top">
+                        <table class="rounded-corners1">
+                         
+                           
+                            <tr>
+                                <td colspan="3">
+                                    @Html.CheckBoxFor(p => p.membertransfered) Transfered
+                                    @Html.CheckBoxFor(p => p.memberretired) Retired
+                                    @Html.CheckBoxFor(p => p.memberclosed) Membership Closed
+                                    @Html.CheckBoxFor(p => p.isdead) Expired<br />
+                                    Expiry Date
+                                    @Html.TextBoxFor(p => p.expirydate, new { @class = " size", @type = "text", maxlength = "10" })
+                                    Close Date/Transfered Date
+                                    @Html.TextBoxFor(p => p.memberclosdt, new { @class = " size", @type = "text", maxlength = "10" })
+                                </td>
+                            </tr>
+
+                        </table>
+                    </td>
+                   
+                </tr>
+            </table>
+        </div>
+
+
+    </div>
+
+</form>
+
+@section scripts
+ {
+    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap-datepicker.js"></script>
+
+    <script type="text/javascript">
+
+
+      
+        function evtEmployeeId(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+
+                EmployeeIdEnter();
+            }
+        }
+
+        function EmployeeIdEnter() {
+             let ModelObject = { employeeid: $('#employeeid').val()};
+            //alert(JSON.stringify(ModelObject));
+            $.ajax({
+
+                type: "POST",
+                url: '@Url.Action("getDataByEmployeeId", "Member")',
+                data: ModelObject,
+                dataType: "json",
+                success: function (data) {
+                    $('#branchid').val(data.branch_id);
+                    $('#memberdate').val(data.strmember_date);
+                    $('#shtype').val(data.member_type);
+                    $('#paycategory').val(data.payment_mode);
+                    $('#memstatus').val(data.status);
+                    $('#membername').val(data.member_name);
+                    $('#birthdate').val(data.strbirth_date);
+                    $('#retirage').val(data.ra);
+                    $('#buno').val(data.buno);
+                    $('#sex').val(data.sex);
+                    $('#mailhno').val(data.mail_hno);
+                    $('#mailadd1').val(data.mail_add1);
+                    $('#mailadd2').val(data.mail_add2);
+                    $('#mailcity').val(data.mail_city);
+                    $('#maildist').val(data.mail_dist);
+                    $('#mailstate').val(data.mail_state);
+                    $('#mailpin').val(data.mail_pin);
+                    $('#permhno').val(data.perm_hno);
+                    $('#permadd1').val(data.perm_add1);
+                    $('#permadd2').val(data.perm_add2);
+                    $('#permcity').val(data.perm_city);
+                    $('#permdist').val(data.perm_dist);
+                    $('#permstate').val(data.perm_state);
+                    $('#permpin').val(data.perm_pin);
+                    $('#dateofjoining').val(data.strdate_of_joining);
+                    $('#dateofretirement').val(data.strdate_of_retirement);
+                    $('#dateofremember').val(data.strdate_of_remember);
+                    $('#wd50dt').val(data.strdo50pwcm);
+                    $('#grdnname').val(data.grdn_name);
+                    $('#relnid').val(data.reln_id);
+                    $('#casteid').val(data.caste_id);
+                    $('#relgnid').val(data.relgn_id);
+                    $('#expirydate').val(data.strexpiry_date);
+                    $('#memberclosdt').val(data.strmember_closdt);
+                    if (data.blif_lti == true) {
+                        $("#iflti").prop('checked', true);
+                    } else {
+                        $("#iflti").prop('checked', false);
+                    }
+                    if (data.blmarried == true) {
+                        $("#married").prop('checked', true);
+                    } else {
+                        $("#married").prop('checked', false);
+                    }
+                    if (data.membertransfered == true) {
+                        $("#membertransfered").prop('checked', true);
+                    } else {
+                        $("#membertransfered").prop('checked', false);
+                    }
+                    if (data.blmember_retired == true) {
+                        $("#memberretired").prop('checked', true);
+                    } else {
+                        $("#memberretired").prop('checked', false);
+                    }
+                    if (data.blmember_closed == true) {
+                        $("#memberclosed").prop('checked', true);
+                    } else {
+                        $("#memberclosed").prop('checked', false);
+                    }
+                    if (data.blis_dead == true) {
+                        $("#isdead").prop('checked', true);
+                    } else {
+                        $("#isdead").prop('checked', false);
+                    }
+                },
+
+                error: function (err) {
+                    alert("Error Occured");
+                }
+
+            });
+        }
+
+      
+
+    </script>
+
+}
