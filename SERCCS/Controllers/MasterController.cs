@@ -89,6 +89,7 @@ namespace SERCCS.Controllers
         /***************************************Share Holder Type End***************************************/
 
         /***************************************Membership Status Mast Start***************************************/
+        [HttpGet]
         public IActionResult MemberShipStatusMaster()
         {
             return View();
@@ -142,7 +143,7 @@ namespace SERCCS.Controllers
         /***************************************Membership Status Mast End***************************************/
 
         /***************************************Pay Category Mast Start***************************************/
-
+        [HttpGet]
         public IActionResult PayCategoryMaster(PayCategoryMastViewModel model)
         {
             return View(model);
@@ -202,5 +203,68 @@ namespace SERCCS.Controllers
         }
 
         /***************************************Pay Category Mast End***************************************/
+
+        /***************************************Branch Mast Start***************************************/
+        [HttpGet]
+        public IActionResult BranchMaster(BranchMasterViewModel model)
+        {
+            return View(model);
+        }
+        public JsonResult SaveBranchMaster(BranchMasterViewModel model)
+        {
+            BranchMast bm = new BranchMast();
+            bm.branch_id = model.branch_id.ToUpper();
+            bm.branch_name = model.branch_name.ToUpper();
+            if(model.branch_add1 != null)
+            {
+                bm.branch_add1 = model.branch_add1.ToUpper();
+            }
+            if(model.branch_add2 != null)
+            {
+                bm.branch_add2 = model.branch_add2.ToUpper();
+            }           
+            bm.branch_phone = model.branch_phone;
+            if(model.branch_sname != null)
+            {
+                bm.branch_sname = model.branch_sname.ToUpper();
+            }
+            if(model.branch_defa != null)
+            {
+                bm.branch_defa = model.branch_defa.ToUpper();
+            }           
+            model.msg = bm.CheckAndSaveBranchMaster(bm);
+            return Json(model.msg);
+        }
+        public JsonResult GetBranchMasterDetails()
+        {
+            BranchMast bm = new BranchMast();
+            List<BranchMast> bml = new List<BranchMast>();
+            bml = bm.getAllBranchList();
+            string fd = string.Empty;
+            int i = 1;
+            if (bml.Count > 0)
+            {
+                foreach (var a in bml)
+                {
+                    if (i == 1)
+                    {
+                        fd = "<tr><th>SR No</th><th>Branch Code</th><th>Branch Name</th><th>Address 1</th><th>Address 2</th><th>Branch Phone</th><th>Branch SName</th><th>Branch DEFA</th></tr>";
+                        fd = fd + "<tr><td>" + Convert.ToString(i) + "</td><td>" + a.branch_id + "</td><td>" + a.branch_name + "</td><td>" + a.branch_add1 + "</td><td>" + a.branch_add2 + "</td><td>" + a.branch_phone + "</td><td>" + a.branch_sname + "</td><td>" + a.branch_defa + "</td></tr>";
+                    }
+                    else
+                    {
+                        fd = fd + "<tr><td>" + Convert.ToString(i) + "</td><td>" + a.branch_id + "</td><td>" + a.branch_name + "</td><td>" + a.branch_add1 + "</td><td>" + a.branch_add2 + "</td><td>" + a.branch_phone + "</td><td>" + a.branch_sname + "</td><td>" + a.branch_defa + "</td></tr>";
+                    }
+                    i = i + 1;
+                }
+            }
+            else
+            {
+                fd = "";
+            }
+            return Json(fd);
+        }
+
+        /***************************************Branch Mast End***************************************/
     }
 }

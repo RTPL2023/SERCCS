@@ -13,19 +13,13 @@ namespace SERCCS.Models.Database
     {
         DBConfig config = new DBConfig();
         public Int32 Id {get; set;} 
-        public string UserID { get; set; }
-        public string UserName { get; set; }
-
-        public string Password { get; set; }
-
-        public string Role { get; set; }
-     
-        public string EmailID { get; set; }
-        public string NewPassword { get; set; }
+        public string allocated_branch_id {get; set;} 
+        public string user_id { get; set; }
+        public string user_name { get; set; }
+        public string user_password { get; set; }
+        public string user_role { get; set; }            
         public int Blocked { get; set; }
         public int tag { get; set; }
-
-
-       
+      
     }
 }

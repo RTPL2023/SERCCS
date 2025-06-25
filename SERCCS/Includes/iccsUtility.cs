@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SERCCS.Includes
 {
-    public static class FinProUility
+    public static class SERCCSUility
     {
         //public void clearTxt(Control container)
         //{
@@ -79,6 +79,7 @@ namespace SERCCS.Includes
 
         private static String[] units = { "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven",
     "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
+
         private static String[] tens = { "", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
 
 

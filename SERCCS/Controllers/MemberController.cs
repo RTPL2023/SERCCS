@@ -1,4 +1,4 @@
-﻿using FinPro.Models.Views;
+﻿using SERCCS.Models.Views;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SERCCS.Models.Database;
