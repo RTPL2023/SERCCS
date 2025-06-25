@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace FinPro.Models.Views
+namespace SERCCS.Models.Views
 {
     public class MemberMasterViewModel
     {

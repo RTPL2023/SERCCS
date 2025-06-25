@@ -40,6 +40,19 @@ namespace SERCCS.Models.Database
         public Int32 srl { get; set; }
 
         public Int32 Count { get; set; }
-       
+        public String getKycMobilenoByCont(string contno)
+        {
+            string sql = "Select mobile_no from KYC_DETAILS where CONT_NO='" + contno + "'";
+            KycDetails kd = new KycDetails();
+            config.singleResult(sql);
+
+            if (config.dt.Rows.Count > 0)
+            {
+                DataRow dr = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
+                kd.mobile_no = dr["mobile_no"].ToString();
+
+            }
+            return kd.mobile_no;
+        }
     }
 }

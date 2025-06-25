@@ -1,9 +1,11 @@
-﻿using FinPro.Models.Views;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SERCCS.Models.Database;
+using SERCCS.Models.Views;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -87,7 +89,73 @@ namespace SERCCS.Controllers
             return m.relgns;
         }
 
-       
+        public IEnumerable<SelectListItem> getAcHdDescForSB()
+        {
+            AccountOpeningViewModel m = new AccountOpeningViewModel();
+            DepTypeMast dtm = new DepTypeMast();
 
+            m.Ac_Hd_DESC = dtm.getAchdfromDeptypeMastForSB().ToList().Select(x => new SelectListItem
+            {
+                Value = x.ac_hd.ToString(),
+                Text = x.dep_desc.ToString()
+            }); ;
+
+            return m.Ac_Hd_DESC;
+        }
+        public IEnumerable<SelectListItem> getAcHdDesc()
+        {
+            AccountOpeningViewModel m = new AccountOpeningViewModel();
+            DepTypeMast dtm = new DepTypeMast();
+
+            m.Ac_Hd_DESC = dtm.getAchdfromDeptypeMast().ToList().Select(x => new SelectListItem
+            {
+                Value = x.ac_hd.ToString(),
+                Text = x.dep_desc.ToString()
+            }); ;
+
+            return m.Ac_Hd_DESC;
+        }
+
+        public IEnumerable<SelectListItem> getStatusDesc()
+        {
+            AccountOpeningViewModel m = new AccountOpeningViewModel();
+            DepositSplStatMast dssm = new DepositSplStatMast();
+
+            m.Ac_Category_DESC = dssm.getStatusDescfromDepositSplStatMast().ToList().Select(x => new SelectListItem
+            {
+                Value = x.spl_status.ToString(),
+                Text = x.status_desc.ToString()
+            }); ;
+
+            return m.Ac_Category_DESC;
+        }
+
+        public IEnumerable<SelectListItem> getOprnMode()
+        {
+            AccountOpeningViewModel m = new AccountOpeningViewModel();
+            DepositOprnMast dom = new DepositOprnMast();
+
+            m.Md_Of_Op_DESC = dom.getOprnModeFromDepositOprnMast().ToList().Select(x => new SelectListItem
+            {
+                Value = x.oprn_mode.ToString(),
+                Text = x.oprn_desc.ToString()
+            }); ;
+
+            return m.Md_Of_Op_DESC;
+        }
+        public MemoryStream DownloadTextFiles(string filename, string uploadPath)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), uploadPath, filename);
+            var memory = new MemoryStream();
+            if (System.IO.File.Exists(path))
+            {
+                var net = new System.Net.WebClient();
+                var data = net.DownloadData(path);
+                var content = new System.IO.MemoryStream(data);
+                memory = content;
+            }
+            memory.Position = 0;
+            return memory;
+        }
     }
 }

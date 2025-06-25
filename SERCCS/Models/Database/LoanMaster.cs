@@ -135,8 +135,60 @@ namespace SERCCS.Models.Database
 
 
 
-        
+
+        public LoanMaster getLoanMasterDetailByAcno(string acno, string achd)
+        {
+            string sql = "SELECT* FROM LOAN_MASTER WHERE BRANCH_ID = 'MN' AND AC_HD = '" + achd + "' AND LOAN_ID = '" + acno + "'";
+            config.singleResult(sql);
+            LoanMaster lm = new LoanMaster();
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    lm.loanee_name = dr["loanee_name"].ToString();
+                    lm.employee_id = dr["employee_id"].ToString();
+                    lm.loan_amt = Convert.ToDecimal(dr["loan_amt"]);
+                    lm.loan_date = Convert.ToDateTime(dr["loan_date"]);
+
+                }
+
+            }
+            else
+            {
+                lm = null;
+            }
+            return lm;
 
 
+
+        }
+        public LoanMaster getLoanMasterDetailByConno(string conno, string achd)
+        {
+            string sql = "SELECT* FROM LOAN_MASTER WHERE BRANCH_ID = 'MN' AND AC_HD = '" + achd + "' AND EMPLOYEE_ID = '" + conno + "' order by loan_date,loan_id";
+            config.singleResult(sql);
+            LoanMaster lm = new LoanMaster();
+            if (config.dt.Rows.Count > 0)
+            {
+                //foreach (DataRow dr in config.dt.Rows)
+                //{
+                DataRow dr = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
+
+                lm.loanee_name = dr["loanee_name"].ToString();
+                lm.loan_id = dr["loan_id"].ToString();
+                lm.loan_amt = Convert.ToDecimal(dr["loan_amt"]);
+                lm.loan_date = Convert.ToDateTime(dr["loan_date"]);
+
+                //}
+
+            }
+            else
+            {
+                lm = null;
+            }
+            return lm;
+
+
+
+        }
     }
 }

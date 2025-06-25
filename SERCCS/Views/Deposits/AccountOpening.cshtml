@@ -1,0 +1,756 @@
+﻿@model SERCCS.Models.Views.AccountOpeningViewModel
+@{
+    Layout = "../Shared/_layout.cshtml";
+    ViewBag.Title = "AccountOpening";
+}
+
+<style>
+    .heading {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color: saddlebrown;
+        font-size: 30px;
+        text-align: center;
+    }
+
+    body {
+        /*font-weight:bold;*/
+        color: darkslategrey;
+    }
+
+    .rounded-corners {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid green;
+    }
+
+    .rounded-corners1 {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid brown;
+    }
+
+    .rounded-corners2 {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid white;
+    }
+
+    .rounded-corners {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid green;
+    }
+
+    input {
+        background-color: rgba( 173,216,230, 0.4);
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    select {
+        background-color: rgba( 173,216,230, 0.4);
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    input:focus {
+        background-color: rgba(249,98,159, 0.2);
+    }
+
+    select:focus {
+        background-color: rgba( 173,216,230, 0.4);
+    }
+
+    .table-bordered {
+        border: 2px solid white
+    }
+
+    .tableT {
+        background-color: #ece9fb;
+        text-align: center;
+        font-size: 13px
+    }
+
+    .fixed_header {
+        width: 1200px;
+        table-layout: fixed;
+        border-collapse: collapse;
+    }
+
+    .fixed_header1 {
+        width: 200px;
+        table-layout: auto;
+        border-collapse: collapse;
+    }
+
+        .fixed_header1 tbody {
+            display: block;
+            width: 100%;
+            overflow: auto;
+            height: 100px;
+        }
+
+    .fixed_header tbody {
+        display: block;
+        width: 100%;
+        overflow: auto;
+        height: 300px;
+    }
+
+    .fixed_header1 thead tr {
+        display: block;
+    }
+
+    .fixed_header thead tr {
+        display: block;
+    }
+
+    .fixed_header thead {
+        background: #00008B;
+        color: #fff;
+    }
+
+    .fixed_header1 thead {
+        background: #00008B;
+        color: #fff;
+        padding: 10px;
+        width: 100px;
+    }
+
+    .fixed_header th,
+    .fixed_header td {
+        padding: 5px;
+        text-align: left;
+        width: 200px;
+    }
+
+    .fixed_header1 th,
+    .fixed_header1 td {
+        padding: 5px;
+        text-align: left;
+        width: 110px;
+    }
+
+    .small-size {
+        width: 90px;
+    }
+
+    .small-size1 {
+        width: 30px;
+    }
+
+    .big-size {
+        width: 250px;
+    }
+
+    .tbl {
+        margin: 0 auto;
+    }
+
+    .itemtab {
+        font-family: Arial, Helvetica, sans-serif;
+        /*font-size: 15px;*/
+        border-collapse: collapse;
+        width: 80%;
+    }
+
+        .itemtab tbody {
+            display: block;
+            width: 1120px;
+            overflow: auto;
+            height: 250px;
+        }
+
+        .itemtab td {
+            border: 2px solid #ddd;
+            padding: 8px;
+            padding-left: 8px;
+            padding-right: 8px;
+            text-align: center;
+            font-size: 12px
+        }
+
+        .itemtab tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .itemtab tr:hover {
+            background-color: #F7C1D3;
+        }
+
+        .itemtab th {
+            border: 2px solid white;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            padding-left: 8px;
+            padding-right: 8px;
+            text-align: center;
+            font-size: 15px;
+            /*background-color: #04AA6D;*/
+            background-color: #145f9f;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+    .btn_size {
+        width: 100px;
+        height: 30px;
+    }
+
+    .sizeS {
+        width: 60px;
+        height: 30px
+    }
+
+    .sizeXS {
+        width: 40px;
+        height: 30px
+    }
+
+    .size {
+        width: 180px;
+        height: 30px
+    }
+
+    .sizeM {
+        width: 90px;
+        height: 30px
+    }
+
+    .sizeM1 {
+        width: 110px;
+        height: 30px
+    }
+
+    .sizeL {
+        width: 190px;
+        height: 30px;
+        font-size: 12px
+    }
+
+    .sizebig {
+        width: 220px;
+        height: 30px;
+        font-size: 13px
+    }
+</style>
+
+<form asp-controller="Deposits" asp-action="AccountOpening" method="post">
+    <div class="heading mt-2">
+        Account Opening
+    </div>
+    <div class="container mt-3" style="font-weight:bold">
+        <div class="row">
+            <table class="rounded-corners1" style="background-color: #f2dfb7; color: brown; font-size: 15px">
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>
+                                    <input id="ButtonSAVE" type="button" value="SAVE" name="ButtonSAVE" class="btn btn-primary btn_size" onclick="SaveData()" />
+                                    <input id="ButtonAddNew" type="button" value="ADD NEW" name="ButtonAddNew" class="btn btn-primary btn_size" onclick="Reload()" />
+                                    <input id="ButtonEXIT" type="button" value="EXIT" name="ButtonEXIT" class="btn btn-primary btn_size" onclick="Home()" />
+
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="margin-top:10px">
+                            <tr>
+                                <td>
+                                    Branch<br />
+                                    @Html.DropDownListFor(p => p.BranchId, new SelectList(new string[] { "MN" }), new { @class = "sizeS" })
+                                </td>
+                                <td class="gap">
+                                </td>
+                                <td>
+                                    Account Head<br />
+                                    @Html.DropDownListFor(p => p.AcHd, new SelectList(Model.Ac_Hd_DESC, "Value", "Text"), new { @class = "size" })
+                                </td>
+                                <td class="gap">
+                                </td>
+                                <td>
+                                    Control No<br />
+                                    @Html.TextBoxFor(p => p.ContNo, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtContNo(event); " })
+                                </td>
+                                <td class="gap">
+                                </td>
+                                <td>
+                                    Account No<br />
+                                    @Html.TextBoxFor(p => p.AcNo, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtAcNo(event); " })
+                                </td>
+
+
+
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <table align="center" class="mt-2">
+                <tr>
+                    <td>
+                        Opening Date<br />
+                        @Html.TextBoxFor(p => p.OpenDate, new { @class = "size", @type = "text" })
+                    </td>
+                    <td>
+                        Category of Account<br />
+                        @Html.DropDownListFor(p => p.SplStatus, new SelectList(Model.Ac_Category_DESC, "Value", "Text"), new { @class = "size" })
+                    </td>
+
+                    <td>
+                        Mode of Operation<br />
+                        @Html.DropDownListFor(p => p.OprnMode, new SelectList(Model.Md_Of_Op_DESC, "Value", "Text"), new { @class = "size" })
+                    </td>
+                    <td id="chqfacility">
+                        Cheque Facility<br />
+                        @Html.DropDownListFor(p => p.ChqFacility, new SelectList(new string[] { "NO", "YES" }), new { @class = "sizeS" })
+                    </td>
+                </tr>
+            </table>
+            <h6 class="text-center bg-danger p-1 mt-2" style="color:whitesmoke">MEMBER HOLDER'S PARTICULARS</h6>
+            <table class="table table-bordered tableT" style="margin-top:-8px">
+                <tr style="background-color: #145f9f; color: white;">
+                    <th>Srl</th>
+                    <th>Member ID</th>
+                    <th>Member Name</th>
+                    <th>Guardian's Name'</th>
+                    <th>Relation</th>
+                    <th>Sex</th>
+                    <th>Occupation</th>
+                    <th>Sign</th>
+                    <th>LTI</th>
+                    <th>Pan No</th>
+
+                </tr>
+                <tr>
+
+                    <td>@Html.TextBoxFor(p => p.Srl1, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.MemberId1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.MemberName1, new { @class = "sizeL", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.GuardianName1, new { @class = "sizeL", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.Relation1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.Sex1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.Occupation1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.DropDownListFor(p => p.Sign1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                    <td>@Html.DropDownListFor(p => p.Lti1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                    <td>@Html.TextBoxFor(p => p.PanNo1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
+                    <td id="addbutton"><img src="~/Images/Plus.png" width="30" height="30" onclick="OpenNewRowForMember()" /></td>
+
+                </tr>
+                <tr id="NewMem">
+                    <td>@Html.TextBoxFor(p => p.Srl2, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.MemberId2, new { @class = "sizeM", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.MemberName2, new { @class = "sizeL", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.GuardianName2, new { @class = "sizeL", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.Relation2, new { @class = "sizeM", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.Sex2, new { @class = "sizeM", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.Occupation2, new { @class = "sizeS", @type = "text" })</td>
+                    <td>@Html.DropDownListFor(p => p.Sign2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                    <td>@Html.DropDownListFor(p => p.Lti2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                    <td>@Html.TextBoxFor(p => p.PanNo2, new { @class = "sizeM", @type = "text" })</td>
+                    <th><img src="~/Images/Minus.png" width="30" height="30" onclick="CloseNewRowForMember()" /></th>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <table class="rounded-corners2" style="background-color: rgb(216, 191, 216,0.6); color: rgb(119, 7, 55); font-weight: bold; font-size: 14px">
+                            <tr>
+                                <td>
+                                    A/C Name
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.AcName, new { @class = "sizebig", @type = "text", @readonly = "true" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Address
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.AcAdd1, new { @class = " sizebig", @type = "text", @readonly = "true" })<br />
+                                    @Html.TextBoxFor(p => p.AcAdd2, new { @class = " sizebig", @type = "text", @readonly = "true" })<br />
+                                </td>
+                            </tr>
+                            <tr>
+
+                                <td>
+                                    State
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.AcState, new { @class = "sizeM1", @type = "text", @readonly = "true" })
+                                </td>
+                                <td>
+                                    District
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.AcDist, new { @class = "sizeM1", @type = "text", @readonly = "true" })
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    City
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.AcCity, new { @class = "sizeM1", @type = "text", @readonly = "true" })
+                                </td>
+                                <td>
+                                    Pin
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(p => p.AcPin, new { @class = "sizeM1", @type = "text", @readonly = "true" })
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="rounded-corners">
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+
+                                                Minor Account:
+                                                @Html.DropDownListFor(p => p.IsMinor, new SelectList(new string[] { "NO", "YES" }), new { @class = "sizeS", @onchange = "showhideminor()" })
+                                            </td>
+                                        <tr id="minor">
+
+                                            <td>
+                                                Date of Birth
+                                                @Html.TextBoxFor(p => p.MinorDob, new { @class = "size", @type = "text" })
+                                            </td>
+                                            <td>
+                                                Attain Majority On
+                                                @Html.TextBoxFor(p => p.MinorAdultDt, new { @class = "size", @type = "text" })
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        <h6 class="text-center p-1 mt-2" style="background-color: #A95C68; color: white; font-size: 15px; font-weight: bold; text-align: center; text-transform: uppercase; border: 1px solid; border-color: rgb(170, 152, 169); border-radius: 20px ">N o m i n e e</h6>
+                        <table class="table tableT table-bordered" style="margin-top:-8px">
+                            <tr style="background-color: #ffd5b9; color: darkslateblue; font-weight: bold; text-align: center; font-size: 14px">
+                                <th>Nominee Name</th>
+                                <th>Relation</th>
+                                <th>Pan No</th>
+                                <th>Aadhar No</th>
+                            </tr>
+                            <tr>
+                                <td>@Html.TextBoxFor(p => p.NomName, new { @class = " sizeL", @type = "text", @readonly = "true" })</td>
+                                <td>@Html.TextBoxFor(p => p.NomReln, new { @class = " sizeM", @type = "text", @readonly = "true" })</td>
+                                <td>@Html.TextBoxFor(p => p.NomPan, new { @class = " sizeM", @type = "text", @readonly = "true" })</td>
+                                <td>@Html.TextBoxFor(p => p.NomAadhar, new { @class = " sizeM", @type = "text", @readonly = "true" })</td>
+                            </tr>
+                        </table>
+
+            </table>
+
+
+
+
+        </div>
+
+
+    </div>
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script type="text/javascript">
+            window.onload = function () {
+                $("#lblError").html('@Html.Raw(ViewBag.ErrorMsg)');
+                $("#MyPopup").modal("show");
+            };
+        </script>
+    }
+</form>
+@section scripts
+{
+
+    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap-datepicker.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="~/js/jquery-3.6.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script type="text/javascript">
+
+
+        function OpenNewRowForMember() {
+            $("#NewMem").show();
+            $("#addbutton").hide();
+            $("#Srl2").val("2");
+            $("#MemberId2").focus();
+
+        }
+
+        function CloseNewRowForMember() {
+            $("#NewMem").hide();
+            $("#addbutton").show();
+            $("#Srl2").val("");
+            $("#MemberId2").val("");
+        }
+
+        function EvtContNo(evt) {
+
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            //if ((charCode != 46 && charCode > 31
+            //    && (charCode < 48 || charCode > 57)) && charCode != 13 && charCode != 193)
+            //if ((charCode < 106 && charCode > 95) || (charCode < 58 && charCode > 47) || charCode != 13 || charCode != 193 || charCode != 111)
+            //    return false;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                GetDetailByContNo();
+            }
+        }
+
+        function EvtAcNo(evt) {
+
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            //if ((charCode != 46 && charCode > 31
+            //    && (charCode < 48 || charCode > 57)) && charCode != 13 && charCode != 193)
+            //if ((charCode < 106 && charCode > 95) || (charCode < 58 && charCode > 47) || charCode != 13 || charCode != 193 || charCode != 111)
+            //    return false;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                GetDetailByAcNo();
+            }
+        }
+
+
+
+
+
+
+        function GetDetailByContNo() {
+
+
+            let ModelObject = {
+                Achd: $('#AcHd').val(), ContNo: $('#ContNo').val()};
+
+
+            $.ajax({
+
+                type: "POST",
+                    url: '@Url.Action("GetDetailByContNo", "Accounts")',
+                    data: ModelObject,
+                    dataType: "json",
+                success: function (data) {
+
+                        $('#AcNo').val(data.ac_no);
+                        $('#ContNo').val(data.contno);
+                        $('#MemberId1').val(data.member_id);
+                        $('#MemberName1').val(data.ac_name);
+                        $('#GuardianName1').val(data.grdn_name);
+                        $('#Relation1').val(data.reln_id);
+                        $('#Sex1').val(data.sex);
+                        $('#Occupation1').val(data.occup_id);
+                        $('#Sign1').val(data.sign);
+                        $('#Lti1').val(data.lti);
+                        $('#PanNo1').val(data.pan);
+                        $('#AcName').val(data.ac_name);
+                        $('#AcAdd1').val(data.ac_add1);
+                        $('#AcAdd2').val(data.ac_add2);
+                        $('#AcCity').val(data.ac_city);
+                        $('#AcDist').val(data.ac_dist);
+                        $('#AcState').val(data.ac_state);
+                        $('#AcPin').val(data.ac_pin);
+                        $('#NomName').val(data.nom_name);
+                        $('#NomReln').val(data.nom_Reln);
+                        $('#NomPan').val(data.nom_Pan);
+                        $('#NomAadhar').val(data.nom_aadhar);
+                        $('#MinorDob').val(data.str_minor_dob);
+                        $('#MinorAdultDt').val(data.str_minor_adult_dt);
+                    if (data.is_minor != "" && data.is_minor != null) {
+                        $("#IsMinor").val("YES")
+                        $("#minor").show();
+                    }
+                    $('#AcNo').focus();
+
+                    if (data.ac_no != "" && data.ac_no != null) {
+                        document.getElementById('AcNo').readOnly = true;
+                        $('#OpenDate').val(data.str_open_date);
+                        document.getElementById('OpenDate').readOnly = true;
+                        $("#ButtonSAVE").hide();
+                        $('#ContNo').focus();
+                    }
+
+                },
+
+                error: function (err) {
+                alert("Error Occured");
+                }
+
+            });
+        }
+
+        function GetDetailByAcNo() {
+
+
+            let ModelObject = {
+                Achd: $('#AcHd').val(), AcNo: $('#AcNo').val()};
+
+
+            $.ajax({
+
+                type: "POST",
+                    url: '@Url.Action("GetDetailByAcNo", "Accounts")',
+                    data: ModelObject,
+                    dataType: "json",
+                success: function (data) {
+
+                        $('#AcNo').val(data.ac_no);
+                        $('#ContNo').val(data.contno);
+                        $('#MemberId1').val(data.member_id);
+                        $('#MemberName1').val(data.ac_name);
+                        $('#GuardianName1').val(data.grdn_name);
+                        $('#Relation1').val(data.reln_id);
+                        $('#Sex1').val(data.sex);
+                        $('#Occupation1').val(data.occup_id);
+                        $('#Sign1').val(data.sign);
+                        $('#Lti1').val(data.lti);
+                        $('#PanNo1').val(data.pan);
+                        $('#AcName').val(data.ac_name);
+                        $('#AcAdd1').val(data.ac_add1);
+                        $('#AcAdd2').val(data.ac_add2);
+                        $('#AcCity').val(data.ac_city);
+                        $('#AcDist').val(data.ac_dist);
+                        $('#AcState').val(data.ac_state);
+                        $('#AcPin').val(data.ac_pin);
+                        $('#NomName').val(data.nom_name);
+                        $('#NomReln').val(data.nom_Reln);
+                        $('#NomPan').val(data.nom_Pan);
+                        $('#NomAadhar').val(data.Nom_aadhar);
+                        $('#MinorDob').val(data.str_minor_dob);
+                        $('#MinorAdultDt').val(data.str_minor_adult_dt);
+                    if (data.is_minor != "" && data.is_minor != null) {
+                        $("#IsMinor").val("YES")
+                        $("#minor").show();
+                    }
+
+
+                    if (data.ac_no != "" && data.ac_no != null) {
+                        document.getElementById('AcNo').readOnly = true;
+                        $('#OpenDate').val(data.str_open_date);
+                        document.getElementById('OpenDate').readOnly = true;
+                        $("#ButtonSAVE").hide();
+                    }
+
+                },
+
+                error: function (err) {
+                alert("Error Occured");
+                }
+
+            });
+        }
+
+
+        $(document).ready(function () {
+            $("#minor").hide();
+            $("#NewMem").hide();
+            $("#Srl1").val("1");
+
+        });
+
+
+        function showhideminor() {
+
+            if ($("#IsMinor option:Selected").text() == "YES") {
+                $("#minor").show();
+
+            }
+            else {
+                $("#minor").hide();
+
+            }
+
+        }
+        function SaveData() {
+
+
+            let ModelObject = {
+                BranchId: $('#BranchId').val(),
+                Achd: $('#AcHd').val(),
+                AcNo: $('#AcNo').val(),
+                ContNo: $('#ContNo').val(),
+                OpenDate: $('#OpenDate').val(),
+                SplStatus: $('#SplStatus').val(),
+                OprnMode: $('#OprnMode').val(),
+                ChqFacility: $('#ChqFacility').val(),
+                Srl1: $('#Srl1').val(),
+                Srl1: $('#Srl1').val(),
+                MemberId1: $('#MemberId1').val(),
+                MemberId1: $('#MemberId1').val(),
+                MemberName1: $('#MemberName1').val(),
+                MemberName1: $('#MemberName1').val(),
+                GuardianName1: $('#GuardianName1').val(),
+                GuardianName1: $('#GuardianName1').val(),
+                Relation1: $('#Relation1').val(),
+                Relation1: $('#Relation1').val(),
+                Sex1: $('#Sex1').val(),
+                Sex1: $('#Sex1').val(),
+                Occupation1: $('#Occupation1').val(),
+                Occupation1: $('#Occupation1').val(),
+                Sign1: $('#Sign1').val(),
+                Sign1: $('#Sign1').val(),
+                Lti1: $('#Lti1').val(),
+                Lti1: $('#Lti1').val(),
+                PanNo1: $('#PanNo1').val(),
+                PanNo1: $('#PanNo1').val(),
+                AcName: $('#AcName').val(),
+                AcAdd1: $('#AcAdd1').val(),
+                AcAdd1: $('#AcAdd1').val(),
+                AcCity: $('#AcCity').val(),
+                AcDist: $('#AcDist').val(),
+                AcState: $('#AcState').val(),
+                AcPin: $('#AcPin').val(),
+                IsMinor: $('#IsMinor').val(),
+                MinorDob: $('#MinorDob').val(),
+                MinorAdultDt: $('#MinorAdultDt').val(),
+
+            };
+
+
+            $.ajax({
+
+                type: "POST",
+                    url: '@Url.Action("SaveDepositMast", "Accounts")',
+                    data: ModelObject,
+                    dataType: "json",
+                success: function (data) {
+
+                    alert(data);
+
+                },
+
+                error: function (err) {
+                alert("Error Occured");
+                }
+
+            });
+        }
+
+        function Reload() {
+            window.location.href = "@Url.Action("AccountOpening", "Accounts")";
+        }
+        function Home() {
+            window.location.href = "@Url.Action("Index", "Home")";
+        }
+        function Edit() {
+            document.getElementById('AcNo').readOnly = false;
+            document.getElementById('OpenDate').readOnly = false;
+            $("#ButtonSAVE").show();
+        }
+    </script>
+}
+

@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Member\" />
+    <Folder Include="Views\Deposits\" />
   </ItemGroup>
 
 </Project>
