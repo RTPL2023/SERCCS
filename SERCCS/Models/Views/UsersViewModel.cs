@@ -14,6 +14,8 @@ namespace SERCCS.Models.Views
         public string user_role { get; set; }
         public string user_password { get; set; }
         public string email_id { get; set; }
+        public bool blocked { get; set; }
+        public string msg { get; set; }
         public IEnumerable<SelectListItem> brmst { get; set; }
 
     }
