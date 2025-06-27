@@ -52,7 +52,36 @@ namespace SERCCS.Models.Database
         public string XTY { get; set; }
         public string name { get; set; }
         public string cont_no { get; set; }
-        
-      
+        public string getLastLoanNo(string ac_hd, string Loan_id)
+        {
+            DBConfig config = new DBConfig();
+            string no = "0";
+            string sql = "";
+            if (ac_hd == "LTL")
+            {
+                sql = "SELECT * FROM LOAN_LEDGER_LTL WHERE BRANCH_ID='MN' AND AC_HD='" + ac_hd + "' AND LOAN_ID='" + Loan_id + "' ORDER BY VCH_DATE, VCH_NO, VCH_SRL";
+            }
+            if (ac_hd == "STL")
+            {
+                sql = "SELECT * FROM LOAN_LEDGER_STL WHERE BRANCH_ID='MN' AND AC_HD='" + ac_hd + "' AND LOAN_ID='" + Loan_id + "' ORDER BY VCH_DATE, VCH_NO, VCH_SRL";
+            }
+            if (ac_hd == "FES")
+            {
+                sql = "SELECT * FROM LOAN_LEDGER_FES WHERE BRANCH_ID='MN' AND AC_HD='" + ac_hd + "' AND LOAN_ID='" + Loan_id + "' ORDER BY VCH_DATE, VCH_NO, VCH_SRL";
+            }
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                DataRow dr = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
+                no = Convert.ToString(dr["no"]);
+                if (no == "")
+                {
+                    no = "0";
+                }
+                no = Convert.ToString(Convert.ToInt32(no) + 1);
+            }
+            return no;
+        }
+
     }
 }

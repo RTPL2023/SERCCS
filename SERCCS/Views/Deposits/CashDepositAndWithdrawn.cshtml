@@ -1,0 +1,1232 @@
+﻿@model SERCCS.Models.Views.CashDepositWthdrawViewModel
+@{
+    Layout = "../Shared/_layout.cshtml";
+    ViewBag.Title = "Cash Deposit And Withdrawn";
+}
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/datepicker.css" />
+
+<style>
+    .heading {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color: saddlebrown;
+        font-size: 30px;
+        text-align: center;
+    }
+
+
+    input {
+        /* background-color: rgba( 173,216,230, 0.4);*/
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    select {
+        /*background-color: rgba( 173,216,230, 0.4);*/
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    /* input:focus {
+        background-color: rgba(249,98,159);
+    }*/
+    /*
+    select:focus {
+        background-color: rgba( 173,216,230, 0.4);
+    }*/
+    input[readonly] {
+        background-color: lavender
+    }
+
+    .size {
+        height: 30px;
+        width: 130px;
+    }
+
+    .bsizetxt {
+        height: 30px;
+        width: 200px;
+    }
+
+    .sizegap {
+        height: 10px;
+        width: 30px;
+    }
+
+    .image {
+        height: 130px;
+        width: 100px;
+    }
+
+    .zoomimage {
+        height: 260px;
+        width: 200px;
+    }
+
+    .sign {
+        height: 40px;
+        width: 170px;
+    }
+
+    .zoomsign {
+        height: 100px;
+        width: 300px;
+    }
+
+    .fixed_header {
+        width: 700px;
+        table-layout: fixed;
+        border-collapse: collapse;
+    }
+
+        .fixed_header tbody {
+            display: block;
+            width: 100%;
+            overflow: auto;
+            height: 300px;
+        }
+
+        .fixed_header thead tr {
+            display: block;
+        }
+
+        .fixed_header thead {
+            background: #00008B;
+            color: #fff;
+        }
+
+        .fixed_header th,
+        .fixed_header td {
+            padding: 5px;
+            text-align: left;
+            width: 200px;
+        }
+
+    .rounded-corners {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid green;
+    }
+
+    /* .heading {
+        background-color: #4361b7;
+        text-align: center;
+        padding-bottom: 05px;
+        margin-top: 05px;
+        color: #fff;
+    }*/
+
+    .itemtab {
+        font-family: Arial, Helvetica, sans-serif;
+        /*font-size: 15px;*/
+        border-collapse: collapse;
+        width: 1050px;
+    }
+
+        .itemtab tbody {
+            display: block;
+            width: 1050px;
+            overflow: auto;
+            height: 250px;
+        }
+
+        .itemtab td {
+            border: 2px solid #ddd;
+            padding: 8px;
+            padding-left: 8px;
+            padding-right: 8px;
+            text-align: center;
+            font-size: 12px
+        }
+
+        .itemtab td, th {
+            width: 1050px;
+        }
+
+        .itemtab tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .itemtab tr:hover {
+            background-color: lightpink;
+        }
+
+        .itemtab th {
+            border: 2px solid white;
+            padding-top: 8px;
+            padding-bottom: 12px;
+            padding-left: 8px;
+            padding-right: 8px;
+            text-align: center;
+            font-size: 15px;
+            /*background-color: #04AA6D;*/
+            background-color: firebrick;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+    .table-bordered {
+        border: 1px solid white;
+    }
+
+    .table-bordered1 {
+        border: 1px solid #ea9c8d;
+    }
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 28px;
+        font-weight: bold;
+        color: firebrick;
+        cursor: pointer;
+    }
+
+        .close-btn:hover {
+            color: #ff0000;
+        }
+
+    [type="checkbox"]:checked,
+    [type="checkbox"]:not(:checked) {
+        position: absolute;
+        left: -9999px;
+    }
+
+    .modal-btn:checked + label,
+    .modal-btn:not(:checked) + label {
+        position: relative;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 2;
+        /* height: 30px;*/
+        transition: all 200ms linear;
+        border-radius: 4px;
+        /* width: 80px;*/
+        letter-spacing: 1px;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -webkit-align-items: center;
+        align-items: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -ms-flex-pack: center;
+        text-align: center;
+        -ms-flex-item-align: center;
+        align-self: center;
+        border: none;
+        cursor: pointer;
+    }
+
+        .modal-btn:checked + label .uil,
+        .modal-btn:not(:checked) + label .uil {
+            margin-left: 10px;
+            font-size: 18px;
+        }
+
+
+        .modal-btn:checked + label:after {
+            transition: opacity 300ms 300ms ease, transform 300ms 300ms ease, background-color 250ms linear, color 250ms linear;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+    .modal {
+        position: fixed;
+        display: block;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-pack: center;
+        justify-content: center;
+        margin: 0 auto;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
+        overflow-x: hidden;
+        background-color: rgba(31,32,41,.75);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 250ms 700ms ease;
+    }
+
+    .modal-btn:checked ~ .modal {
+        pointer-events: auto;
+        opacity: 1;
+        transition: all 300ms ease-in-out;
+    }
+
+    .modal-wrap {
+        position: relative;
+        display: block;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        overflow: hidden;
+        padding-bottom: 20px;
+        background-color: #fff;
+        -ms-flex-item-align: center;
+        align-self: center;
+        box-shadow: 0 12px 25px 0 rgba(199,175,189,.25);
+        opacity: 0;
+        transform: scale(0.6);
+        transition: opacity 250ms 250ms ease, transform 300ms 250ms ease;
+    }
+
+        .modal-wrap .photo {
+            display: block;
+            width: 400px;
+            height: 500px;
+            margin: 20px auto;
+        }
+
+        .modal-wrap .sign {
+            display: block;
+            width: 500px;
+            height: 150px;
+            margin: 20px auto;
+        }
+
+    /* .modal-wrap p {
+            padding-left: 10px;
+            padding-bottom: 5px;
+            padding-right: 10px;
+            text-align: justify
+        }*/
+
+    .modal-btn:checked ~ .modal .modal-wrap {
+        opacity: 1;
+        transform: scale(1);
+        transition: opacity 250ms 500ms ease, transform 350ms 500ms ease;
+    }
+
+
+
+    .modal-btn:checked ~ .logo img {
+        filter: brightness(100%);
+        transition: all 250ms linear;
+    }
+</style>
+
+<form id="form1" asp-controller="Deposits" asp-action="CashDepositAndWithdrawn" method="post">
+    <div class="heading mt-2" style="text-transform:uppercase">
+        Cash Deposit And Withdrawn
+    </div>
+    <div class="container mt-3"style="font-weight: bold; background-color: #f2dfb7">
+
+
+        <div class="container">
+
+            <div class="row mt-1 justify-content-center">
+                <div class="col-lg-12 col-md-12 col-12 border border-1 border-dark" style="background-color: #ece9fb;">
+                    <div class="row mt-1 mb-1">
+                        <div class="col-lg-9 col-md-9 col-12 border border-1 rounded rounded-2" id="mytable" style="font-size:14px;font-weight:bold">
+                            <div class="row mt-1">
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    Ac Hd <br />
+                                    @Html.DropDownListFor(p => p.AcHd, new SelectList(new string[] { "SB", "FD", "SH", "LTL", "FES", "CON", "STL", "CMTD", "LFC", "MISC", "DIV", "ADV" }), new { @class = "size", @onchange = "showhideLabel(this)" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    Counter<br />@Html.DropDownListFor(p => p.CounterNo, new SelectList(new string[] { "1", "2", "3", "4", "5", "6" }), new { @class = "size" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    Dep/With<br />@Html.DropDownListFor(p => p.DepositWithdrow, new SelectList(new string[] { "Withdrawal", "Deposit" }), new { @class = "size", @onchange = "showhide(this)" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    Mode Of Payment<br />@Html.DropDownListFor(p => p.ModeOfPayment, new SelectList(new string[] { "Cash", "Cheque" }), new { @class = "size" })
+                                </div>
+                            </div>
+                            <div class="row mt-1">
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    Control No <br />@Html.TextBoxFor(p => p.ContNo, new { @class = "size", @type = "text", @onkeypress = "javascript: return evtContNo(event); " })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    <span id="spnlbl">Ac. No</span><br />@Html.TextBoxFor(p => p.AcNo, new { @class = "size", @type = "text", @onkeypress = "javascript: return evtAcNo(event); " })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    Name<br />@Html.TextBoxFor(p => p.Name, new { @class = "bsizetxt", @type = "text", @readonly = "true" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    Mode of Op.<br />@Html.TextBoxFor(p => p.ModeOfOprtn, new { @class = "size", @type = "text", @readonly = "true" })
+                                </div>
+                            </div>
+                            <div class="row mt-1">
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    Last Op. Date <br />@Html.TextBoxFor(p => p.LastOpDate, new { @class = "size", @type = "text", @readonly = "true" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    Last Bal.<br />@Html.TextBoxFor(p => p.LastBalance, new { @class = "size", @type = "text", @style = "font-weight:bold; color: #800000; ", @readonly = "true" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    Max.With.Bal.<br /> @Html.TextBoxFor(p => p.MaxWithAmount, new { @class = "size", @type = "text", @style = "font-weight:bold;color: #ff264b; ", @readonly = "true" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    Po No<br />@Html.TextBoxFor(p => p.PoNo, new { @class = "size", @type = "text" })
+                                </div>
+                            </div>
+                            <div class="row mt-1">
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    <span id="spnlbl1" style="font-weight:bold;">Deposit Amount</span><br />@Html.TextBoxFor(p => p.WithAmount, new { @class = "size", @type = "text", @onkeypress = "javascript: return isNumberKey(event); ", @style = "font-weight:bold; color: #009f2f;" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-12 mt-2">
+                                    <img src="/Images/reset.jpg" width="30px" height="30px" onclick="refresh();" />
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-12">
+                                    Trans. Date<br />
+                                    @Html.TextBoxFor(p => p.TransDate, new { @class = "datepicker , size", @id = "datepicker1", })
+                                </div>
+                            </div>
+                            <div class="row mt-1 mb-1">
+                                <div class="col-lg-6 col-md-6 col-12">
+
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-12 text-right">
+                                    <input id="btnSave" type="button" name="btnSave" class="btn btn-primary btn-sm" value="Save" onclick="SaveData()" />
+
+                                    <input id="btnTotal" type="button" name="btnTotal" class="btn btn-primary btn-sm" value="Total" onclick="Total()" />
+
+                                    <input id="btnPrint" type="button" name="btnPrint" class="btn btn-primary btn-sm" value="DownLoad Text" onclick="GetPrintFile()" />
+
+                                    <input id="btnRefresh" type="button" name="btnRefresh" class="btn btn-primary btn-sm" value="Refresh" onclick="btnREFRESHOnclick()" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-12">
+
+                            <table align="center">
+                                <tr>
+                                    <td class="ClientDivBox">
+
+
+                                        <div class="row" style="margin-top:15px">
+                                            <input class="modal-btn" type="checkbox" id="photo-modal-btn" name="modal-btn" />
+                                            <label for="photo-modal-btn"><img id="ImageUrl" src="" height="130" width="100" unit="px" /> </label>
+                                            <div class="modal" id="photo-modal">
+                                                <div class="modal-wrap">
+                                                    <span class="close-btn" onclick="document.getElementById('photo-modal-btn').checked = false;">&times;</span>
+                                                    <img id="PhotoImageUrl" src="" class="photo" />
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                    @*<td align="center">
+            <img id="PhotoImageUrl" src="" class="image" />
+            <script type="text/javascript">
+                let PhotoImageUrl = document.getElementById("PhotoImageUrl");
+
+                PhotoImageUrl.addEventListener("mouseover", function () {
+                    PhotoImageUrl.classList.add("zoomimage");
+                    PhotoImageUrl.classList.remove("image");
+                });
+                PhotoImageUrl.addEventListener("mouseout", function () {
+                    PhotoImageUrl.classList.remove("zoomimage");
+                    PhotoImageUrl.classList.add("image");
+                });
+            </script>
+        </td>*@
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="row" style="margin-top:15px">
+                                            <input class="modal-btn" type="checkbox" id="sign-modal-btn" name="modal-btn" />
+                                            <label for="sign-modal-btn"><img id="SignUrl" src="" height="40" width="170" unit="px" /> </label>
+                                            <div class="modal" id="sign-modal">
+                                                <div class="modal-wrap">
+                                                    <span class="close-btn" onclick="document.getElementById('sign-modal-btn').checked = false;">&times;</span>
+                                                    <img id="SigImageUrl" src="" class="sign" />
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                    @*"@ViewBag.SigImageUrl"*@
+                                    @*<td align="center">
+            <img id="SigImageUrl" src="" class="sign" />
+            <script type="text/javascript">
+                let SigImageUrl = document.getElementById("SigImageUrl");
+
+                SigImageUrl.addEventListener("mouseover", function () {
+                    SigImageUrl.classList.add("zoomsign");
+                    SigImageUrl.classList.remove("sign");
+                });
+                SigImageUrl.addEventListener("mouseout", function () {
+                    SigImageUrl.classList.remove("zoomsign");
+                    SigImageUrl.classList.add("sign");
+                });
+            </script>
+        </td>*@
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="container mt-2">
+            <div class="row">
+                <table id="DEPtable" class="itemtab" align="center">
+                </table>
+            </div>
+        </div>
+        <div class="mt-1">
+            <table >
+                <tr>
+                    Total :
+                    @Html.TextBoxFor(p => p.totalAmt, new { @class = "size", @readonly ="true" })
+                    @*<td id="divdenomtotal" style="font-weight: 500">Total Denomination: <input id="totdenom" value="0" class="size" /></td>*@
+                    @*<td style="font-weight: 500">Total (Rs.)<input value="@ViewBag.Total" class="size" /></td>*@
+                </tr>
+            </table>
+        </div>
+        <div>
+            <h5 style="color: darkred; background-color: bisque">@Html.DisplayFor(model => model.msgbox, new { @class = "size", @type = "text" })</h5>
+        </div>
+    </div>
+    @if (ViewBag.ErrorMsg != null)
+    {
+        <script type="text/javascript">
+
+
+            window.onload = function () {
+                $("#lblError").html('@Html.Raw(ViewBag.ErrorMsg)');
+                $("#MyPopup").modal("show");
+            };
+
+
+
+
+        </script>
+    }
+</form>
+
+@section scripts
+{
+    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap-datepicker.js"></script>
+
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+        alert("PLEASE SELECT YOUR COUNTER NO FIRST");
+        var x = document.getElementById("mytable");
+        $("#spnlbl1").text("Withdrawl Amount");
+        x.style.backgroundColor = "#FA7070";
+        $('#datepicker1').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            format: "dd/mm/yyyy",
+            language: "tr",
+            autoclose: true
+        });
+        $("#datepicker1").datepicker({ dateFormat: "dd/mm/yyyy" }).datepicker("setDate", new Date());
+
+        getPONO();
+
+        $('#ContNo').val("");
+        $('#CounterNo').focus();
+
+    });
+
+        function showhideLabel(obj) {
+
+
+
+            //alert($("#AcHd option:Selected").text());
+            if ($("#AcHd option:Selected").text() == "SB"
+                || $("#AcHd option:Selected").text() == "FD"
+                || $("#AcHd option:Selected").text() == "CMTD") {
+                $("#spnlbl").text("Account No.");
+
+            }
+            else if ($("#AcHd option:Selected").text() == "LTL"
+                || $("#AcHd option:Selected").text() == "FES"
+                || $("#AcHd option:Selected").text() == "CON"){
+                $("#spnlbl").text("Loan No.");
+
+
+            }
+            else if ($("#AcHd option:Selected").text() == "SH" || $("#AcHd option:Selected").text() == "DIV" ) {
+                $("#spnlbl").text("SR. No.");
+
+
+            }
+
+            getPONO();
+        }
+
+
+        function CheckForSaving() {
+           // alert("save")
+            if ($('#DepositWithdrow').val() == "Deposit") {
+
+                if ($('#WithAmount').val() > 0) {
+                  if ( $('#totdenom').val() > 0) {
+
+                        if ($('#WithAmount').val() == $('#totdenom').val())
+
+                            return confirm("Do you want to Save?");
+                        else {
+                            alert("Cash Denomination total is not matching with Deposit amount.");
+                            return false;
+                        }
+                    }
+                    else {
+                        alert("Cash Denomination total is not matching with Deposit amount.");
+                        return false;
+                    }
+                 }
+             }
+        }
+
+        //new
+        function evtContNo(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                getdatabyContNo();
+
+
+            }
+        }
+        function evtAcNo(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                getdatabyAcNo();
+
+
+            }
+        }
+        function getdatabyContNo() {
+             let ModelObject = {
+                 ContNo: $('#ContNo').val(),
+                 AcHd: $('#AcHd').val(),
+                 TransDate: $('#datepicker1').val(),
+                 CounterNo: $('#CounterNo').val(),
+                 DepositWithdrow: $('#DepositWithdrow').val(),
+             };
+                $.ajax({
+                type: "POST",
+                url: '@Url.Action("getdatabyContNofordepwith", "Deposits")',
+                data: ModelObject,
+                dataType: "json",
+                    success: function (data) {
+                         //alert(JSON.stringify(data));
+
+                        const formatter = new Intl.NumberFormat('en-US');
+
+
+                            $('#AcNo').val(data.acNo);
+                            $('#Name').val(data.name);
+                            $('#ModeOfOprtn').val(data.modeOfOprtn);
+                            $('#LastOpDate').val(data.lastOpDate);
+                             $('#LastBalance').val(data.lastBalance);
+                        $('#MaxWithAmount').val(data.maxWithAmount);
+                            $('#PoNo').val(data.poNo);
+                            $('#WithAmount').val("");
+                            $('#WithAmount').focus();
+                        getphotosign();
+
+                },
+                error: function (err) {
+                    alert(err);
+                }
+                });
+        }
+         function getdatabyAcNo() {
+             let ModelObject = {
+                 AcNo: $('#AcNo').val(),
+                 AcHd: $('#AcHd').val(),
+                 TransDate: $('#datepicker1').val(),
+                 CounterNo: $('#CounterNo').val(),
+                 DepositWithdrow: $('#DepositWithdrow').val(),
+             };
+                $.ajax({
+                type: "POST",
+                url: '@Url.Action("getdatabyAcNofordepwith", "Deposits")',
+                data: ModelObject,
+                dataType: "json",
+                    success: function (data) {
+                         //alert(JSON.stringify(data));
+
+
+
+
+                            $('#ContNo').val(data.contNo);
+                            $('#Name').val(data.name);
+                            $('#ModeOfOprtn').val(data.modeOfOprtn);
+                            $('#LastOpDate').val(data.lastOpDate);
+                            $('#LastBalance').val(data.lastBalance);
+                            $('#MaxWithAmount').val(data.maxWithAmount);
+                            $('#PoNo').val(data.poNo);
+                            $('#WithAmount').val("");
+                            $('#WithAmount').focus();
+                        getphotosign();
+
+                },
+                error: function (err) {
+                    alert(err);
+                }
+                });
+        }
+        function getphotosign() {
+             let ModelObject = {
+                 ContNo: $('#ContNo').val(),
+
+             };
+                $.ajax({
+                type: "POST",
+                url: '@Url.Action("Getphotosignfordepwith", "Deposits")',
+                data: ModelObject,
+                dataType: "json",
+                    success: function (data) {
+
+                        $("#PhotoImageUrl").attr("src", data.photoImageUrl);
+                        $("#ImageUrl").attr("src", data.photoImageUrl);
+                        $("#SigImageUrl").attr("src", data.sigImageUrl);
+                        $("#SignUrl").attr("src", data.sigImageUrl);
+
+
+
+                },
+                error: function (err) {
+                    alert(err);
+                }
+                });
+        }
+
+        function SaveData() {
+            if ($('#ContNo').val() == null || $('#ContNo').val() == "")
+            {
+                alert("Control No Cannot Be Blank");
+            }
+            if ($('#AcNo').val() == null || $('#AcNo').val() == "") {
+                alert("Control No Cannot Be Blank");
+            }
+            else if (parseFloat($('#WithAmount').val()) <= 0) {
+                alert("Deposit/Withdraw Amount Must be Greater Than 0");
+                $('#WithAmount').focus();
+            }
+            else if ($('#DepositWithdrow').val() == "Withdrawal" && parseFloat($('#WithAmount').val()) > parseFloat($('#MaxWithAmount').val().replace(",", "").replace(",", "").replace(",", "").replace(",", "").replace(",", ""))) {
+                alert("Withdraw Amount Cannot be Greater than Max Withdraw Amount");
+                //alert(parseFloat($('#MaxWithAmount').val().replace(",", "").replace(",", "").replace(",", "").replace(",", "").replace(",", "")));
+                $('#WithAmount').focus();
+            }
+            else {
+                 let ModelObject = {
+                 AcNo: $('#AcNo').val(),
+                 AcHd: $('#AcHd').val(),
+                 CounterNo: $('#CounterNo').val(),
+                 DepositWithdrow: $('#DepositWithdrow').val(),
+                 ModeOfPayment: $('#ModeOfPayment').val(),
+                 LastBalance: $('#LastBalance').val(),
+                 Name: $('#Name').val(),
+                 ContNo: $('#ContNo').val(),
+                 MaxWithAmount: $('#MaxWithAmount').val(),
+                 PoNo: $('#PoNo').val(),
+                 WithAmount: $('#WithAmount').val(),
+                 TransDate: $('#datepicker1').val()
+             };
+                $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveDepositWitdraw", "Deposits")',
+                data: ModelObject,
+                dataType: "json",
+                    success: function (data) {
+                        alert(data);
+                        if ($('#DepositWithdrow').val() == "Withdrawal" && $('#AcHd').val() == "SB") {
+                            $('#LastBalance').val(Number(parseFloat($('#LastBalance').val().replace(",", "").replace(",", "").replace(",", "").replace(",", "").replace(",", "")) - parseFloat($('#WithAmount').val())).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                            $('#MaxWithAmount').val(Number(parseFloat($('#MaxWithAmount').val().replace(",", "").replace(",", "").replace(",", "").replace(",", "").replace(",", "")) - parseFloat($('#WithAmount').val())).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+
+                        }
+                        else if ($('#DepositWithdrow').val() == "Deposit" && $('#AcHd').val() == "SB") {
+                            $('#LastBalance').val(Number(parseFloat($('#LastBalance').val().replace(",", "").replace(",", "").replace(",", "").replace(",", "").replace(",", "")) + parseFloat($('#WithAmount').val())).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                            $('#MaxWithAmount').val(Number(parseFloat($('#MaxWithAmount').val().replace(",", "").replace(",", "").replace(",", "").replace(",", "").replace(",", "")) + parseFloat($('#WithAmount').val())).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                        }
+                        else if ($('#DepositWithdrow').val() == "Withdrawal" && $('#AcHd').val() == "CMTD") {
+                            $('#LastBalance').val(Number(parseFloat($('#LastBalance').val().replace(",", "").replace(",", "").replace(",", "").replace(",", "").replace(",", "")) - parseFloat($('#WithAmount').val())).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                            $('#MaxWithAmount').val(Number(parseFloat($('#MaxWithAmount').val().replace(",", "").replace(",", "").replace(",", "").replace(",", "").replace(",", "")) - parseFloat($('#WithAmount').val())).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+
+                        }
+                        else if ($('#DepositWithdrow').val() == "Deposit" && $('#AcHd').val() == "CMTD") {
+                            $('#LastBalance').val(Number(parseFloat($('#LastBalance').val().replace(",", "").replace(",", "").replace(",", "").replace(",", "").replace(",", "")) + parseFloat($('#WithAmount').val())).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                            $('#MaxWithAmount').val(Number(parseFloat($('#MaxWithAmount').val().replace(",", "").replace(",", "").replace(",", "").replace(",", "").replace(",", "")) + parseFloat($('#WithAmount').val())).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                        }
+
+                        $('#ContNo').val("");
+                        $('#ContNo').focus();
+                },
+                error: function (err) {
+                    alert(err);
+                }
+                });
+            }
+
+
+        }
+
+        function getPONO() {
+
+            let ModelObject = {
+                counterno: $("#CounterNo option:Selected").text(),
+                depwith: $("#DepositWithdrow option:Selected").text(),
+                achd: $("#AcHd option:Selected").text(),
+                trndate: $('#datepicker1').val()
+            };
+
+
+            $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("GeneratePoNo", "Deposits")',
+
+                data: ModelObject,
+
+
+
+                dataType: "json",
+                success: function (data) {
+
+
+                        $('#PoNo').val(data);
+
+
+
+                },
+                error: function (err) {
+                    alert(err);
+                }
+
+            });
+        }
+
+        $("#CounterNo").change(function (event) {
+            getPONO();
+            $('#ContNo').focus();
+        });
+
+        $("#DepositWithdrow").change(function (event) {
+            var x = document.getElementById("mytable");
+
+            if ($("#DepositWithdrow").val() == "Deposit") {
+                $("#spnlbl1").text("Deposit Amount");
+                x.style.backgroundColor = "#97E7E1";
+            }
+            else {
+                $("#spnlbl1").text("Withdrawl Amount");
+                x.style.backgroundColor = "#FA7070";
+            }
+
+
+            getPONO();
+            $('#ContNo').focus();
+        });
+
+        function isNumberKey(evt) {
+
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode != 46 && charCode > 31
+                && (charCode < 48 || charCode > 57)) && charCode != 13)
+                return false;
+            else if (charCode == 13) {
+                if ($('#WithAmount').val() > 0) {
+                    if (confirm("Do you want to save?")) {
+                        SaveData();
+
+                    }
+                    else
+                        return false;
+                }
+            }
+
+        }
+
+
+
+
+
+        function Total() {
+             let ModelObject = {
+                 AcNo: $('#AcNo').val(),
+                 AcHd: $('#AcHd').val(),
+                 CounterNo: $('#CounterNo').val(),
+                 DepositWithdrow: $('#DepositWithdrow').val(),
+                 ModeOfPayment: $('#ModeOfPayment').val(),
+                 LastBalance: $('#LastBalance').val(),
+                 Name: $('#Name').val(),
+                 ContNo: $('#ContNo').val(),
+                 MaxWithAmount: $('#MaxWithAmount').val(),
+                 PoNo: $('#PoNo').val(),
+                 WithAmount: $('#WithAmount').val(),
+                 TransDate: $('#datepicker1').val()
+             };
+                $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetTotalList", "Deposits")',
+                data: ModelObject,
+                dataType: "json",
+                    success: function (data) {
+                        document.getElementById("DEPtable").innerHTML = data.table;
+                        $('#totalAmt').val(data.totalAmt);
+                },
+                error: function (err) {
+                    alert(err);
+                }
+                });
+        }
+        function btnREFRESHOnclick() {
+            window.location.href = "@Url.Action("CashDepositAndWithdrawn", "Deposits")" ;
+        }
+        //end new
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //$("#WithAmount").blur(function () {
+        //    if ($('#DepositWithdrow').val() == "Withdrawal") {
+        //        if ($("#MaxWithAmount").val() > 0 && $("#WithAmount").val() > $("#MaxWithAmount").val()) {
+
+        //            alert("Withdraw Amount can not be greater than Maximum Withdraw Amount! ")
+        //            return false;
+        //        }
+        //        else
+        //            $('#WithAmount').focus().select();
+        //    }
+
+        //});
+
+
+        @*$("#WithAmount").blur(function () {
+
+            //alert("ok");
+            let ModelObject = { MaxWithAmount: $('#MaxWithAmount').val(), WithAmount: $('#WithAmount').val() };
+            //alert(JSON.stringify(ModelObject));
+
+            $.ajax({
+
+                type: "POST",
+                url: '@Url.Action("CheckWithBal", "Deposits")',
+                data: ModelObject,
+
+                dataType: "json",
+                success: function (data) {
+
+                    //alert(data);
+                    if (data == "No") {
+                        alert("Withdraw Amount can not be greater than Maximum Withdraw Amount! ")
+                        return false;
+                    }
+                    else if (data == "Yes") {
+                        $('#btnSave').focus().select();
+                    }
+
+                },
+
+                error: function (err) {
+                    alert("Error Occured");
+                }
+
+            });
+        });*@
+
+
+
+        @*$("#AcNo").blur(function () {
+           // var valdata = $("#form1").serialize();
+
+            let ModelObject = { contno: $('#ContNo').val(), acno: $('#AcNo').val(), achd: $("#AcHd option:Selected").text(), transdate: $('#datepicker1').val() }; // { Name: $("#txtName").val(), Gender: $("#drpGender option:Selected").text(), Role: $("#drpRole option:Selected").text() }
+          //  alert(JSON.stringify(ModelObject));
+            $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("GetAccountDetail", "Deposits")',
+
+                data: ModelObject,
+
+                // // ModelObject,contentType: "application/json; charset=utf-8",
+
+                dataType: "json",
+                success: function (data) {
+                    $(data).each(function (CashDepositAndWithdrawn, Model) {
+                      //  alert(JSON.stringify(data.photoImageUrl));
+
+                        $('#Name').val(data.name);
+                        $('#ModeOfOprtn').val(data.modeOfOprtn);
+                        $('#LastOpDate').val(data.lastOpDate);
+                        $('#LastBalance').val(data.lastBalance);
+                        $('#MaxWithAmount').val(data.maxWithAmount);
+                        $('#ContNo').val(data.contNo);
+                        //$("#PhotoImageUrl").attr("src", data.photoImageUrl);
+                        //$("#SigImageUrl").attr("src", data.sigImageUrl);
+
+                    });
+
+                    getPONO();
+                },
+                error: function (err) {
+                    alert(err);
+                }
+
+            });
+        });*@
+
+        @*$("#ContNo").blur(function () {
+            let ModelObject = { contno: $('#ContNo').val(), acno: $('#AcNo').val(), achd: $("#AcHd option:Selected").text(), transdate: $('#datepicker1').val() };   //    alert(JSON.stringify(ModelObject));
+                $.ajax({
+
+                    type: "POST",
+
+                    url: '@Url.Action("GetAccountDetail", "Deposits")',
+
+                    data: ModelObject,
+
+                   // contentType: "application/json; charset=utf-8",
+
+                    dataType: "json",
+                    success: function (data) {
+                        $(data).each(function (CashDepositAndWithdrawn, Model) {
+                           // alert(JSON.stringify(data));
+
+                            $('#Name').val(data.name);
+                            $('#ModeOfOprtn').val(data.modeOfOprtn);
+                            $('#LastOpDate').val(data.lastOpDate);
+                            $('#LastBalance').val(data.lastBalance);
+                            $('#MaxWithAmount').val(data.maxWithAmount);
+                            $('#AcNo').val(data.acNo);
+                        });
+                        getPONO();
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+
+                });
+            });*@
+
+
+
+
+
+    //    function showhide(obj) {
+    //       // alert("ok");
+    //    if ($("#DepositWithdrow option:Selected").text() == "Deposit") {
+    //       // $("#divdenom").show();
+    //       // $("#divdenomtotal").show();
+    //        $("#spnlbl1").text("Deposit Amount");
+    //    }
+    //    else {
+    //       // $("#divdenom").hide();
+    //        //$("#divdenomtotal").hide();
+    //        $("#spnlbl1").text("Withdrawal Amount");
+    //    }
+
+    //}
+
+
+
+
+
+
+
+
+
+//currently not using
+    function denomCount() {
+
+
+        var tot = (isNaN($('#txt2000').val()) ? 0 * 2000 : parseInt($('#txt2000').val()) * 2000)
+            + (isNaN($('#txt500').val()) ? 0 * 500 : parseInt($('#txt500').val()) * 500)
+            + (isNaN($('#txt200').val()) ? 0 * 200 : parseInt($('#txt200').val()) * 200)
+        + (isNaN($('#txt100').val()) ? 0 * 100 : parseInt($('#txt100').val()) * 100)
+        + (isNaN($('#txt50').val()) ? 0 * 50 : parseInt($('#txt50').val()) * 50)
+        + (isNaN($('#txt20').val()) ? 0 * 20 : parseInt($('#txt20').val()) * 20)
+        + (isNaN($('#txt10').val()) ? 0 * 10 : parseInt($('#txt10').val()) * 10)
+        + (isNaN($('#txt5').val()) ? 0 * 5 : parseInt($('#txt5').val()) * 5)
+        + (isNaN($('#txt2').val()) ? 0 * 2 : parseInt($('#txt2').val()) * 2)
+        + (isNaN($('#txt1').val()) ? 0 * 1 : parseInt($('#txt1').val()) * 1)
+
+        /* alert(tot);*/
+
+        $('#totdenom').val(tot);
+
+
+        if ($('#DepositWithdrow').val() == "Deposit") {
+
+            if ($('#WithAmount').val() > 0) {
+                if ($('#totdenom').val() > 0) {
+
+                    if ($('#WithAmount').val() == $('#totdenom').val())
+
+                        $('#btnSave').focus().select();
+
+                    else {
+                        alert("Cash Denomination total is not matching with Deposit amount.");
+                        $('#txt2000').focus().select();
+
+
+                        return false;
+                    }
+                }
+                else {
+                    alert("Cash Denomination total is not matching with Deposit amount.");
+                    $('#txt2000').focus().select();
+                    return false;
+                }
+            }
+        }
+    }
+
+
+        //currently not using
+        function resetDenomination() {
+            $('#txt2000').val("0");
+        $('#txt500').val("0");
+        $('#txt200').val("0");
+        $('#txt100').val("0");
+        $('#txt50').val("0");
+        $('#txt20').val("0");
+        $('#txt10').val("0");
+        $('#txt5').val("0");
+        $('#txt2').val("0");
+        $('#txt1').val("0");
+        $('#totdenom').val("0");
+        $('#WithAmount').val("0");
+    }
+
+
+        function successsave(m) {
+
+            alert("Saved/ Updated Successfully");
+            $('#ContNo').focus().select();
+        };
+
+        function duplicate(m) {
+
+            alert("Transaction already done");
+            $('#ContNo').focus().select();
+        };
+
+        function setfocusCont(m) {
+            // Name, ModeOfOprtn, LastOpDate, LastBalance, MaxWithAmount, PoNo
+         //   $('#AcNo').attr('readonly', 'readonly');
+            $('#Name').attr('readonly', 'readonly');
+            $('#ModeOfOprtn').attr('readonly', 'readonly');
+            $('#LastOpDate').attr('readonly', 'readonly');
+            $('#LastBalance').attr('readonly', 'readonly');
+            $('#MaxWithAmount').attr('readonly', 'readonly');
+            $('#PoNo').attr('readonly', 'readonly');
+            $('#WithAmount').focus().select();
+        };
+
+
+        function refresh() {
+            // Name, ModeOfOprtn, LastOpDate, LastBalance, MaxWithAmount, PoNo
+            //   $('#AcNo').attr('readonly', 'readonly');
+            $('#Name').attr('readonly',false);
+            $('#ModeOfOprtn').attr('readonly', false);
+            $('#LastOpDate').attr('readonly', false);
+            $('#LastBalance').attr('readonly', false);
+            $('#MaxWithAmount').attr('readonly', false);
+            $('#PoNo').attr('readonly', false);
+
+            $('#Name').val("");
+            $('#ModeOfOprtn').val("");
+            $('#LastOpDate').val("");
+            $('#LastBalance').val("");
+            $('#MaxWithAmount').val("");
+            $('#AcNo').val("");
+            $('#PoNo').val("");
+            $('#WithAmount').val("");
+            $('#ContNo').val("");
+            $('#ContNo').focus().select();
+
+
+        };
+
+
+        function refresh(a) {
+            // Name, ModeOfOprtn, LastOpDate, LastBalance, MaxWithAmount, PoNo
+            //   $('#AcNo').attr('readonly', 'readonly');
+            $('#Name').attr('readonly', false);
+            $('#ModeOfOprtn').attr('readonly', false);
+            $('#LastOpDate').attr('readonly', false);
+            $('#LastBalance').attr('readonly', false);
+            $('#MaxWithAmount').attr('readonly', false);
+            $('#PoNo').attr('readonly', false);
+
+            //$('#Name').val("");
+            //$('#ModeOfOprtn').val("");
+            //$('#LastOpDate').val("");
+            //$('#LastBalance').val("");
+            //$('#MaxWithAmount').val("");
+            $('#AcNo').val("");
+            $('#PoNo').val("");
+            //$('#WithAmount').val("");
+            $('#ContNo').val("");
+            $('#ContNo').focus().select();
+
+
+        };
+
+        function GetPrintFile() {
+            window.location.href = "@Url.Action("GetPrintFile", "Deposits")" + "?DepositWithdrow=" + $("#DepositWithdrow").val() + "&CounterNo=" + $("#CounterNo").val() + "&AcHd=" + $("#AcHd").val() + "&TransDate=" + $("#datepicker1").val();
+    }
+
+
+    </script>
+
+    @if (ViewBag.JavaScriptFunction1 != null)
+    {
+        <script type="text/javascript">
+
+        @Html.Raw(ViewBag.JavaScriptFunction1)
+        </script>
+    }
+
+    @if (ViewBag.JavaScriptFunctionSave != null)
+    {
+        <script type="text/javascript">
+
+            @Html.Raw(ViewBag.JavaScriptFunctionSave)
+            $('#ContNo').focus().select();
+        </script>
+    }
+    @if (ViewBag.JavaScriptFunctionDuplicate != null)
+    {
+        <script type="text/javascript">
+
+        @Html.Raw(ViewBag.JavaScriptFunctionDuplicate)
+        </script>
+    }
+
+}

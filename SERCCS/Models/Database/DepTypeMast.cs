@@ -47,6 +47,47 @@ namespace SERCCS.Models.Database
         public String photo_pathold { get; set; }
         public String sign_pathold { get; set; }
 
-       
+        public List<DepTypeMast> getAchdfromDeptypeMastForSB()
+        {
+            string sql;
+            sql = "select * from deptype_mast where ac_hd='SB'";
+            config.singleResult(sql);
+            List<DepTypeMast> lstdtm = new List<DepTypeMast>();
+
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    DepTypeMast dtm = new DepTypeMast();
+                    dtm.dep_desc = dr["dep_desc"].ToString();
+                    dtm.ac_hd = dr["ac_hd"].ToString();
+
+
+                    lstdtm.Add(dtm);
+                }
+            }
+            return lstdtm;
+        }
+        public List<DepTypeMast> getAchdfromDeptypeMast()
+        {
+            string sql;
+            sql = "select * from deptype_mast";
+            config.singleResult(sql);
+            List<DepTypeMast> lstdtm = new List<DepTypeMast>();
+
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    DepTypeMast dtm = new DepTypeMast();
+                    dtm.dep_desc = dr["dep_desc"].ToString();
+                    dtm.ac_hd = dr["ac_hd"].ToString();
+
+
+                    lstdtm.Add(dtm);
+                }
+            }
+            return lstdtm;
+        }
     }
 }

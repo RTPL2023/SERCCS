@@ -93,7 +93,7 @@
 </style>
 
 <form asp-controller="Member" asp-action="MemberMaster" method="post">
-   
+
     <div class="heading mt-2">
         Member Master Entry
     </div>
@@ -110,7 +110,7 @@
                         {
                             <input id="BtnGenQueue" type="button" name="BtnGenQueue" Height="25" Width="25" class="btn btn-primary" value="Generate Queue" onclick="BtnGenQueueoOnClick()" />
                         }
-                       
+
                     </td>
                     <td>
                         <input id="btnExit" type="button" name="btnExit" Height="25" Width="25" class="btn btn-primary" value="Exit" onclick="btnExitClick()" />
@@ -126,8 +126,8 @@
                     <td>
 
                         Branch<span style="color:red">*</span><br />
-                       
-                        @Html.TextBoxFor(p => p.branchid, new { @class = " sizeM", @type = "text", maxlength = "15" })
+
+                        @Html.TextBoxFor(p => p.branchid, new { @class = " sizeM", @type = "text", maxlength = "15", @onkeypress = "javascript: return  evtbranchid(event);" })
 
                     </td>
                     <td class="sizesmall"></td>
@@ -136,58 +136,58 @@
 
                         @Html.TextBoxFor(p => p.employeeid, new { @class = " sizeM", @type = "text", maxlength = "15", @onkeypress = "javascript: return evtEmployeeId(event);" })
                     </td>
-                   
+
                     <td>
                         Membership Date<br />
-                        @Html.TextBoxFor(p => p.memberdate, new { @class = "sizeM", @type = "text", maxlength = "10" })
+                        @Html.TextBoxFor(p => p.memberdate, new { @class = "sizeM", @type = "text", maxlength = "10", @onkeypress = "javascript: return evtmemberdate(event);" })
                     </td>
                     <td class="sizesmall"></td>
                     <td>
                         Share Holder Type<br />
-                     
-                        @Html.DropDownListFor(p => p.shtype, new SelectList(Model.shtypes, "Value", "Text"), new { @class = "sizeM" })
+
+                        @Html.DropDownListFor(p => p.shtype, new SelectList(Model.shtypes, "Value", "Text"), new { @class = "sizeM", @onchange = "shtypeonchange()" })
                     </td>
                     <td class="sizesmall"></td>
                     <td align="center">
                         Pay Category<br />
-                        @Html.DropDownListFor(p => p.paycategory, new SelectList(Model.paycategorys, "Value", "Text"), new { @class = "sizeM" })
+                        @Html.DropDownListFor(p => p.paycategory, new SelectList(Model.paycategorys, "Value", "Text"), new { @class = "sizeM", @onchange = "paycategoryonchange()" })
                     </td>
                     <td align="center">
                         Member Status<br />
-                        @Html.DropDownListFor(p => p.memstatus, new SelectList(Model.memstatuss, "Value", "Text"), new { @class = "sizeM" })
+                        @Html.DropDownListFor(p => p.memstatus, new SelectList(Model.memstatuss, "Value", "Text"), new { @class = "sizeM", @onchange = "memstatusOnchange()" })
                     </td>
                 </tr>
             </table>
         </div>
-      
+
         <div class="row mt-1">
             <table class="rounded-corners">
                 <tr>
                     <td>
                         Name<span style="color:red">*</span>:
-                        @Html.TextBoxFor(p => p.membername, new { @class = " sizebig", @type = "text", maxlength = "40" })
+                        @Html.TextBoxFor(p => p.membername, new { @class = " sizebig", @type = "text", maxlength = "40", @onkeypress = "javascript: return evtmembername(event);" })
 
                     </td>
                     <td></td>
                     <td>
                         Birth Date<span style="color:red">*</span> :
-                        @Html.TextBoxFor(p => p.birthdate, new { @class = " sizeM", @type = "text", maxlength = "10", @onkeypress = "javascript: return evtBirthDate(event);" })@*, @id = "datepicker2"*@
+                        @Html.TextBoxFor(p => p.birthdate, new { @class = " sizeM", @type = "text", maxlength = "10", @onkeypress = "javascript: return evtbirthdate(event);" })@*, @id = "datepicker2"*@
                     </td>
                     <td></td>
                     <td align="center">
                         Retirement Age<span style="color:red">*</span> :
-                        @Html.TextBoxFor(p => p.retirage, new { @class = " size", @type = "text", maxlength = "6" })
+                        @Html.TextBoxFor(p => p.retirage, new { @class = " size", @type = "text", maxlength = "6", @onkeypress = "javascript: return evtretirage(event);" })
                     </td>
                     <td align="center">
                         B/U NO<span style="color:red">*</span> :
-                        @Html.TextBoxFor(p => p.buno, new { @class = " size", @type = "text", maxlength = "6" })
+                        @Html.TextBoxFor(p => p.buno, new { @class = " size", @type = "text", maxlength = "6", @onkeypress = "javascript: return evtbuno(event);" })
                     </td>
 
                     <td></td>
                     <td>
                         Sex :
-                      
-                        @Html.DropDownListFor(p => p.sex, new SelectList(new string[] { "MALE", "FEMALE","OTHER" }), new { @class = "size" })
+
+                        @Html.DropDownListFor(p => p.sex, new SelectList(new string[] { "MALE", "FEMALE", "OTHER" }), new { @class = "size", @onchange = "sexonchange()" })
                     </td>
                 </tr>
             </table>
@@ -199,23 +199,23 @@
                         <td>
                             Joining Date
                             <br />
-                            @Html.TextBoxFor(p => p.dateofjoining, new { @class = " size", @type = "text", maxlength = "10" })
+                            @Html.TextBoxFor(p => p.dateofjoining, new { @class = " size", @type = "text", maxlength = "10", @onkeypress = "javascript: return evtdateofjoining(event);" })
                         </td>
                         <td> </td>
                         <td>
                             Retirement Date
                             <br />
-                            @Html.TextBoxFor(p => p.dateofretirement, new { @class = " size", @type = "text", maxlength = "10" })
+                            @Html.TextBoxFor(p => p.dateofretirement, new { @class = " size", @type = "text", maxlength = "10", @onkeypress = "javascript: return evtdateofretirement(event);" })
                         </td>
                         <td>
                             Re Membership Date
                             <br />
-                            @Html.TextBoxFor(p => p.dateofremember, new { @class = " size", @type = "text", maxlength = "10" })
+                            @Html.TextBoxFor(p => p.dateofremember, new { @class = " size", @type = "text", maxlength = "10", @onkeypress = "javascript: return evtdateofremember(event);" })
                         </td>
                         <td>
                             50% CMTD Withdrawal Date
                             <br />
-                            @Html.TextBoxFor(p => p.wd50dt, new { @class = " size", @type = "text", maxlength = "10" })
+                            @Html.TextBoxFor(p => p.wd50dt, new { @class = " size", @type = "text", maxlength = "10", @onkeypress = "javascript: return evtwd50dt(event);" })
                         </td>
                     </tr>
                 </table>
@@ -224,23 +224,23 @@
                 <tr>
                     <td>
                         Gurdian Name<span style="color:red">*</span> : <br />
-                        @Html.TextBoxFor(p => p.grdnname, new { @class = "sizebig", @type = "text", maxlength = "40" })
+                        @Html.TextBoxFor(p => p.grdnname, new { @class = "sizebig", @type = "text", maxlength = "40", @onkeypress = "javascript: return evtgrdnname(event);" })
                     </td>
                     <td> </td>
                     <td>
                         Relationship With Member :<br />
-                        @Html.DropDownListFor(p => p.relnid, new SelectList(Model.relns, "Value", "Text"), new { @class = "sizeM" })
+                        @Html.DropDownListFor(p => p.relnid, new SelectList(Model.relns, "Value", "Text"), new { @class = "sizeM", @onchange = "relnidonchange()" })
                     </td>
                     <td></td>
                     <td>
-                        Caste :<br />@Html.DropDownListFor(p => p.casteid, new SelectList(Model.castes, "Value", "Text"), new { @class = "sizeM" })
+                        Caste :<br />@Html.DropDownListFor(p => p.casteid, new SelectList(Model.castes, "Value", "Text"), new { @class = "sizeM", @onchange = "casteidonchange()" })
                     </td>
                     <td></td>
                     <td>
                         Religion: <br /> @Html.DropDownListFor(p => p.relgnid, new SelectList(Model.relgns, "Value", "Text"), new { @class = " sizeM" })
                     </td>
                     <td></td>
-                  
+
                     <td>
                         @Html.CheckBoxFor(P => P.iflti) LTI &nbsp;&nbsp;&nbsp;&nbsp;
                         @Html.CheckBoxFor(P => P.married) Married
@@ -355,20 +355,20 @@
                         </table>
 
                     </td>
-                  
+
                 </tr>
 
             </table>
         </div>
-      
+
         <div class="row mt-1">
             <table>
                 <tr>
-                   
+
                     <td valign="top">
                         <table class="rounded-corners1">
-                         
-                           
+
+
                             <tr>
                                 <td colspan="3">
                                     @Html.CheckBoxFor(p => p.membertransfered) Transfered
@@ -384,7 +384,7 @@
 
                         </table>
                     </td>
-                   
+
                 </tr>
             </table>
         </div>
@@ -396,12 +396,48 @@
 
 @section scripts
  {
-    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap-datepicker.js"></script>
 
     <script type="text/javascript">
+        $(document).ready(function () {
+            $('#employeeid').focus();
 
 
-      
+        });
+
+        function shtypeonchange() {
+            $('#paycategory').focus();
+        }
+        function paycategoryonchange() {
+            $('#memstatus').focus();
+        }
+        //function memstatussonchange() {
+        //    $('#membername').focus();
+        //}
+        function sexonchange() {
+            $('#dateofjoining').focus();
+        }
+        function relnidonchange() {
+            $('#casteid').focus();
+        }
+        function casteidonchange() {
+            $('#relgnid').focus();
+        }
+        function memstatusOnchange() {
+
+            if ($('#memstatus').val() == "CT") {
+                $("#membertransfered").prop('checked', true);
+                $("#memberclosed").prop('checked', false);
+            } else if ($('#memstatus').val() == "CS") {
+                $("#memberclosed").prop('checked', true);
+                $("#membertransfered").prop('checked', false);
+            } else {
+                $("#memberclosed").prop('checked', false);
+                $("#membertransfered").prop('checked', false);
+            }
+            $('#membername').focus();
+
+        }
+
         function evtEmployeeId(evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode;
             if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
@@ -422,70 +458,78 @@
                 data: ModelObject,
                 dataType: "json",
                 success: function (data) {
-                    $('#branchid').val(data.branch_id);
-                    $('#memberdate').val(data.strmember_date);
-                    $('#shtype').val(data.member_type);
-                    $('#paycategory').val(data.payment_mode);
-                    $('#memstatus').val(data.status);
-                    $('#membername').val(data.member_name);
-                    $('#birthdate').val(data.strbirth_date);
-                    $('#retirage').val(data.ra);
-                    $('#buno').val(data.buno);
-                    $('#sex').val(data.sex);
-                    $('#mailhno').val(data.mail_hno);
-                    $('#mailadd1').val(data.mail_add1);
-                    $('#mailadd2').val(data.mail_add2);
-                    $('#mailcity').val(data.mail_city);
-                    $('#maildist').val(data.mail_dist);
-                    $('#mailstate').val(data.mail_state);
-                    $('#mailpin').val(data.mail_pin);
-                    $('#permhno').val(data.perm_hno);
-                    $('#permadd1').val(data.perm_add1);
-                    $('#permadd2').val(data.perm_add2);
-                    $('#permcity').val(data.perm_city);
-                    $('#permdist').val(data.perm_dist);
-                    $('#permstate').val(data.perm_state);
-                    $('#permpin').val(data.perm_pin);
-                    $('#dateofjoining').val(data.strdate_of_joining);
-                    $('#dateofretirement').val(data.strdate_of_retirement);
-                    $('#dateofremember').val(data.strdate_of_remember);
-                    $('#wd50dt').val(data.strdo50pwcm);
-                    $('#grdnname').val(data.grdn_name);
-                    $('#relnid').val(data.reln_id);
-                    $('#casteid').val(data.caste_id);
-                    $('#relgnid').val(data.relgn_id);
-                    $('#expirydate').val(data.strexpiry_date);
-                    $('#memberclosdt').val(data.strmember_closdt);
-                    if (data.blif_lti == true) {
-                        $("#iflti").prop('checked', true);
+                    if (data.msg != "Notfound") {
+
+                        $('#branchid').val(data.branch_id);
+                        $('#memberdate').val(data.strmember_date);
+                        $('#shtype').val(data.member_type);
+                        $('#paycategory').val(data.payment_mode);
+                        $('#memstatus').val(data.status);
+                        $('#membername').val(data.member_name);
+                        $('#birthdate').val(data.strbirth_date);
+                        $('#retirage').val(data.ra);
+                        $('#buno').val(data.buno);
+                        $('#sex').val(data.sex);
+                        $('#mailhno').val(data.mail_hno);
+                        $('#mailadd1').val(data.mail_add1);
+                        $('#mailadd2').val(data.mail_add2);
+                        $('#mailcity').val(data.mail_city);
+                        $('#maildist').val(data.mail_dist);
+                        $('#mailstate').val(data.mail_state);
+                        $('#mailpin').val(data.mail_pin);
+                        $('#permhno').val(data.perm_hno);
+                        $('#permadd1').val(data.perm_add1);
+                        $('#permadd2').val(data.perm_add2);
+                        $('#permcity').val(data.perm_city);
+                        $('#permdist').val(data.perm_dist);
+                        $('#permstate').val(data.perm_state);
+                        $('#permpin').val(data.perm_pin);
+                        $('#dateofjoining').val(data.strdate_of_joining);
+                        $('#dateofretirement').val(data.strdate_of_retirement);
+                        $('#dateofremember').val(data.strdate_of_remember);
+                        $('#wd50dt').val(data.strdo50pwcm);
+                        $('#grdnname').val(data.grdn_name);
+                        $('#relnid').val(data.reln_id);
+                        $('#casteid').val(data.caste_id);
+                        $('#relgnid').val(data.relgn_id);
+                        $('#expirydate').val(data.strexpiry_date);
+                        $('#memberclosdt').val(data.strmember_closdt);
+                        if (data.blif_lti == true) {
+                            $("#iflti").prop('checked', true);
+                        } else {
+                            $("#iflti").prop('checked', false);
+                        }
+                        if (data.blmarried == true) {
+                            $("#married").prop('checked', true);
+                        } else {
+                            $("#married").prop('checked', false);
+                        }
+                        if (data.membertransfered == true) {
+                            $("#membertransfered").prop('checked', true);
+                        } else {
+                            $("#membertransfered").prop('checked', false);
+                        }
+                        if (data.blmember_retired == true) {
+                            $("#memberretired").prop('checked', true);
+                        } else {
+                            $("#memberretired").prop('checked', false);
+                        }
+                        if (data.blmember_closed == true) {
+                            $("#memberclosed").prop('checked', true);
+                        } else {
+                            $("#memberclosed").prop('checked', false);
+                        }
+                        if (data.blis_dead == true) {
+                            $("#isdead").prop('checked', true);
+                        } else {
+                            $("#isdead").prop('checked', false);
+                        }
                     } else {
-                        $("#iflti").prop('checked', false);
+                        alert("New Member");
+                        $('#memberdate').focus();
+
                     }
-                    if (data.blmarried == true) {
-                        $("#married").prop('checked', true);
-                    } else {
-                        $("#married").prop('checked', false);
-                    }
-                    if (data.membertransfered == true) {
-                        $("#membertransfered").prop('checked', true);
-                    } else {
-                        $("#membertransfered").prop('checked', false);
-                    }
-                    if (data.blmember_retired == true) {
-                        $("#memberretired").prop('checked', true);
-                    } else {
-                        $("#memberretired").prop('checked', false);
-                    }
-                    if (data.blmember_closed == true) {
-                        $("#memberclosed").prop('checked', true);
-                    } else {
-                        $("#memberclosed").prop('checked', false);
-                    }
-                    if (data.blis_dead == true) {
-                        $("#isdead").prop('checked', true);
-                    } else {
-                        $("#isdead").prop('checked', false);
-                    }
+
                 },
 
                 error: function (err) {
@@ -495,8 +539,354 @@
             });
         }
 
-      
+        function evtbirthdate(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                if ($("#birthdate").val()== null || $("#birthdate").val() == "") {
+                    alert("Birth Date Can't Blank !!");
+                    $('#birthdate').focus();
+                }
+                else {
 
+                    $('#retirage').focus();
+
+                }
+            }
+        }
+        function evtretirage(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                if ($("#retirage").val() != null || $("#retirage").val() != "") {
+                    let ModelObject = { birthdate: $('#birthdate').val(), retirage: $('#retirage').val() };
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetRetirementDate", "Member")',
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            $('#dateofretirement').val(data);
+                            $('#buno').focus();
+                        },
+                        error: function (err) {
+                            alert("Unable To Calculate");
+                        }
+                    });
+                }
+                else {
+                    alert("Birth Date Can't Blank !!");
+                }
+            }
+        }
+
+
+        function evtEmployeeId(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+
+                EmployeeIdEnter();
+
+            }
+        }
+
+        function evtmemberdate(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+
+                $('#shtype').focus();
+
+            }
+        }
+
+
+
+        function evtmembername(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+
+                $('#birthdate').focus();
+
+            }
+        }
+
+        function evtmembername(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+
+                $('#birthdate').focus();
+
+            }
+        }
+
+        //function evtbirthdate(evt) {
+        //    var charCode = (evt.which) ? evt.which : event.keyCode;
+        //    if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+        //        return false;
+        //    else if (charCode == 13) {
+
+        //        $('#retirage').focus();
+
+        //    }
+        //}
+
+        //function evtretirage(evt) {
+        //    var charCode = (evt.which) ? evt.which : event.keyCode;
+        //    if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+        //        return false;
+        //    else if (charCode == 13) {
+
+        //        $('#buno').focus();
+
+        //    }
+        //}
+
+        function evtbuno(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+
+                $('#sex').focus();
+
+            }
+        }
+
+        function evtdateofjoining(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+
+                $('#dateofretirement').focus();
+
+            }
+        }
+
+
+        function evtdateofretirement(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+
+                $('#dateofremember').focus();
+
+            }
+        }
+
+        function evtdateofremember(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+
+                $('#wd50dt').focus();
+
+            }
+        }
+
+        function evtwd50dt(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+
+                $('#grdnname').focus();
+
+            }
+        }
+
+        function evtgrdnname(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+
+                $('#relnid').focus();
+
+            }
+        }
+
+
+        function btnSaveClick() {
+            if ($('#branchid').val() == "" || $('#branchid').val() == null) {
+                alert("branchid can't be blank!!");
+                $('#branchid').focus();
+            }
+            else if ($('#employeeid').val() == "" || $('#employeeid').val() == null) {
+                alert("employeeid can't be blank!!");
+                $('#employeeid').focus();
+            }
+            else if ($('#memberdate').val() == "" || $('#memberdate').val() == null) {
+                alert("membername can't be blank");
+                $('#memberdate').focus();
+            }
+            else if ($('#shtype').val() == "" || $('#shtype').val() == null) {
+                alert("shtype can't be blank");
+                $('#shtype').focus();
+            }
+            else if ($('#paycategory').val() == "" || $('#paycategory').val() == null) {
+                alert("paycategory can't be blank");
+                $('#paycategory').focus();
+            }
+            else if ($('#memstatus').val() == "" || $('#memstatus').val() == null) {
+                alert("memstatus can't be blank");
+                $('#memstatus').focus();
+            }
+            else if ($('#membername').val() == "" || $('#membername').val() == null) {
+                alert("membername can't be blank");
+                $('#membername').focus();
+            }
+            else if ($('#birthdate').val() == "" || $('#birthdate').val() == null) {
+                alert("birthdate can't be blank");
+                $('#birthdate').focus();
+            }
+            else if ($('#retirage').val() == "" || $('#retirage').val() == null) {
+                alert("retirage can't be blank");
+                $('#retirage').focus();
+            }
+            else if ($('#buno').val() == "" || $('#buno').val() == null) {
+                alert("buno can't be blank");
+                $('#buno').focus();
+            }
+            else if ($('#sex').val() == "" || $('#sex').val() == null) {
+                alert("sex can't be blank");
+                $('#sex').focus();
+            }
+            else if ($('#dateofjoining').val() == "" || $('#dateofjoining').val() == null) {
+                alert("dateofjoining can't be blank");
+                $('#dateofjoining').focus();
+            }
+            else if ($('#grdnname').val() == "" || $('#grdnname').val() == null) {
+                alert("grdnname can't be blank");
+                $('#grdnname').focus();
+            }
+            else if ($('#relnid').val() == "" || $('#relnid').val() == null) {
+                alert("relnid can't be blank");
+                $('#relnid').focus();
+            }
+            else if ($('#casteid').val() == "" || $('#casteid').val() == null) {
+                alert("casteid can't be blank");
+                $('#casteid').focus();
+            }
+            else if ($('#relgnid').val() == "" || $('#relgnid').val() == null) {
+                alert("relgnid can't be blank");
+                $('#relgnid').focus();
+            }
+
+            else {
+
+
+                let ModelObject = {
+                    branchid: $('#branchid').val(),
+                    retirage: $('#retirage').val(),
+                    buno: $('#buno').val(),
+                    employeeid: $('#employeeid').val(),
+                    memberdate: $('#memberdate').val(),
+                    paycategory: $('#paycategory').val(),
+                    shtype: $('#shtype').val(),
+                    membername: $('#membername').val(),
+                    grdnname: $('#grdnname').val(),
+                    relnid: $('#relnid').val(),
+                    mailhno: $('#mailhno').val(),
+                    mailadd1: $('#mailadd1').val(),
+                    mailadd2: $('#mailadd2').val(),
+                    mailcity: $('#mailcity').val(),
+                    maildist: $('#maildist').val(),
+                    mailstate: $('#mailstate').val(),
+                    mailpin: $('#mailpin').val(),
+                    permhno: $('#permhno').val(),
+                    permadd1: $('#permadd1').val(),
+                    permadd2: $('#permadd2').val(),
+                    permcity: $('#permcity').val(),
+                    permdist: $('#permdist').val(),
+                    permstate: $('#permstate').val(),
+                    permpin: $('#permpin').val(),
+                    birthdate: $('#birthdate').val(),
+                    casteid: $('#casteid').val(),
+                    sex: $('#sex').val(),
+                    relgnid: $('#relgnid').val(),
+                    married: $('#married').val(),
+                    iflti: $('#iflti').val(),
+                    dateofjoining: $('#dateofjoining').val(),
+                    wd50dt: $('#wd50dt').val(),
+                    dateofretirement: $('#dateofretirement').val(),
+                    dateofremember: $('#dateofremember').val(),
+                    isdead: $('#isdead').val(),
+                    expirydate: $('#expirydate').val(),
+                    /* memberclosed: $('#memberclosed').val(),*/
+                    memberclosdt: $('#memberclosdt').val(),
+                    //memberretired: $('#memberretired').val(),
+                    //membertransfered: $('#membertransfered').val(),
+                    memstatus: $('#memstatus').val(),
+                    memberclosed: document.getElementById('memberclosed').checked,
+                    membertransfered: document.getElementById('membertransfered').checked,
+                    iflti: document.getElementById('iflti').checked,
+                    married: document.getElementById('married').checked,
+                    isdead: document.getElementById('isdead').checked,
+                    memberretired: document.getElementById('memberretired').checked,
+                };
+                $.ajax({
+                    url: '@Url.Action("SaveMemberDetails", "Member")',
+                    type: "POST",
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        alert(data);
+                        $('#branchid').val("");
+                        $('#retirage').val("");
+                        $('#buno').val("");
+                        $('#employeeid').val("");
+                        $('#memberdate').val("");
+                        $('#membername').val("");
+                        $('#grdnname').val("");
+                        $('#mailhno').val("");
+                        $('#mailadd1').val("");
+                        $('#mailadd2').val("");
+                        $('#mailcity').val("");
+                        $('#maildist').val("");
+                        $('#mailstate').val("");
+                        $('#mailpin').val("");
+                        $('#permhno').val("");
+                        $('#permadd1').val("");
+                        $('#permadd2').val("");
+                        $('#permcity').val("");
+                        $('#permdist').val("");
+                        $('#permstate').val("");
+                        $('#permpin').val("");
+                        $('#birthdate').val("");
+                        $('#married').val("");
+                        $('#iflti').val("");
+                        $('#dateofjoining').val("");
+                        $('#wd50dt').val("");
+                        $('#dateofretirement').val("");
+                        $('#dateofremember').val("");
+                        $('#isdead').val("");
+                        $('#expirydate').val("");
+                        $('#memberclosed').val("");
+                        $('#memberclosdt').val("");
+                        $('#memberretired').val("");
+                        $('#membertransfered').val("");
+                    },
+                    error: function (err) {
+                        //alert("Error Occured");
+                        alert(JSON.stringify(err));
+                        //alert(JSON.stringify(ModelObject));
+                    }
+                });
+            }
+        }
     </script>
 
 }

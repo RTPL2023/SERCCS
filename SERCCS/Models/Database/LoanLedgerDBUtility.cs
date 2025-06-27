@@ -101,7 +101,38 @@ namespace SERCCS.Models.Database
         public string XTY { get; set; }
         public DateTime chq_date { get; set; }
         public string flag { get; set; }
-        
 
+        public LoanLedger GetLoanLedgerDetail(string acno, string achd, string contno, string transdate)
+        {
+            if (achd == "LTL")
+                sql = "select * from LOAN_LEDGER_LTL WHERE BRANCH_ID='MN' AND AC_HD='LTL' AND LOAN_ID='" + acno + "' AND TO_CHAR(vch_DATE, 'DD/MM/YYYY')='" + transdate + "' AND VCH_ACHD='LTL' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
+            else if (achd == "CON")
+                sql = "select * from LOAN_LEDGER_CON WHERE BRANCH_ID='MN' AND AC_HD='CON' AND LOAN_ID='" + acno + "' AND VCH_ACHD='CON' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
+            else if (achd == "STL")
+                sql = "select * from LOAN_LEDGER_STL WHERE BRANCH_ID='MN' AND AC_HD='STL' AND LOAN_ID='" + acno + "' AND TO_CHAR(vch_DATE, 'DD/MM/YYYY')='" + transdate + "' AND VCH_ACHD='STL' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
+            else if (achd == "FES")
+                sql = "select * from LOAN_LEDGER_FES WHERE BRANCH_ID='MN' AND AC_HD='FES' AND LOAN_ID='" + acno + "' AND VCH_ACHD='FES' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
+
+
+
+
+
+            config.Load_DTG(sql);
+
+            LoanLedger lst = new LoanLedger();
+
+            if (config.dt.Rows.Count > 0)
+            {
+                DataRow dr = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
+
+                lst.vch_date = Convert.ToDateTime(dr["vch_date"]);
+                if (achd != "FES")
+                    lst.prin_amount = Convert.ToDecimal(dr["prin_amount "]);
+                else
+                    lst.prin_amount = Convert.ToDecimal(dr["LOAN_AMT"]);
+            }
+
+            return lst;
+        }
     }
 }

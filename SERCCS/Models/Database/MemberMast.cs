@@ -64,6 +64,8 @@ namespace SERCCS.Models.Database
         public DateTime member_closdt { get; set; }
         public DateTime do50pwcm { get; set; }
         public DateTime date_of_remember { get; set; }
+        public Nullable<DateTime> exp_date { get; set; }
+        public Nullable<DateTime> member_clos_dt { get; set; }
 
         public string strbirth_date { get; set; }
 
@@ -85,7 +87,7 @@ namespace SERCCS.Models.Database
         public int tf_buffer { get; set; }
         public string member_retired { get; set; }
         public bool blmember_retired { get; set; }
-       
+
         public decimal sbamt { get; set; }
         public string cmtdno { get; set; }
         public decimal cmtdamt { get; set; }
@@ -100,7 +102,15 @@ namespace SERCCS.Models.Database
         public string empid_type { get; set; }
         public string member_transfered { get; set; }
         public bool membertransfered { get; set; }
-
+        public string Nom_Name { get; set; }
+        public string Nom_Reln { get; set; }
+        public string Nom_AAdhar { get; set; }
+        public string Nom_Pan { get; set; }
+        public DateTime Nom_DOB { get; set; }
+        public string member_dt { get; set; }
+        public string brth_dt { get; set; }
+        public string tag { get; set; }
+        public string msg { get; set; }
         public MemberMast GetRecByEmployeeId(String EmployeeId, string branch)
         {
             MemberMast mm = new MemberMast();
@@ -249,9 +259,211 @@ namespace SERCCS.Models.Database
                         mm.blis_dead = false;
                 }
             }
+            else
+            {
+                mm.msg = "Notfound";
+            }
             return mm;
         }
+        public MemberMast getMemberMastDetailByAcno(string acno)
+        {
+            string sql = "SELECT * FROM MEMBER_MAST WHERE BRANCH_ID='MN' AND MEMBER_ID=' " + acno + "' ORDER BY CONTNO";
+            config.singleResult(sql);
+            MemberMast mm = new MemberMast();
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    mm.member_name = dr["member_name"].ToString();
+                    mm.employee_id = dr["employee_id"].ToString();
 
+                }
+
+            }
+            else
+            {
+                mm = null;
+            }
+            return mm;
+
+        }
+        public MemberMast getMemberMastDetailByConNo(string conno)
+
+        {
+            string sql = "SELECT * FROM MEMBER_MAST WHERE BRANCH_ID='MN' AND EMPLOYEE_ID= '" + conno + "'ORDER BY MEMBER_DATE";
+            config.singleResult(sql);
+            MemberMast mm = new MemberMast();
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    mm.branch_id = dr["branch_id"].ToString();
+                    mm.employee_id = dr["employee_id"].ToString();
+                    mm.member_name = Convert.ToString(dr["member_name"]);
+                    // mm.member_id = Convert.ToString(dr["member_id"]);
+                    mm.member_date = Convert.ToDateTime(dr["member_date"]);
+                    mm.mail_add1 = dr["mail_add1"].ToString();
+                    mm.mail_add2 = dr["mail_add2"].ToString();
+                    mm.mail_city = dr["mail_city"].ToString();
+                    mm.mail_dist = dr["mail_dist"].ToString();
+                    mm.mail_state = dr["mail_state"].ToString();
+                    mm.mail_pin = dr["mail_pin"].ToString();
+                    mm.birth_date = !Convert.IsDBNull(dr["birth_date"]) ? Convert.ToDateTime(dr["birth_date"]) : Convert.ToDateTime("01/01/0001");
+                    mm.cmtdno = dr["cmtdno"].ToString();
+                    //  mm.book_no = dr["book_no"].ToString();
+                    //  mm.t_no = dr["t_no"].ToString();
+                    mm.grdn_name = dr["grdn_name"].ToString();
+                    mm.reln_id = dr["reln_id"].ToString();
+                    mm.sex = dr["sex"].ToString();
+                    mm.occup_id = dr["occup_id"].ToString();
+                    mm.pan_no = dr["pan_no"].ToString();
+
+                }
+                sql = "SELECT * FROM Kyc_Details WHERE Cont_No= '" + conno + "'";
+                config.singleResult(sql);
+                if (config.dt.Rows.Count > 0)
+                {
+                    foreach (DataRow dr1 in config.dt.Rows)
+                    {
+                        mm.Nom_Name = Convert.ToString(dr1["Nom_Name"]);
+                        mm.Nom_Pan = Convert.ToString(dr1["Nom_Pan"]);
+                        mm.Nom_DOB = !Convert.IsDBNull(dr1["Nom_DOB"]) ? Convert.ToDateTime(dr1["Nom_DOB"]) : Convert.ToDateTime("01/01/0001");
+                        mm.Nom_AAdhar = Convert.ToString(dr1["Nom_AAdhar"]);
+                        mm.Nom_Reln = Convert.ToString(dr1["Nom_Reln"]);
+
+                    }
+                }
+
+            }
+            else
+            {
+                mm = null;
+            }
+            return mm;
+
+        }
+        public string saveupdateMember(MemberMast det)
+        {
+            
+            string sql = "SELECT * FROM Member_Mast WHERE employee_id = '" + det.employee_id + "' and branch_id ='" + det.branch_id + "' ";
+            config.singleResult(sql);
+
+            if (config.dt.Rows.Count > 0)
+            {
+                config.Update("Member_Mast", new Dictionary<String, object>()
+                    {
+                    { "ra", Convert.ToInt32 (det.ra)},
+                    { "buno", det.buno},
+                    { "member_date",  det.member_date},
+                    { "PAYMENT_MODE", det.payment_mode},
+                    { "member_type", det.member_type},
+                    { "member_name", det.member_name},
+                    { "status", det.status},
+                    { "grdn_name", det.grdn_name},
+                    { "reln_id", det.reln_id},
+                    { "mail_hno", det.mail_hno},
+                    { "mail_add1", det.mail_add1},
+                    { "mail_add2", det.mail_add2},
+                    { "mail_city", det.mail_city},
+                    { "mail_state", det.mail_state},
+                    { "mail_dist", mail_dist},
+                    { "mail_pin", det.mail_pin},
+                    { "perm_hno", det.perm_hno},
+                    { "perm_add1", det.perm_add1},
+                    { "perm_add2", det.perm_add2},
+                    { "perm_city", det.perm_city},
+                    { "perm_dist", det.perm_dist},
+                    { "perm_state", det.perm_state},
+                    { "perm_pin", det.perm_pin},
+                    { "birth_date", det.birth_date},
+                    { "caste_id", det.caste_id},
+                    { "sex", det.sex},
+                    { "relgn_id", det.relgn_id},
+                    { "married", det.married},
+                    { "if_lti", det.if_lti},
+                    { "date_of_joining", det.date_of_joining},
+                    { "date_of_retirement",  det.date_of_retirement},
+                    { "date_of_remember", det.date_of_remember},
+                    { "id_mark", det.id_mark},
+                    { "is_dead", det.is_dead},
+                    { "expiry_date",  det.exp_date},
+                    { "member_closed",  det.member_closed},
+                    { "member_closdt",  det.member_clos_dt},
+                    { "member_retired", det.member_retired},
+                    { "member_transfered", det.member_transfered},
+                    { "do50pwcm" , det.do50pwcm},
+                    { "modified_by", "USER"},
+                    { "modified_on",DateTime.Now},
+                    { "mcomputer_name", Environment.MachineName},
+                    }, new Dictionary<string, object>()
+                    {
+                    { "employee_id",  det.employee_id },
+                    {"branch_id", det.branch_id },
+                    });
+                det.msg = "Updated Successfuly";
+            }
+            else
+            {
+                try
+                {
+
+                    config.Insert("Member_Mast", new Dictionary<string, object>()
+                        {
+                        {"branch_id", det.branch_id},
+                        {"ra",Convert.ToInt32( det.ra ) },
+                        {"buno", det.buno },
+                        {"sex", det.sex },
+                        {"member_type", det.member_type },
+                        {"member_name", det.member_name},
+                        {"grdn_name", det.grdn_name },
+                        {"birth_date", Convert.ToDateTime(det.birth_date) },
+                        {"status", det.status },
+
+                        {"employee_id", det.employee_id },
+                        {"member_date",Convert.ToDateTime(member_date)},
+                        {"mail_hno", det.mail_hno },
+                        {"mail_add1", det.mail_add1 },
+                        {"mail_add2", det.mail_add2 },
+                        {"mail_city", det.mail_city },
+                        {"mail_dist", det.mail_dist },
+                        {"payment_mode", det.payment_mode },
+
+                        {"mail_state", det.mail_state },
+                        {"mail_pin", det.mail_pin },
+                        {"perm_hno", det.perm_hno},
+                        {"perm_add1", det.perm_add1 },
+                        {"perm_add2", det.perm_add2 },
+                        {"perm_city", det.perm_city },
+                        {"perm_dist", det.perm_dist },
+
+                        {"perm_state", det.perm_state },
+                        {"perm_pin", det.perm_pin },
+                        {"date_of_joining",Convert.ToDateTime( det.date_of_joining) },
+                        {"date_of_retirement",Convert.ToDateTime (det.date_of_retirement) },
+                        {"date_of_remember", Convert.ToDateTime (det.date_of_remember) },
+                        {"do50pwcm",Convert.ToDateTime( det.do50pwcm )},
+                        {"reln_id", det.reln_id },
+                        {"caste_id", det.caste_id },
+                        {"relgn_id", det.relgn_id  },
+                        {"expiry_date", det.exp_date },
+                        {"member_closdt", det.member_closdt },
+                        {"member_closed", det.member_closed },
+                        {"member_transfered", det.member_transfered },
+                        {"married", det.married},
+                        {"if_lti", det.if_lti },
+                        {"is_dead", det.is_dead },
+                        {"member_retired", det.member_retired },
+
+                    });
+                    msg = "Member details saved successfully.";
+                }
+                catch (Exception EX)
+                {
+                    msg = "Unable To Save.";
+                }
+            }
+            return det.msg;
+        }
     }
 }
 

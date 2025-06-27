@@ -1,0 +1,1912 @@
+﻿//using Newtonsoft.Json;
+using SERCCS.Models.Views;
+using SERCCS.Models.Database;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Web;
+using System.Collections.Generic;
+using System.Linq;
+using System.Data;
+using System.Threading.Tasks;
+using System.Text;
+using System.Net;
+using System.IO;
+
+using Microsoft.AspNetCore.Mvc.Rendering;
+using SERCCS.Includes;
+
+using Microsoft.AspNetCore.Authorization;
+using OfficeOpenXml;
+using System.Reflection;
+using System.ComponentModel;
+
+using Vintasoft.Twain;
+using System.Drawing.Printing;
+using System.Drawing;
+
+
+
+namespace SERCCS.Controllers
+{
+   
+    public class DepositsController : Controller
+    {
+        UtilityController uc = new UtilityController();
+        const string ESC = "\u001B";
+        const string BoldOn = ESC + "E" + "\u0001";
+        const string BoldOff = ESC + "E" + "\0";
+        private const string V = "#,##0";
+        public char form_feed = Convert.ToChar(12);
+        public DateTime xDate;
+        public Double XBAL;
+        public String xacno;
+        public String XNAME;
+        public String XCONT;
+        public String xpo;
+        public String QRY3;
+        public String QRY4;
+        public String XMSG;
+        public String XDATE;
+        public String _pono;
+        public DateTime xinopdt;
+        public DateTime xunclmdt;
+        public decimal XAMT;
+        String XXDATE;
+
+        public String from_logon_date;
+        // private object serial;
+
+
+
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult CashDepositAndWithdrawn(CashDepositWthdrawViewModel model)
+        {
+
+            CashDepositWthdrawViewModel cv = new CashDepositWthdrawViewModel();
+            decimal total = 0;
+
+            //    model.PoNo = GetPoNo(model.CounterNo, model.DepositWithdrow, model.AcHd, model.TransDate);
+
+            if (!string.IsNullOrEmpty(model.ContNo) && !string.IsNullOrEmpty(model.AcHd) && string.IsNullOrEmpty(model.AcNo) && string.IsNullOrEmpty(model.WithAmount))
+            {
+
+                cv = GetAccountDetailByControlNO(model.ContNo, model.AcHd, model.TransDate);
+                model.AcNo = cv.AcNo;
+                model.Name = cv.Name;
+                model.ModeOfOprtn = cv.ModeOfOprtn;
+                model.LastOpDate = cv.LastOpDate;
+                model.LastBalance = cv.LastBalance;
+                model.MaxWithAmount = cv.MaxWithAmount;
+                model.PoNo = GetPoNo(model.CounterNo, model.DepositWithdrow, model.AcHd, model.TransDate);
+
+            }
+            else if (string.IsNullOrEmpty(model.ContNo) && !string.IsNullOrEmpty(model.AcHd) && !string.IsNullOrEmpty(model.AcNo) && string.IsNullOrEmpty(model.WithAmount))
+            {
+                cv = GetAccountDetailByAccountNO(model.AcNo, model.AcHd, model.TransDate);
+                model.ContNo = cv.ContNo;
+                model.Name = cv.Name;
+                model.ModeOfOprtn = cv.ModeOfOprtn;
+                model.LastOpDate = cv.LastOpDate;
+                model.LastBalance = cv.LastBalance;
+                model.MaxWithAmount = cv.MaxWithAmount;
+                model.PoNo = GetPoNo(model.CounterNo, model.DepositWithdrow, model.AcHd, model.TransDate);
+            }
+
+            //KYC Photo & Signature Display
+            if (!string.IsNullOrWhiteSpace(model.ContNo))
+            {
+                KycDetails kd = new KycDetails();
+                MemberMastDBUtility memMastDBUtility = new MemberMastDBUtility();
+
+                kd = memMastDBUtility.getKycDetailsBySingleCont(model.ContNo);
+                if (kd.photo != null && kd.sign != null)
+                {
+
+                    ViewBag.PhotoImageUrl = "data:image/jpg;base64," + Convert.ToBase64String(kd.photo);
+
+                    ViewBag.SignImageUrl = "data:image/jpg;base64," + Convert.ToBase64String(kd.sign);
+                }
+
+            }
+
+            //if (!string.IsNullOrEmpty(model.CounterNo) && !string.IsNullOrEmpty(model.AcHd) && !string.IsNullOrEmpty(model.AcNo) && !string.IsNullOrEmpty(model.TransDate) && string.IsNullOrEmpty(model.WithAmount))
+            //{
+            //    model.PoNo = GetPoNo(model.CounterNo, model.DepositWithdrow, model.AcHd, model.TransDate);
+            //}
+
+            if (model.btnTotal != null)
+            {
+                List<TvchDetail> lstTV = new List<TvchDetail>();
+                lstTV = GetTotal(model);
+                ViewBag.tvchlist = lstTV;
+                foreach (var tvch in lstTV)
+                {
+                    total = total + tvch.vch_amt;
+                }
+                ViewBag.Total = total.ToString();
+
+            }
+
+            //if (model.btnPrint != null)
+            //{
+            //    List<TvchDetail> lstTV = new List<TvchDetail>();
+            //    lstTV = GetTotal(model);
+            //    ViewBag.tvchlist = lstTV;
+            //    foreach (var tvch in lstTV)
+            //    {
+            //        total = total + tvch.vch_amt;
+            //    }
+            //    ViewBag.Total = total.ToString();
+            //    GetPrintFile(lstTV, model);
+            //}
+
+            //
+            if (!string.IsNullOrEmpty(model.btnSave) && !string.IsNullOrEmpty(model.WithAmount) && Convert.ToDecimal(model.WithAmount) > 0 && !string.IsNullOrEmpty(model.PoNo))
+            // if (model.btnSave != null)
+            {
+                if (!string.IsNullOrEmpty(model.WithAmount) && Convert.ToDecimal(model.WithAmount) > 0 && !string.IsNullOrEmpty(model.PoNo))
+                {
+                    int i = 1;
+                    TvchDetail tv = new TvchDetail();
+                    if (model.DepositWithdrow == "Withdrawal")
+                    {
+                        tv.vch_drcr = "D";
+                    }
+                    else
+                    {
+                        tv.vch_drcr = "C";
+                    }
+
+                    i = tv.ValidateData(model.AcHd, model.AcNo, model.CounterNo, model.TransDate, model.PoNo, tv.vch_drcr);
+
+                    if (i == 0)
+                    {
+                        string result = string.Empty;
+                        if (model.DepositWithdrow == "Deposit")
+                        {
+                            result = "Yes";
+                        }
+                        else
+                        {
+
+                            result = CheckWithdrawAmount(Convert.ToDecimal(model.MaxWithAmount), Convert.ToDecimal(model.WithAmount));
+                        }
+                        if (result == "No")
+                        {
+                            ViewBag.ErrorMsg = "Withdraw Amount can not be greater than Maximum Withdraw Amount! ";
+                        }
+                        else if (result == "Yes")
+                        {
+                            SaveData(model);
+                            DepositMast dm = new DepositMast();
+                            if (model.DepositWithdrow == "Withdrawal")
+                            {
+                                dm = dm.CheckStatus(model.AcHd, model.AcNo);
+                                if (dm.ac_closed == "T")
+                                {
+                                    dm.ac_closed = "C";
+                                    dm.ac_hd = model.AcHd;
+                                    dm.ac_no = model.AcNo;
+                                    dm.UpdateDepositMastForClosFlag(dm);
+                                }
+                            }
+
+                            model.ContNo = null;
+                            model.AcNo = null;
+                            model.Name = null;
+                            model.LastOpDate = null;
+                            model.LastBalance = null;
+                            model.MaxWithAmount = null;
+                            model.PoNo = GetPoNo(model.CounterNo, model.DepositWithdrow, model.AcHd, model.TransDate);
+                            model.msgbox = "Transaction Over";
+                            ViewBag.ErrorMsg = "Transaction Over";
+
+                            ViewBag.JavaScriptFunctionSave = string.Format("refresh('{0}');", "1");
+                        }
+
+
+
+                        //if(model.AcHd=="SB")
+                        //{
+                        //    DataTable dt = new DataTable();
+                        //    DepositLedgerSB ldg = new DepositLedgerSB();
+                        //    dt= ldg.GetLastBalanceOrCloseAccount(model.AcHd,model.AcNo);
+                        //    if (dt.Rows.Count > 0)
+                        //    {
+                        //        DataRow dr = (DataRow)dt.Rows[dt.Rows.Count - 1];
+                        //        if (model.DepositWithdrow == "WITHDRAWAL")
+
+                        //            model.LastBalance = (Convert.ToDecimal(dr["prin_bal"]) - Convert.ToDecimal(model.WithAmount)).ToString();
+
+                        //        else
+
+                        //            model.LastBalance = (Convert.ToDecimal(dr["prin_bal"]) + Convert.ToDecimal(model.WithAmount)).ToString();
+
+
+                        //    }
+                        //    else {
+                        //        model.LastBalance = "";
+                        //        model.MaxWithAmount = "";
+                        //    }
+                        //}
+
+
+
+                    }
+                    else
+                    {
+                        model.msgbox = "Transaction already done";
+                        ViewBag.ErrorMsg = "Transaction already done";
+                        model.ContNo = "";
+                        model.AcNo = "";
+                        model.Name = "";
+                        model.LastOpDate = "";
+                        model.LastBalance = "";
+                        model.MaxWithAmount = "";
+                        model.PoNo = "";
+                        ViewBag.JavaScriptFunctionDuplicate = string.Format("refresh('{0}');", "1");
+                    }
+                }
+
+            }
+
+            if (!string.IsNullOrEmpty(model.ContNo) || !string.IsNullOrEmpty(model.AcNo))
+            {
+                ViewBag.JavaScriptFunction1 = string.Format("setfocusCont('{0}');", "1");
+            }
+
+
+            if (model.msgbox != null)
+                ViewBag.ErrorMsg = model.msgbox;
+
+            return View(model);
+        }
+
+
+        public JsonResult getdatabyContNofordepwith(CashDepositWthdrawViewModel model)
+        {
+            CashDepositWthdrawViewModel cv = new CashDepositWthdrawViewModel();
+            cv = GetAccountDetailByControlNO(model.ContNo, model.AcHd, model.TransDate);
+            model.AcNo = cv.AcNo;
+            model.Name = cv.Name;
+            model.ModeOfOprtn = cv.ModeOfOprtn;
+            model.LastOpDate = cv.LastOpDate;
+            
+            model.LastBalance = Convert.ToDecimal(cv.LastBalance).ToString("#,##0.00"); 
+            model.MaxWithAmount = Convert.ToDecimal(cv.MaxWithAmount).ToString("#,##0.00");
+            model.PoNo = GetPoNo(model.CounterNo, model.DepositWithdrow, model.AcHd, model.TransDate);
+            return Json(model);
+        }
+        public JsonResult getdatabyAcNofordepwith(CashDepositWthdrawViewModel model)
+        {
+            CashDepositWthdrawViewModel cv = new CashDepositWthdrawViewModel();
+            cv = GetAccountDetailByAccountNO(model.AcNo, model.AcHd, model.TransDate);
+            model.ContNo = cv.ContNo;
+            model.Name = cv.Name;
+            model.ModeOfOprtn = cv.ModeOfOprtn;
+            model.LastOpDate = cv.LastOpDate;
+            model.LastBalance = Convert.ToDecimal(cv.LastBalance).ToString("#,##0.00");
+            model.MaxWithAmount = Convert.ToDecimal(cv.MaxWithAmount).ToString("#,##0.00");
+            model.PoNo = GetPoNo(model.CounterNo, model.DepositWithdrow, model.AcHd, model.TransDate);
+            return Json(model);
+        }
+        public JsonResult Getphotosignfordepwith(string ContNo)
+        {
+            CashDepositWthdrawViewModel model = new CashDepositWthdrawViewModel();
+            KycDetails kd = new KycDetails();
+            MemberMastDBUtility memMastDBUtility = new MemberMastDBUtility();
+
+            kd = memMastDBUtility.getKycDetailsBySingleCont(ContNo);
+            if (kd.photo != null && kd.sign != null)
+            {
+
+                model.PhotoImageUrl = "data:image/jpg;base64," + Convert.ToBase64String(kd.photo);
+
+                model.SigImageUrl = "data:image/jpg;base64," + Convert.ToBase64String(kd.sign);
+            }
+            return Json(model);
+        }
+        public JsonResult SaveDepositWitdraw(CashDepositWthdrawViewModel model)
+        {
+            int i = 1;
+            TvchDetail tv = new TvchDetail();
+            if (model.DepositWithdrow == "Withdrawal")
+            {
+                tv.vch_drcr = "D";
+            }
+            else
+            {
+                tv.vch_drcr = "C";
+            }
+
+            i = tv.ValidateData(model.AcHd, model.AcNo, model.CounterNo, model.TransDate, model.PoNo, tv.vch_drcr);
+
+            if (i == 0)
+            {
+                string result = string.Empty;
+
+
+
+
+                SaveData(model);
+                DepositMast dm = new DepositMast();
+                if (model.DepositWithdrow == "Withdrawal")
+                {
+                    dm = dm.CheckStatus(model.AcHd, model.AcNo);
+                    if (dm.ac_closed == "T")
+                    {
+                        dm.ac_closed = "C";
+                        dm.ac_hd = model.AcHd;
+                        dm.ac_no = model.AcNo;
+                        dm.UpdateDepositMastForClosFlag(dm);
+                    }
+                }
+
+
+                model.msgbox = "Transaction Over";
+
+
+            }
+            else
+            {
+                model.msgbox = "Transaction already done";
+
+            }
+
+
+            return Json(model.msgbox);
+        }
+        public JsonResult GetTotalList(CashDepositWthdrawViewModel model)
+        {
+            int i = 1;
+            model.totalAmt = "0";
+            model.table = "<tr><th>Srl</th><th>Counter No</th><th>PO No.</th><th> A/c No </th><th> Name </th><th> Amount (Rs.) </th></tr>";
+            List<TvchDetail> lstTV = new List<TvchDetail>();
+            lstTV = GetTotal(model);
+            if (lstTV.Count > 0)
+            {
+                foreach (var a in lstTV)
+                {
+                    model.table = model.table + "<tr><td>" + i.ToString() + "</td><td>" + a.counter_no + "</td><td>" + a.trn_no + "</td><td>" + a.vch_pacno + "</td><td>" + a.vch_acname + "</td><td>" + a.vch_amt.ToString("0.00") + "</td></tr>";
+                    model.totalAmt = (Convert.ToDecimal(model.totalAmt) + a.vch_amt).ToString("0.00");
+                    i = i + 1;
+                }
+            }
+            return Json(model);
+        }
+        [HttpPost]
+        public IActionResult CashDepositAndWithdrawn(CashDepositWthdrawViewModel model, string btnSave, string btnTotal, string btnPrint, string btnRefresh)
+        {
+
+            XDATE = model.TransDate; // (Convert.ToDateTime(datepicker1.Value).AddDays(1)).ToString();
+                                     //  decimal total = 0;
+
+            CashDepositWthdrawViewModel cv = new CashDepositWthdrawViewModel();
+
+            if (btnRefresh != null)
+            {
+                CashDepositWthdrawViewModel cdw = new CashDepositWthdrawViewModel();
+
+                //cdw.AcHd = "";
+                //cdw.CounterNo = "";
+                //cdw.ContNo = "";
+                //cdw.AcNo = "";
+                //cdw.Name = "";
+                //cdw.ModeOfOprtn = "";
+                //cdw.LastOpDate = "";
+                //cdw.LastBalance = "";
+                //cdw.MaxWithAmount = "";
+                //cdw.PoNo = "";
+                //cdw.DepositWithdrow = "";
+                //cdw.TransDate = "";
+                cdw = null;
+                return RedirectToAction("CashDepositAndWithdrawn", cdw);
+            }
+
+            return RedirectToAction("CashDepositAndWithdrawn", model);
+        }
+
+     
+
+        [HttpPost]
+        public JsonResult CheckWithBal(string MaxWithAmount, string WithAmount)
+        {
+            decimal maxwithdraw = Convert.ToDecimal(MaxWithAmount);
+            decimal withdrawAmt = Convert.ToDecimal(WithAmount);
+            string res = CheckWithdrawAmount(maxwithdraw, withdrawAmt);
+            return Json(res);
+
+        }
+
+        public string CheckWithdrawAmount(decimal maxwith, decimal with)
+        {
+            string result = string.Empty;
+            if (with > 0 && with <= maxwith)
+            {
+                result = "Yes";
+            }
+            else
+            {
+                result = "No";
+
+            }
+            return result;
+        }
+
+
+        [HttpPost]
+        public JsonResult GetAccountDetail(string contno, string acno, string achd, string transdate)
+        {
+            DepositMast dm;
+            CashDepositWthdrawViewModel cashDepositWthdrawViewModel = new CashDepositWthdrawViewModel();
+
+            if (acno != null && acno.Length > 0 && contno == null)
+            {
+
+
+                if (achd == "SB" || achd == "FD")
+                {
+                    DepositDBUtility depositDBUtility = new DepositDBUtility();
+                    dm = depositDBUtility.getDepositMastDetailByAcno(acno, achd);
+                    if (dm != null)
+                    {
+                        cashDepositWthdrawViewModel.ContNo = dm.contno;
+                        cashDepositWthdrawViewModel.Name = dm.ac_name;
+                        if (dm.oprn_mode == "ANY")
+                            cashDepositWthdrawViewModel.ModeOfOprtn = "Any One";
+                        else if (dm.oprn_mode == "SING")
+                            cashDepositWthdrawViewModel.ModeOfOprtn = "SINGLE";
+                        else
+                            cashDepositWthdrawViewModel.ModeOfOprtn = dm.oprn_mode;
+                    }
+
+                    if (achd == "SB")
+                    {
+                        DepositLedgerSB dlsb = new DepositLedgerSB();
+                        DepLedgerSBDBUtility depLedgerSBDBUtility = new DepLedgerSBDBUtility();
+                        dlsb = depLedgerSBDBUtility.getDepositLedgerDetailByAcno(acno, achd);
+                        if (dlsb != null)
+                        {
+                            cashDepositWthdrawViewModel.LastOpDate = dlsb.vch_date.ToString("dd-MM-yyyy");
+                            cashDepositWthdrawViewModel.LastBalance = dlsb.prin_bal.ToString();
+                        }
+
+                        DepositLedgerTemp tm = new DepositLedgerTemp();
+                        DepLedgerTempDBUtility depLedgerTempDBUtility = new DepLedgerTempDBUtility();
+                        tm = depLedgerTempDBUtility.getDepositLedgerTempByAcno(acno, achd);
+                        if (tm != null)
+                        {
+                            if (tm.dr_cr == "D")
+                            {
+                                cashDepositWthdrawViewModel.LastBalance = (Convert.ToDecimal(cashDepositWthdrawViewModel.LastBalance) - tm.prin_amount).ToString();
+                            }
+                            else
+                            {
+                                cashDepositWthdrawViewModel.LastBalance = (Convert.ToDecimal(cashDepositWthdrawViewModel.LastBalance) + tm.prin_amount).ToString();
+
+                            }
+                        }
+                        if (dm.ac_closed.ToString() == "T")
+                            cashDepositWthdrawViewModel.MaxWithAmount = dlsb.prin_bal.ToString();
+                        else
+                            cashDepositWthdrawViewModel.MaxWithAmount = (Convert.ToDecimal(cashDepositWthdrawViewModel.LastBalance) - 300).ToString();
+
+                    }
+                    else if (achd == "FD")
+                    {
+                        DepositLedgerFd dlfd = new DepositLedgerFd();
+                        DepositLedgerDbUtility depositLedgerDbUtility = new DepositLedgerDbUtility();
+                        dlfd = depositLedgerDbUtility.GetFDLedgerDetail(acno, achd);
+                        if (dlfd != null)
+                        {
+                            cashDepositWthdrawViewModel.LastOpDate = dlfd.vch_date.ToString("dd-MM-yyyy");
+                            cashDepositWthdrawViewModel.LastBalance = dlfd.prin_bal.ToString();
+                            cashDepositWthdrawViewModel.MaxWithAmount = dlfd.prin_bal.ToString();
+                        }
+
+                    }
+                    else
+                    {
+                        cashDepositWthdrawViewModel.LastOpDate = "";
+
+                        cashDepositWthdrawViewModel.LastBalance = "";
+
+                        cashDepositWthdrawViewModel.MaxWithAmount = "";
+
+                    }
+
+                }
+                else if (achd == "DIV" || achd == "SH" || achd == "CMTD" || achd == "MISC" || achd == "ADV" || achd == "PRF" || achd == "SBIPP")
+                {
+
+                    MemberMast mm = new MemberMast();
+                    mm = mm.getMemberMastDetailByAcno(acno);
+                    if (mm != null)
+                    {
+                        cashDepositWthdrawViewModel.ContNo = mm.employee_id;
+                        cashDepositWthdrawViewModel.Name = mm.member_name;
+
+                    }
+
+                    Ledger ld = new Ledger();
+                    DepositLedgerDbUtility depositLedgerDbUtility = new DepositLedgerDbUtility();
+                    ld = depositLedgerDbUtility.GetLedgerDetail(acno, achd, cashDepositWthdrawViewModel.ContNo);
+                    if (ld != null)
+                    {
+                        cashDepositWthdrawViewModel.LastOpDate = ld.vch_date.ToString("dd-MM-yyyy");
+                        cashDepositWthdrawViewModel.LastBalance = ld.prin_bal.ToString();
+                        cashDepositWthdrawViewModel.MaxWithAmount = ld.prin_bal.ToString();
+                    }
+
+                }
+                else
+                {
+                    LoanMaster lm = new LoanMaster();
+                    lm = lm.getLoanMasterDetailByAcno(acno, achd);
+                    if (lm != null)
+                    {
+                        cashDepositWthdrawViewModel.ContNo = lm.employee_id;
+                        cashDepositWthdrawViewModel.Name = lm.loanee_name;
+                        //if (achd == "FES")
+                        //{
+                        //    cashDepositWthdrawViewModel.Total = lm.loan_amt.ToString();
+                        //    cashDepositWthdrawViewModel.MaxWithAmount = lm.loan_amt.ToString();
+                        //    cashDepositWthdrawViewModel.WithAmount = lm.loan_amt.ToString();
+                        //}
+                        // XDATE = lm.loan_date.ToString();
+                        if (achd == "SBIPP")
+                            cashDepositWthdrawViewModel.MaxWithAmount = "1000000";
+
+                        Ledger ld = new Ledger();
+                        DepositLedgerDbUtility depositLedgerDbUtility = new DepositLedgerDbUtility();
+                        ld = depositLedgerDbUtility.GetLedgerDetail(acno, achd, cashDepositWthdrawViewModel.ContNo, transdate);
+                        if (ld != null)
+                        {
+
+                            cashDepositWthdrawViewModel.LastBalance = ld.prin_amount.ToString();
+                            cashDepositWthdrawViewModel.MaxWithAmount = ld.prin_amount.ToString();
+                            cashDepositWthdrawViewModel.WithAmount = ld.prin_amount.ToString();
+                        }
+
+
+                    }
+
+                }
+
+
+            }
+            else if (contno != null && contno.Length > 0 && acno == null) //get by control no.
+            {
+
+
+                if (achd == "SB" || achd == "FD")
+                {
+
+                    DepositDBUtility depositDBUtility = new DepositDBUtility();
+                    dm = depositDBUtility.getDepositMastDetailByConNo(contno, achd);
+                    if (dm != null)
+                    {
+                        cashDepositWthdrawViewModel.AcNo = dm.ac_no;
+                        cashDepositWthdrawViewModel.Name = dm.ac_name;
+                        if (dm.oprn_mode == "ANY")
+                            cashDepositWthdrawViewModel.ModeOfOprtn = "Any One";
+                        else if (dm.oprn_mode == "SING")
+                            cashDepositWthdrawViewModel.ModeOfOprtn = "SINGLE";
+                        else
+                            cashDepositWthdrawViewModel.ModeOfOprtn = dm.oprn_mode;
+                    }
+
+
+                    if (achd == "SB")
+                    {
+                        DepositLedgerSB dlsb = new DepositLedgerSB();
+                        DepLedgerSBDBUtility depLedgerSBDBUtility = new DepLedgerSBDBUtility();
+                        dlsb = depLedgerSBDBUtility.getDepositLedgerDetailByAcno(dm.ac_no, achd);
+                        if (dlsb != null)
+                        {
+                            cashDepositWthdrawViewModel.LastOpDate = dlsb.vch_date.ToString("dd-MM-yyyy");
+                            cashDepositWthdrawViewModel.LastBalance = dlsb.prin_bal.ToString();
+                        }
+
+                        DepositLedgerTemp tm = new DepositLedgerTemp();
+                        DepLedgerTempDBUtility depLedgerTempDBUtility = new DepLedgerTempDBUtility();
+                        tm = depLedgerTempDBUtility.getDepositLedgerTempByAcno(acno, achd);
+                        if (tm != null)
+                        {
+                            if (tm.dr_cr == "D")
+                            {
+                                cashDepositWthdrawViewModel.LastBalance = (Convert.ToDecimal(cashDepositWthdrawViewModel.LastBalance) - tm.prin_amount).ToString();
+                            }
+                            else
+                            {
+                                cashDepositWthdrawViewModel.LastBalance = (Convert.ToDecimal(cashDepositWthdrawViewModel.LastBalance) + tm.prin_amount).ToString();
+
+                            }
+                        }
+                        if (dm.ac_closed.ToString() == "T")
+                            cashDepositWthdrawViewModel.MaxWithAmount = dlsb.prin_bal.ToString();
+                        else
+                            cashDepositWthdrawViewModel.MaxWithAmount = (Convert.ToDecimal(cashDepositWthdrawViewModel.LastBalance) - 300).ToString();
+
+                    }
+                }
+                else if (achd == "DIV" || achd == "SH" || achd == "CMTD" || achd == "MISC" || achd == "ADV" || achd == "PRF" || achd == "SBIPP")
+                {
+
+                    MemberMast mm = new MemberMast();
+                    mm = mm.getMemberMastDetailByConNo(contno);
+                    if (mm != null)
+                    {
+                        //cashDepositWthdrawViewModel.AcNo = mm.member_id;
+                        cashDepositWthdrawViewModel.Name = mm.member_name;
+
+                    }
+
+                }
+                else
+                {
+                    LoanMaster lm = new LoanMaster();
+                    lm = lm.getLoanMasterDetailByConno(contno, achd);
+                    if (lm != null)
+                    {
+                        cashDepositWthdrawViewModel.AcNo = lm.loan_id;
+                        cashDepositWthdrawViewModel.Name = lm.loanee_name;
+                        //if (model.ac_hd == "FES")
+                        //{
+                        //    txtTotal.Text = lm.loan_amt.ToString();
+                        //    txtWBal.Text = lm.loan_amt.ToString();
+                        //    txtWith.Text = lm.loan_amt.ToString();
+                        //}
+                        //XDATE = lm.loan_date;
+                        //if (model.ac_hd == "SBIPP")
+                        //    txtWBal.Text = "1000000";
+                    }
+
+                }
+
+            }
+
+
+
+            if (!string.IsNullOrWhiteSpace(cashDepositWthdrawViewModel.ContNo))
+            {
+                KycDetails kd = new KycDetails();
+                MemberMastDBUtility memMastDBUtility = new MemberMastDBUtility();
+
+                kd = memMastDBUtility.getKycDetailsBySingleCont(cashDepositWthdrawViewModel.ContNo);
+
+                //cashDepositWthdrawViewModel.PhotoImageUrl = "data:image/jpg;base64," + Convert.ToBase64String(kd.photo);
+
+                //cashDepositWthdrawViewModel.SigImageUrl = "data:image/jpg;base64," + Convert.ToBase64String(kd.sign);
+
+            }
+
+
+            return Json(cashDepositWthdrawViewModel);
+        }
+
+
+        public CashDepositWthdrawViewModel GetAccountDetailByControlNO(string contno, string achd, string transdate)
+        {
+            DepositMast dm;
+            CashDepositWthdrawViewModel cashDepositWthdrawViewModel = new CashDepositWthdrawViewModel();
+
+
+
+            if (achd == "SB" || achd == "FD")
+            {
+
+                DepositDBUtility depositDBUtility = new DepositDBUtility();
+                dm = depositDBUtility.getDepositMastDetailByConNo(contno, achd);
+                if (dm != null)
+                {
+                    cashDepositWthdrawViewModel.AcNo = dm.ac_no;
+                    cashDepositWthdrawViewModel.Name = dm.ac_name;
+                    if (dm.oprn_mode == "ANY")
+                        cashDepositWthdrawViewModel.ModeOfOprtn = "Any One";
+                    else if (dm.oprn_mode == "SING")
+                        cashDepositWthdrawViewModel.ModeOfOprtn = "SINGLE";
+                    else
+                        cashDepositWthdrawViewModel.ModeOfOprtn = dm.oprn_mode;
+
+
+
+                    if (achd == "SB")
+                    {
+                        DepositLedgerSB dlsb = new DepositLedgerSB();
+                        DepLedgerSBDBUtility depLedgerSBDBUtility = new DepLedgerSBDBUtility();
+                        dlsb = depLedgerSBDBUtility.getDepositLedgerDetailByAcno(dm.ac_no, achd);
+                        if (dlsb != null)
+                        {
+                            cashDepositWthdrawViewModel.LastOpDate = dlsb.vch_date.ToString("dd-MM-yyyy");
+                            cashDepositWthdrawViewModel.LastBalance = dlsb.prin_bal.ToString();
+                        }
+
+                        List<DepositLedgerTemp> tm = new List<DepositLedgerTemp>();
+                        DepLedgerTempDBUtility depLedgerTempDBUtility = new DepLedgerTempDBUtility();
+                        tm = depLedgerTempDBUtility.getDepositLedgerTempByAcnoForDepWith(dm.ac_no, achd);
+                        if (tm.Count>0)
+                        {
+                            foreach(var a in tm)
+                            {
+                                if (a.dr_cr == "D")
+                                {
+                                    cashDepositWthdrawViewModel.LastBalance = (Convert.ToDecimal(cashDepositWthdrawViewModel.LastBalance) - a.prin_amount).ToString();
+                                }
+                                else
+                                {
+                                    cashDepositWthdrawViewModel.LastBalance = (Convert.ToDecimal(cashDepositWthdrawViewModel.LastBalance) + a.prin_amount).ToString();
+
+                                }
+                            }
+                           
+                        }
+                        if (dm.ac_closed.ToString() == "T")
+                            cashDepositWthdrawViewModel.MaxWithAmount = dlsb.prin_bal.ToString();
+                        else
+                            cashDepositWthdrawViewModel.MaxWithAmount = (Convert.ToDecimal(cashDepositWthdrawViewModel.LastBalance) - 300).ToString();
+
+                    }
+
+                }
+                else
+                {
+                    cashDepositWthdrawViewModel.msgbox = "Wrong Control NO";
+                    ViewBag.ErrorMsg = "Wrong Control NO";
+                }
+
+            }
+            else if (achd == "DIV" || achd == "SH" || achd == "CMTD" || achd == "MISC" || achd == "ADV" || achd == "PRF" || achd == "SBIPP" || achd == "LFC")
+            {
+
+                MemberMast mm = new MemberMast();
+                mm = mm.getMemberMastDetailByConNo(contno);
+                if (mm != null)
+                {
+                    //cashDepositWthdrawViewModel.AcNo = mm.member_id;
+                    cashDepositWthdrawViewModel.Name = mm.member_name;
+                    if(achd == "CMTD")
+                    {
+                        DepositLedgerSB dlsb = new DepositLedgerSB();
+                        DepLedgerSBDBUtility depLedgerSBDBUtility = new DepLedgerSBDBUtility();
+                        dlsb = depLedgerSBDBUtility.getDepositLedgerDetailByAcno(contno, achd);
+                        if (dlsb != null)
+                        {
+                            cashDepositWthdrawViewModel.LastOpDate = dlsb.vch_date.ToString("dd-MM-yyyy");
+                            cashDepositWthdrawViewModel.LastBalance = dlsb.prin_bal.ToString();
+                            cashDepositWthdrawViewModel.MaxWithAmount= dlsb.prin_bal.ToString();
+                        }
+                    }
+                }
+                else
+                {
+                    cashDepositWthdrawViewModel.msgbox = "Wrong Control NO";
+                    ViewBag.ErrorMsg = "Wrong Control NO";
+                }
+
+            }
+            else
+            {
+                LoanMaster lm = new LoanMaster();
+                lm = lm.getLoanMasterDetailByConno(contno, achd);
+                if (lm != null)
+                {
+                    cashDepositWthdrawViewModel.AcNo = lm.loan_id;
+                    cashDepositWthdrawViewModel.Name = lm.loanee_name;
+                    //if (model.ac_hd == "FES")
+                    //{
+                    //    txtTotal.Text = lm.loan_amt.ToString();
+                    //    txtWBal.Text = lm.loan_amt.ToString();
+                    //    txtWith.Text = lm.loan_amt.ToString();
+                    //}
+                    //XDATE = lm.loan_date;
+                    //if (model.ac_hd == "SBIPP")
+                    //    txtWBal.Text = "1000000";
+                }
+                else
+                {
+                    cashDepositWthdrawViewModel.msgbox = "Wrong Control NO";
+                    ViewBag.ErrorMsg = "Wrong Control NO";
+                }
+
+            }
+
+
+            cashDepositWthdrawViewModel.ContNo = contno;
+
+
+            //if (!string.IsNullOrWhiteSpace(cashDepositWthdrawViewModel.ContNo))
+            //{
+            //    KycDetails kd = new KycDetails();
+            //    MemberMastDBUtility memMastDBUtility = new MemberMastDBUtility();
+
+            //    kd = memMastDBUtility.getKycDetailsBySingleCont(cashDepositWthdrawViewModel.ContNo);
+
+            //    //cashDepositWthdrawViewModel.PhotoImageUrl = "data:image/jpg;base64," + Convert.ToBase64String(kd.photo);
+
+            //    //cashDepositWthdrawViewModel.SigImageUrl = "data:image/jpg;base64," + Convert.ToBase64String(kd.sign);
+
+            //}
+
+
+            return cashDepositWthdrawViewModel;
+        }
+
+        public CashDepositWthdrawViewModel GetAccountDetailByAccountNO(string acno, string achd, string transdate)
+        {
+            DepositMast dm;
+            CashDepositWthdrawViewModel cashDepositWthdrawViewModel = new CashDepositWthdrawViewModel();
+
+            if (acno != null && acno.Length > 0)
+            {
+
+
+                if (achd == "SB" || achd == "FD")
+                {
+                    DepositDBUtility depositDBUtility = new DepositDBUtility();
+                    dm = depositDBUtility.getDepositMastDetailByAcno(acno, achd);
+                    if (dm != null)
+                    {
+                        cashDepositWthdrawViewModel.ContNo = dm.contno;
+                        cashDepositWthdrawViewModel.Name = dm.ac_name;
+                        if (dm.oprn_mode == "ANY")
+                            cashDepositWthdrawViewModel.ModeOfOprtn = "Any One";
+                        else if (dm.oprn_mode == "SING")
+                            cashDepositWthdrawViewModel.ModeOfOprtn = "SINGLE";
+                        else
+                            cashDepositWthdrawViewModel.ModeOfOprtn = dm.oprn_mode;
+
+
+                        if (achd == "SB")
+                        {
+                            DepositLedgerSB dlsb = new DepositLedgerSB();
+                            DepLedgerSBDBUtility depLedgerSBDBUtility = new DepLedgerSBDBUtility();
+                            dlsb = depLedgerSBDBUtility.getDepositLedgerDetailByAcno(acno, achd);
+                            if (dlsb != null)
+                            {
+                                cashDepositWthdrawViewModel.LastOpDate = dlsb.vch_date.ToString("dd-MM-yyyy");
+                                cashDepositWthdrawViewModel.LastBalance = dlsb.prin_bal.ToString();
+                            }
+
+                            DepositLedgerTemp tm = new DepositLedgerTemp();
+                            List<DepositLedgerTemp> tml = new List<DepositLedgerTemp>();
+                            DepLedgerTempDBUtility depLedgerTempDBUtility = new DepLedgerTempDBUtility();
+                            tml = depLedgerTempDBUtility.getDepositLedgerTempListByAcno(acno, achd);
+                            //if (tml != null)
+                            if (tml.Count > 0)
+                            {
+                                foreach (var dlt in tml)
+                                {
+                                    if (dlt.dr_cr == "D")
+                                    {
+                                        cashDepositWthdrawViewModel.LastBalance = (Convert.ToDecimal(cashDepositWthdrawViewModel.LastBalance) - dlt.prin_amount).ToString();
+                                    }
+                                    else
+                                    {
+                                        cashDepositWthdrawViewModel.LastBalance = (Convert.ToDecimal(cashDepositWthdrawViewModel.LastBalance) + dlt.prin_amount).ToString();
+
+                                    }
+                                }
+
+                            }
+                            if (Convert.ToString(dm.ac_closed) == "T")
+                                cashDepositWthdrawViewModel.MaxWithAmount = dlsb.prin_bal.ToString();
+                            else
+                                cashDepositWthdrawViewModel.MaxWithAmount = (Convert.ToDecimal(cashDepositWthdrawViewModel.LastBalance) - 300).ToString();
+
+                        }
+                        else if (achd == "FD")
+                        {
+                            DepositLedgerFd dlfd = new DepositLedgerFd();
+                            DepositLedgerDbUtility depositLedgerDbUtility = new DepositLedgerDbUtility();
+                            dlfd = depositLedgerDbUtility.GetFDLedgerDetail(acno, achd);
+                            if (dlfd != null)
+                            {
+                                cashDepositWthdrawViewModel.LastOpDate = dlfd.vch_date.ToString("dd-MM-yyyy");
+                                cashDepositWthdrawViewModel.LastBalance = dlfd.prin_bal.ToString();
+                                cashDepositWthdrawViewModel.MaxWithAmount = dlfd.prin_bal.ToString();
+                            }
+
+                        }
+
+                    }
+                    //else
+                    //{
+                    //    cashDepositWthdrawViewModel.LastOpDate = "";
+
+                    //    cashDepositWthdrawViewModel.LastBalance = "";
+
+                    //    cashDepositWthdrawViewModel.MaxWithAmount = "";
+
+                    //}
+
+                }
+                else if (achd == "DIV" || achd == "SH" || achd == "CMTD" || achd == "MISC" || achd == "ADV" || achd == "PRF" || achd == "SBIPP")
+                {
+
+                    MemberMast mm = new MemberMast();
+                    mm = mm.getMemberMastDetailByAcno(acno);
+                    if (mm != null)
+                    {
+                        cashDepositWthdrawViewModel.ContNo = mm.employee_id;
+                        cashDepositWthdrawViewModel.Name = mm.member_name;
+
+                    }
+
+                    Ledger ld = new Ledger();
+                    DepositLedgerDbUtility depositLedgerDbUtility = new DepositLedgerDbUtility();
+                    ld = depositLedgerDbUtility.GetLedgerDetail(acno, achd, cashDepositWthdrawViewModel.ContNo);
+                    if (ld != null)
+                    {
+                        cashDepositWthdrawViewModel.LastOpDate = ld.vch_date.ToString("dd-MM-yyyy");
+                        cashDepositWthdrawViewModel.LastBalance = ld.prin_bal.ToString();
+                        cashDepositWthdrawViewModel.MaxWithAmount = ld.prin_bal.ToString();
+                    }
+
+                    if (achd == "SBIPP")
+                        cashDepositWthdrawViewModel.MaxWithAmount = "1000000";
+                }
+                else
+                {
+                    LoanMaster lm = new LoanMaster();
+                    lm = lm.getLoanMasterDetailByAcno(acno, achd);
+                    if (lm != null)
+                    {
+                        cashDepositWthdrawViewModel.ContNo = lm.employee_id;
+                        cashDepositWthdrawViewModel.Name = lm.loanee_name;
+
+                        LoanLedger lld = new LoanLedger();
+                        LoanLedgerDBUtility loanLedgerDbUtility = new LoanLedgerDBUtility();
+                        lld = loanLedgerDbUtility.GetLoanLedgerDetail(acno, achd, cashDepositWthdrawViewModel.ContNo, transdate);
+                        if (lld != null)
+                        {
+                            cashDepositWthdrawViewModel.LastBalance = lld.prin_amount.ToString();
+                            cashDepositWthdrawViewModel.MaxWithAmount = lld.prin_amount.ToString();
+                            cashDepositWthdrawViewModel.WithAmount = lld.prin_amount.ToString();
+                        }
+
+
+                    }
+
+                }
+
+
+            }
+
+            cashDepositWthdrawViewModel.AcNo = acno;
+
+            //if (!string.IsNullOrWhiteSpace(cashDepositWthdrawViewModel.ContNo))
+            //{
+            //    KycDetails kd = new KycDetails();
+            //    MemberMastDBUtility memMastDBUtility = new MemberMastDBUtility();
+
+            //    kd = memMastDBUtility.getKycDetailsBySingleCont(cashDepositWthdrawViewModel.ContNo);
+
+            //    //cashDepositWthdrawViewModel.PhotoImageUrl = "data:image/jpg;base64," + Convert.ToBase64String(kd.photo);
+
+            //    //cashDepositWthdrawViewModel.SigImageUrl = "data:image/jpg;base64," + Convert.ToBase64String(kd.sign);
+
+            //}
+
+
+            return cashDepositWthdrawViewModel;
+        }
+
+
+        //[HttpPost]
+        //public JsonResult GetDetailByContNo(string contno, string achd)
+        //{
+
+        //    CashDepositWthdrawViewModel cashDepositWthdrawViewModel = new CashDepositWthdrawViewModel();
+
+
+
+        //    //if (model.WithAmount != null && model.WithAmount.ToString().Length > 0)
+        //    //{
+        //    //    //SaveData(model);
+        //    //}
+
+
+        //    //model = cashDepositWthdrawViewModel;
+
+        //    //  return View(cashDepositWthdrawViewModel);
+        //    return Json(cashDepositWthdrawViewModel);
+        //}
+
+        [HttpPost]
+        public JsonResult GeneratePoNo(string counterno, string depwith, string achd, string trndate)
+        {
+            TvchDetail tvch = new TvchDetail();
+            if (depwith == "Withdrawal")
+            {
+                if (counterno == "ALL")
+                {
+                    tvch = tvch.getTvchDetailWithdrowAll(achd, trndate.Replace("/", "-"));
+                }
+                else
+                    tvch = tvch.getTvchDetailWithdrowCounter(achd, trndate.Replace("/", "-"), counterno);
+
+
+            }
+            else
+            {
+                tvch = tvch.getTvchDetailDepositCounter(achd, trndate.Replace("/", "-"), counterno);
+
+            }
+
+            if (tvch != null)
+            {
+                xpo = tvch.trn_no.Substring(Math.Max(tvch.trn_no.Length - 4, 0), Math.Min(4, tvch.trn_no.Length));
+                xpo = (Convert.ToInt32(xpo) + 1).ToString();
+                _pono = tvch.trn_no.Substring(0, Math.Max(tvch.trn_no.Length - 4, 0)) + xpo.PadLeft(4, '0');
+
+            }
+            else
+            {
+                xpo = "1";
+
+                if (achd == "SB")
+                {
+                    if (depwith == "Deposit")
+                        _pono = "GDCDSB" + xpo.PadLeft(4, '0');
+
+                    else
+                        _pono = "GDCWSB" + xpo.PadLeft(4, '0');
+                }
+
+
+                else if (achd == "FD")
+                {
+                    if (depwith == "Deposit")
+
+                        _pono = "GDCDFD" + xpo.PadLeft(4, '0');
+
+                    else
+
+                        _pono = "GDCWFD" + xpo.PadLeft(4, '0');
+                }
+
+                else if (achd == "SH")
+                {
+                    if (depwith == "Deposit")
+
+                        _pono = "CMDSH" + xpo.PadLeft(4, '0');
+
+                    else
+
+                        _pono = "CMWSH" + xpo.PadLeft(4, '0');
+                }
+                else
+                {
+                    if (depwith == "Deposit")
+
+                        _pono = "CMD" + achd.Trim() + xpo.PadLeft(4, '0');
+
+                    else
+
+                        _pono = "CMW" + achd.Trim() + xpo.PadLeft(4, '0');
+                }
+
+
+            }
+
+            return Json(_pono);
+        }
+
+        [HttpPost]
+        public void SaveData(CashDepositWthdrawViewModel model)
+        {
+            double smstr_amount = 0;
+            double smsbal = 0;
+
+
+            TvchDetail tv = new TvchDetail();
+
+
+            tv.branch_id = "MN";
+            tv.trn_date = Convert.ToDateTime(model.TransDate);
+            tv.trn_shift = "G";
+            tv.counter_no = Convert.ToInt32(model.CounterNo);
+            tv.trn_no = model.PoNo;
+            tv.trn_srl = 2;
+            tv.created_by = User.Identity.Name;
+            tv.created_on = DateTime.Now;
+            tv.computer_name = Environment.MachineName.ToString();
+
+            if (model.AcHd == "SB" || model.AcHd == "FD")
+            {
+                if (model.DepositWithdrow == "Withdrawal")
+                {
+                    tv.vch_drcr = "D";
+
+                    if (model.AcHd == "SB") tv.insert_mode = "CW";
+                    else tv.insert_mode = "MW";
+
+                    tv.conf_flag = "P";
+
+                    tv.is_self = "S";
+
+                    tv.is_chq = "W";
+
+                    tv.bearer_branch = model.Name;
+
+                }
+
+                else
+                {
+                    tv.vch_drcr = "C";
+
+                    if (model.AcHd == "SB") tv.insert_mode = "CD";
+                    else tv.insert_mode = "MD";
+
+
+                    tv.conf_flag = "D";
+
+                    tv.bearer_branch = model.Name;
+                }
+            }
+            else
+            {
+                if (model.DepositWithdrow == "Withdrawal")
+                {
+                    tv.vch_drcr = "D";
+
+                    tv.insert_mode = "MW";
+
+                    tv.conf_flag = "P";
+
+
+                }
+
+                else
+                {
+                    tv.vch_drcr = "C";
+                    tv.insert_mode = "MD";
+                    tv.conf_flag = "D";
+
+                }
+            }
+
+            tv.ac_hd = model.AcHd;
+            tv.vch_pacno = model.AcNo;
+            tv.vch_acname = model.Name;
+            tv.vch_amt = Convert.ToDecimal(model.WithAmount);
+
+
+            tv.SaveVoucher(tv); //sb,fd, and others
+
+            //===========
+
+            Ledger dlt = new Ledger();
+
+            dlt = dlt.getLedgerDetail(model.AcNo, model.AcHd, model.ContNo);
+
+            if (dlt != null)
+            {
+                if (model.AcHd == "DIV")
+                    XBAL = Convert.ToDouble(dlt.bal_amount);
+
+                else
+                {
+                    if (model.AcHd == "SH")
+                        if (Convert.ToDouble(dlt.bal_amount) > 0)
+                            XBAL = Convert.ToDouble(dlt.bal_amount);
+                        else
+                            XBAL = 0;
+                    else
+                        XBAL = Convert.ToDouble(dlt.prin_bal);
+                }
+            }
+            else
+            {
+                dlt = new Ledger();
+                XBAL = 0;
+            }
+
+
+            dlt.branch_id = "MN";
+            dlt.created_by = User.Identity.Name;
+            dlt.created_on = DateTime.Now;
+            dlt.computer_name = Environment.MachineName.ToString();
+
+            // if (model.AcHd != "SH") dlt.ac_hd = model.AcHd;
+            dlt.ac_hd = model.AcHd;
+            if (model.AcHd == "SB" || model.AcHd == "FD")
+            {
+                dlt.ac_no = model.AcNo;
+                dlt.contno = model.ContNo;
+            }
+            else if (model.AcHd == "CMTD")
+            {
+                dlt.member_id = model.ContNo;
+
+            }
+            else if (model.AcHd == "DIV" || model.AcHd == "SH")
+            {
+                dlt.member_id = model.AcNo;
+
+            }
+
+            else
+            {
+                dlt.loan_id = model.AcNo;
+
+            }
+
+            dlt.vch_date = Convert.ToDateTime(model.TransDate);
+            dlt.vch_no = model.PoNo;
+            dlt.vch_srl = 2;
+            dlt.vch_type = "C";
+            dlt.vch_achd = model.AcHd;
+
+            if (model.DepositWithdrow == "Withdrawal")
+            {
+                dlt.dr_cr = "D";
+                if (model.AcHd == "SH" || model.AcHd == "DIV")
+                {
+
+                    dlt.tr_amount = Convert.ToDouble(model.WithAmount);
+                    dlt.bal_amount = Convert.ToDecimal(XBAL) + Convert.ToDecimal(model.WithAmount);
+
+                    smstr_amount = Convert.ToDouble(model.WithAmount);
+                    smsbal = Convert.ToDouble(XBAL) + Convert.ToDouble(model.WithAmount);
+
+
+                }
+                else
+                {
+                    dlt.prin_amount = Convert.ToDecimal(model.WithAmount);
+                    dlt.prin_bal = Convert.ToDecimal(XBAL) - Convert.ToDecimal(model.WithAmount);
+
+                    smstr_amount = Convert.ToDouble(model.WithAmount);
+                    smsbal = Convert.ToDouble(model.LastBalance) - Convert.ToDouble(model.WithAmount);
+
+                }
+
+
+                dlt.insert_mode = "CW";
+                dlt.ref_ac_hd = "CASH";
+                dlt.ref_pacno = model.AcHd + model.PoNo.Substring(Math.Max(model.PoNo.Length - 4, 0), Math.Min(4, model.PoNo.Length));
+
+            }
+
+            else
+            {
+                dlt.dr_cr = "C";
+                if (model.AcHd != "SH")
+                {
+                    dlt.prin_amount = Convert.ToDecimal(model.WithAmount);
+                    dlt.prin_bal = Convert.ToDecimal(XBAL) + Convert.ToDecimal(model.WithAmount);
+
+                    smstr_amount = Convert.ToDouble(model.WithAmount);
+                    smsbal = Convert.ToDouble(model.LastBalance) + Convert.ToDouble(model.WithAmount);
+                }
+                else
+                {
+
+                    if (model.WithAmount.Substring(model.WithAmount.Length - 1, 1) == "1")
+                    {
+                        dlt.tr_amount = Convert.ToDouble(model.WithAmount) - 1;
+                        dlt.bal_amount = Convert.ToDecimal(XBAL) + Convert.ToDecimal(model.WithAmount) - 1;
+
+                        smstr_amount = Convert.ToDouble(model.WithAmount) - 1;
+                        smsbal = Convert.ToDouble(Convert.ToDecimal(XBAL) + Convert.ToDecimal(model.WithAmount) - 1);
+
+                        Int64 xunit = Convert.ToInt64(((Convert.ToDecimal(model.WithAmount) - 1) / 10));
+                        dlt.units = xunit;
+                        dlt.face_val = 10;
+                    }
+
+                    else
+                    {
+                        dlt.tr_amount = Convert.ToDouble(model.WithAmount);
+                        dlt.bal_amount = Convert.ToDecimal(XBAL) + Convert.ToDecimal(model.WithAmount);
+
+                        smstr_amount = Convert.ToDouble(model.WithAmount);
+                        smsbal = Convert.ToDouble(XBAL) + Convert.ToDouble(model.WithAmount);
+
+                        dlt.units = Convert.ToInt64(Convert.ToDecimal(model.WithAmount) / 10);
+                        dlt.face_val = 10;
+                    }
+
+                }
+
+                dlt.insert_mode = "CD";
+                dlt.ref_ac_hd = "CASH";
+                dlt.ref_pacno = model.AcHd + model.PoNo.Substring(Math.Max(model.PoNo.Length - 4, 0), Math.Min(4, model.PoNo.Length));
+
+            }
+
+
+            if (model.AcHd == "SB") dlt.SaveDepositLedgerTemp(dlt);
+            else if (model.AcHd == "FD") dlt.SaveLedger(dlt, "DEPOSIT_LEDGER_FD");
+            else if (model.AcHd == "CMTD") dlt.SaveLedger(dlt, "CMTD_LEDGER");
+            else if (model.AcHd == "DIV") dlt.SaveLedger(dlt, "DIVIDEND_LEDGER");
+            else if (model.AcHd == "SH") dlt.SaveLedger(dlt, "SHARE_LEDGER");
+            //else if (model.AcHd == "LTL") dlt.SaveLedger(dlt, "Loan_Ledger_Ltl");
+            //else if (model.AcHd == "FES") dlt.SaveLedger(dlt, "SHARE_LEDGER");
+            //else if (model.AcHd == "STL") dlt.SaveLedger(dlt, "SHARE_LEDGER");
+
+            //13-07-2022
+            if (model.AcHd == "SB")
+                SendSMS(dlt.ac_no, dlt.contno, dlt.vch_date.ToString(), dlt.dr_cr, smstr_amount, smsbal);
+        }
+
+        public IActionResult GetPrintFile(string DepositWithdrow, string CounterNo, string AcHd, string TransDate)
+        {
+            decimal total = 0;
+            List<TvchDetail> lsttv = new List<TvchDetail>();
+            TvchLedgerDBUtility tv = new TvchLedgerDBUtility();
+            //  Boolean isDateRange = true;
+            lsttv = tv.GetTotalByDateforPrint(DepositWithdrow, CounterNo, AcHd, TransDate);
+            Directory.CreateDirectory("wwwroot\\TextFiles");
+            using (StreamWriter sw = new StreamWriter("wwwroot\\TextFiles\\CASHDEPOSITANDWITHDRAWN.txt"))
+            {
+                int Pg = 1;
+                int Ln = 0;
+
+                sw.WriteLine("C.L.W. CO-OPERATIVE CREDIT SOCIETY LTD.".ToString().PadLeft(48)); //Print #1, Chr(27)
+                sw.WriteLine("CHITTARANJAN".ToString().PadLeft(35));
+                sw.WriteLine("LIST OF CASH DEPOSIT AND WITHDRAWN".ToString().PadLeft(47));
+                sw.WriteLine("");
+                sw.WriteLine(AcHd.ToString().PadRight(4) + "CASH".ToString().PadRight(8) + DepositWithdrow.ToString().PadRight(10) + "SCROLL FOR".ToString().PadRight(2)
+                    + TransDate.PadRight(12) + ":".ToString().PadRight(4) + "COUNTER:".ToString().PadRight(10) + CounterNo.ToString());
+                sw.WriteLine("");
+                sw.WriteLine("Counter  " + "P.O. No.".ToString().PadLeft(14) + "A/c No.".ToString().PadLeft(13) + "Name".ToString().PadLeft(21) + "Amount".ToString().PadLeft(30));
+                sw.WriteLine("-------".ToString().PadLeft(6) + "------------".ToString().PadLeft(18) + "------------".ToString().PadLeft(16) + "------------".ToString().PadLeft(21) + "------------".ToString().PadLeft(29));
+                sw.WriteLine("");
+                Ln = 7;
+                foreach (var tvch in lsttv)
+                {
+                    if (Ln > Pg * 65)
+                    {
+                        sw.WriteLine(form_feed);
+                        sw.WriteLine(BoldOn);
+                        Pg = Pg + 1;
+                        Ln = Ln + 7;
+                        sw.WriteLine("C.L.W. CO-OPERATIVE CREDIT SOCIETY LTD.".ToString().PadLeft(48)); //Print #1, Chr(27)
+                        sw.WriteLine("CHITTARANJAN".ToString().PadLeft(35));
+                        sw.WriteLine("LIST OF CASH DEPOSIT AND WITHDRAWN".ToString().PadLeft(47));
+                        sw.WriteLine("");
+                        sw.WriteLine(AcHd.ToString().PadLeft(4) + "CASH".ToString().PadLeft(8) + DepositWithdrow.ToString().PadLeft(10) + "SCROLL FOR".ToString().PadLeft(2)
+                        + TransDate.PadRight(12) + ":".ToString().PadRight(4) + "COUNTER:".ToString().PadRight(10) + CounterNo.ToString());
+                        sw.WriteLine("");
+                        sw.WriteLine("Counter  " + "P.O. No.".ToString().PadLeft(14) + "A/c No.".ToString().PadLeft(13) + "Name".ToString().PadLeft(21) + "Amount".ToString().PadLeft(30));
+                        sw.WriteLine("-------".ToString().PadLeft(6) + "------------".ToString().PadLeft(18) + "------------".ToString().PadLeft(16) + "------------".ToString().PadLeft(21) + "------------".ToString().PadLeft(29));
+                        sw.WriteLine("");
+                    }
+                    sw.WriteLine("  " + tvch.counter_no.ToString().PadLeft(1)
+                          + tvch.trn_no.PadLeft(21)
+                          + tvch.vch_pacno.PadLeft(12)
+                          + tvch.vch_acname.PadLeft(32)
+                          + tvch.vch_amt.ToString().PadLeft(19)
+                       );
+                    Ln = Ln + 1;
+                    total = total + Convert.ToDecimal(tvch.vch_amt);
+                }
+                Ln = Ln + 10;
+                if (Ln > Pg * 65)
+                {
+                    sw.WriteLine(form_feed);
+                    sw.WriteLine(BoldOn);
+                    sw.WriteLine("  ");
+                    sw.WriteLine("  ");
+                    sw.WriteLine("TOTAL Rs.  " + total.ToString());
+                    // sw.WriteLine(" (" + numtoword(model.Total)) + ")");
+                    sw.WriteLine("  ");
+                    sw.WriteLine("  ");
+                    sw.WriteLine("  ");
+                    sw.WriteLine("  ");
+                    sw.WriteLine("  ");
+                    sw.WriteLine("Section Incharge Secretary");
+                }
+                else
+                {
+                    sw.WriteLine("  ");
+                    sw.WriteLine("  ");
+                    sw.WriteLine("TOTAL Rs.  " + total.ToString());
+                    //  sw.WriteLine(" (" + numtoword(model.Total)) + ")");
+                    sw.WriteLine("  ");
+                    sw.WriteLine("  ");
+                    sw.WriteLine("  ");
+                    sw.WriteLine("  ");
+                    sw.WriteLine("  ");
+                    sw.WriteLine("Section Incharge Secretary");
+                }
+                sw.WriteLine(form_feed);
+                //   total = total + tvch.vch_amt;
+            }
+            UtilityController u = new UtilityController();
+            var memory = u.DownloadTextFiles("CASHDEPOSITANDWITHDRAWN.txt", "wwwroot\\TextFiles");
+            if (System.IO.File.Exists("wwwroot\\TextFiles\\CASHDEPOSITANDWITHDRAWN.txt"))
+            {
+                System.IO.File.Delete("wwwroot\\TextFiles\\CASHDEPOSITANDWITHDRAWN.txt");
+            }
+            return File(memory.ToArray(), "text/plain", "CASH_DEPOSIT_AND_WITHDRAWN_" + AcHd + "_" + CounterNo + "_" + DateTime.Now.ToShortDateString().Replace("/", "_") + ".txt");
+        }
+
+        public List<TvchDetail> GetTotal(CashDepositWthdrawViewModel model)
+        {
+            String qry;
+            List<TvchDetail> lstTV = new List<TvchDetail>();
+            if (model.DepositWithdrow == "Withdrawal")
+            {
+                if (model.CounterNo == "All")
+                {
+                    qry = "SELECT * FROM TVCH_DETAIL WHERE BRANCH_ID='MN' AND ";
+
+                    qry = qry + "TO_DATE(TO_CHAR(TRN_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY')= TO_DATE('" + model.TransDate + "', 'DD/MM/YYYY') ";// and TO_DATE(TO_CHAR(TRN_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY')<TO_DATE('" & XDATE & "', 'DD/MM/YYYY') AND ";
+
+                    qry = qry + "  AND TRN_SHIFT='G' AND VCH_DRCR='D' AND ";
+
+                    qry = qry + "AC_HD='" + model.AcHd + "'";
+
+                    if (model.AcHd == "SB")
+                        qry = qry + " AND INSERT_MODE='CW' AND COUNTER_NO <>'7' order by COUNTER_NO,TRN_NO";
+
+                }
+                else
+                {
+                    qry = "SELECT * FROM TVCH_DETAIL WHERE BRANCH_ID='MN' AND ";
+                    qry = qry + "TO_DATE(TO_CHAR(TRN_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY')= TO_DATE('" + model.TransDate + "', 'DD/MM/YYYY') ";//and TO_DATE(TO_CHAR(TRN_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY')<TO_DATE('" & XDATE & "', 'DD/MM/YYYY') AND ";
+
+                    qry = qry + " AND TRN_SHIFT='G' AND VCH_DRCR='D' AND ";
+
+                    qry = qry + "AC_HD='" + model.AcHd + "'";
+
+                    if (model.AcHd == "SB")
+                        qry = qry + " AND INSERT_MODE='CW'";
+
+                    else
+                        qry = qry + " AND INSERT_MODE='MW'";
+
+
+
+                    qry = qry + " AND COUNTER_NO='" + model.CounterNo + "' order by COUNTER_NO,TRN_NO";
+
+                }
+            }
+            else
+            {
+                if (model.CounterNo == "All")
+                {
+                    qry = "SELECT * FROM TVCH_DETAIL WHERE BRANCH_ID='MN' AND ";
+
+                    qry = qry + " TO_DATE(TO_CHAR(TRN_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY')= TO_DATE('" + model.TransDate + "', 'DD/MM/YYYY')";// and TO_DATE(TO_CHAR(TRN_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY')<TO_DATE('" & XDATE & "', 'DD/MM/YYYY') AND "
+
+                    qry = qry + " AND   TRN_SHIFT ='G' AND VCH_DRCR='C' AND AC_HD='" + model.AcHd + "'";
+
+                    if (model.AcHd == "SB")
+                        qry = qry + " AND INSERT_MODE='CD' order by COUNTER_NO,TRN_NO";
+                    else
+                        qry = qry + " AND INSERT_MODE='MD' order by COUNTER_NO,TRN_NO";
+
+                }
+
+                else
+                {
+
+                    qry = "SELECT * FROM TVCH_DETAIL WHERE BRANCH_ID='MN' AND ";
+                    qry = qry + "TO_DATE(TO_CHAR(TRN_DATE, 'DD/MM/YYYY') , 'DD/MM/YYYY')= TO_DATE('" + model.TransDate + "', 'DD/MM/YYYY')";// and TO_DATE(TO_CHAR(TRN_DATE, 'DD/MM/YYYY'), 'DD/MM/YYYY')<TO_DATE('" & XDATE & "', 'DD/MM/YYYY') AND "
+
+                    qry = qry + " AND TRN_SHIFT='G' AND VCH_DRCR='C'";
+
+                    if (model.AcHd == "SB")
+                        qry = qry + " AND INSERT_MODE='CD'AND AC_HD='" + model.AcHd + "'";
+
+                    else
+                        qry = qry + " AND INSERT_MODE='MD'AND AC_HD='" + model.AcHd + "'";
+
+                    qry = qry + " AND COUNTER_NO=" + model.CounterNo + "order by COUNTER_NO,TRN_NO";
+                }
+            }
+
+            DepositLedgerDbUtility depositLedgerDbUtility = new DepositLedgerDbUtility();
+            lstTV = depositLedgerDbUtility.GetTotalDeposit(qry);
+
+
+            return lstTV;
+
+        }
+
+        public String GetPoNo(string counterno, string depwith, string achd, string trndate)
+        {
+            TvchDetail tvch = new TvchDetail();
+            if (depwith == "Withdrawal")
+            {
+                if (counterno == "ALL")
+                {
+                    tvch = tvch.getTvchDetailWithdrowAll(achd, trndate.Replace("/", "-"));
+                }
+                else
+                    tvch = tvch.getTvchDetailWithdrowCounter(achd, trndate.Replace("/", "-"), counterno);
+
+
+            }
+            else
+            {
+                tvch = tvch.getTvchDetailDepositCounter(achd, trndate.Replace("/", "-"), counterno);
+
+            }
+
+            if (tvch != null)
+            {
+                xpo = tvch.trn_no.Substring(Math.Max(tvch.trn_no.Length - 4, 0), Math.Min(4, tvch.trn_no.Length));
+                xpo = (Convert.ToInt32(xpo) + 1).ToString();
+                _pono = tvch.trn_no.Substring(0, Math.Max(tvch.trn_no.Length - 4, 0)) + xpo.PadLeft(4, '0');
+
+            }
+            else
+            {
+                xpo = "1";
+
+                if (achd == "SB")
+                {
+                    if (depwith == "Deposit")
+                        _pono = "GDCDSB" + xpo.PadLeft(4, '0');
+
+                    else
+                        _pono = "GDCWSB" + xpo.PadLeft(4, '0');
+                }
+
+
+                else if (achd == "FD")
+                {
+                    if (depwith == "Deposit")
+
+                        _pono = "GDCDFD" + xpo.PadLeft(4, '0');
+
+                    else
+
+                        _pono = "GDCWFD" + xpo.PadLeft(4, '0');
+                }
+
+                else if (achd == "SH")
+                {
+                    if (depwith == "Deposit")
+
+                        _pono = "CMDSH" + xpo.PadLeft(4, '0');
+
+                    else
+
+                        _pono = "CMWSH" + xpo.PadLeft(4, '0');
+                }
+                else
+                {
+                    if (depwith == "Deposit")
+
+                        _pono = "CMD" + achd.Trim() + xpo.PadLeft(4, '0');
+
+                    else
+
+                        _pono = "CMW" + achd.Trim() + xpo.PadLeft(4, '0');
+                }
+
+
+            }
+
+            return (_pono);
+        }
+
+        public int checkdata(CashDepositWthdrawViewModel model)
+        {
+            // int i;
+
+            TvchDetail tv = new TvchDetail();
+
+            //i=tv.ValidateData()
+
+
+
+
+
+
+
+            return 0;
+        }
+
+        //13-07-2022
+        public void SendSMS(String ac_no, String contno, String vch_date, String dr_cr, Double tr_amount, Double bal_amount)
+        {
+
+            string smsurl = String.Empty;
+            String phoneno = String.Empty;
+            String msg = String.Empty;
+
+            KycDetails kd = new KycDetails();
+            phoneno = kd.getKycMobilenoByCont(contno);
+
+
+            if (!string.IsNullOrEmpty(phoneno))
+            {
+                string vdate = Convert.ToDateTime(vch_date).ToString("dd/MM/yyyy").Replace("-", "/");
+                if (dr_cr == "C")
+                    msg = "Dear Member, INR " + tr_amount.ToString("0.00") + " deposited to your A/c No " + ac_no + " on " + vdate + ". Available balance " + bal_amount.ToString("0.00") + ". -CHITTARANJAN LWCSL";
+
+                //msg = "Dear Member, INR " + tr_amount + " deposited to your A/c No xxx" + ac_no + " on " + vch_date + ". Available balance " + bal_amount + ".-CLWCCS";
+                else
+                    msg = "Dear Member, INR " + tr_amount.ToString("0.00") + " withdrawn from your A/c No " + ac_no + " on " + vdate + ". Available balance " + bal_amount.ToString("0.00") + ". -CHITTARANJAN LWCSL";
+                //msg = "Dear Member, INR " + tr_amount + " withdrawn from your A/c No xxx" + ac_no + " on " + vch_date + ". Available balance " + bal_amount + ".-CLWCCS";
+
+                //  msg = "Dear Member, INR 200 deposited to your A/c No xx3212 on 12-07-2022. Available balance 23000.00.-CLWCCS";
+
+                try
+                {
+
+                    using (WebClient client = new WebClient())
+                    {
+                        // smsurl =  "http://sms.digilexa.in/http-api.php?username=CHITTARANJAN&password=CLWCCS@r76&senderid=CLWCCS&route=7&number=9432102878&message=" + msg;
+                        //smsurl = "http://sms.digilexa.in/http-api.php?username=CHITTARANJAN&password=CLWCCS@r76&senderid=CLWCCS&route=7&number=" + phoneno + "&message=" + msg;
+
+                        smsurl = "http://sms.digilexa.in/http-api.php?username=CHITTARANJAN&password=CCSCLW@r76&senderid=CCSCLW&route=7&number=" + phoneno + "&message=" + msg;
+                        string result = client.DownloadString(smsurl);
+
+
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+        }
+
+        //*******************************************AccountOpening***********************************************************
+      
+        [HttpGet]
+        public IActionResult AccountOpening(AccountOpeningViewModel model)
+        {
+            model.Ac_Hd_DESC = uc.getAcHdDescForSB();
+            model.Md_Of_Op_DESC = uc.getOprnMode();
+            model.Ac_Category_DESC = uc.getStatusDesc();
+            model.OpenDate = DateTime.Now.ToShortDateString();
+            return View(model);
+        }
+
+        public JsonResult GetDetailByContNo(string AcHd, string ContNo)
+        {
+
+            DepositMast dm = new DepositMast();
+
+
+            dm = dm.GetDepositOrMemberMastbyContNo("MN", AcHd, ContNo);
+
+            return Json(dm);
+        }
+        //public JsonResult GetDetailByAcNo(string AcHd, string AcNo)
+        //{
+
+        //    DepositMast dm = new DepositMast();
+
+        //    dm = dm.GetDepositOrMemberMastbyACNo("MN", AcHd, AcNo);
+
+
+
+        //    return Json(dm);
+        //}
+
+        //public JsonResult GetFDDetailByContNo(string AcHd, string ContNo)
+        //{
+        //    DepositMast dm = new DepositMast();
+        //    List<DepositMast> dmlist = new List<DepositMast>();
+        //    dmlist = dm.GetDepositMastFDDetail("FD", ContNo);
+        //    string fd = string.Empty;
+        //    //ViewBag.dmlist = dmlist;
+        //    decimal TOTFD = 0;
+        //    fd = "<thead><tr><th> Srl </th><th> A/C No </th><th> FD Amount </th></tr></thead>";
+        //    foreach (var a in dmlist)
+        //    {
+        //        int i = 1;
+        //        fd = fd + "<tr><td>" + i.ToString() + "</td><td>" + a.ac_no + "</td><td>" + a.td_face_val + "</td></tr>";
+        //        //TOTFD = TOTFD + a.td_face_val;
+        //        i = i + 1;
+        //    }
+        //    //model.TxtFd = Convert.ToString(TOTFD);
+        //    return Json(fd);
+        //}
+
+
+        //public JsonResult SaveDepositMast(AccountOpeningViewModel model)
+        //{
+        //    string msg = "";
+        //    DepositMast dpm = new DepositMast();
+        //    msg = dpm.GetAcnoByContnoForAcOpening(model.ContNo);
+        //    if (msg == null)
+        //    {
+        //        dpm = dpm.GetDepositMastByAcNo("MN", model.AcHd, model.AcNo);
+        //        if (dpm != null)
+        //        {
+        //            msg = dpm.msg;
+        //        }
+        //        else
+        //        {
+        //            try
+        //            {
+        //                DepositMast dm = new DepositMast();
+        //                dm.branch_id = model.BranchId;
+        //                dm.ac_hd = model.AcHd;
+        //                dm.ac_no = model.AcNo;
+        //                dm.created_by = User.Identity.Name;
+        //                dm.created_on = DateTime.Now;
+        //                dm.computer_name = Environment.MachineName.ToString();
+
+
+        //                dm.open_date = Convert.ToDateTime(model.OpenDate);
+        //                dm.spl_status = model.SplStatus;
+        //                dm.contno = model.ContNo;
+        //                if (model.ChqFacility == "YES")
+        //                    dm.chq_facility = "1";
+        //                else
+        //                    dm.chq_facility = "0";
+        //                dm.oprn_mode = model.OprnMode;
+        //                dm.ac_name = model.AcName;
+        //                dm.ac_add1 = model.AcAdd1;
+        //                dm.ac_add2 = model.AcAdd2;
+        //                dm.ac_city = model.AcCity;
+        //                dm.ac_dist = model.AcDist;
+        //                dm.ac_state = model.AcState;
+        //                dm.ac_pin = model.AcPin;
+        //                if (model.IsMinor == "YES")
+        //                {
+        //                    dm.is_minor = "1";
+        //                    dm.minor_dob = Convert.ToDateTime(model.MinorDob);
+        //                    dm.minor_adult_dt = Convert.ToDateTime(model.MinorAdultDt);
+        //                }
+        //                dm.SaveDepositMast(dm);
+
+
+        //                DepositCustomer dc = new DepositCustomer();
+        //                dc.cust_srl = Convert.ToInt32(model.Srl1);
+        //                dc.branch_id = model.BranchId;
+        //                dc.ac_hd = model.AcHd;
+        //                dc.ac_no = model.AcNo;
+        //                dc.member_id = model.MemberId1;
+        //                if (model.Sign1 == "YES")
+        //                    dc.sign_flag = "S";
+        //                else
+        //                    dc.sign_flag = "L";
+        //                dc.SaveDepositCustomer(dc);
+        //                if (model.Srl2 != null && model.Srl2 != "")
+        //                {
+        //                    if (model.MemberId2 != null && model.MemberId2 != "")
+        //                    {
+        //                        dc.cust_srl = Convert.ToInt32(model.Srl2);
+        //                        dc.branch_id = model.BranchId;
+        //                        dc.ac_hd = model.AcHd;
+        //                        dc.ac_no = model.AcNo;
+        //                        dc.member_id = model.MemberId2;
+        //                        if (model.Sign1 == "YES")
+        //                            dc.sign_flag = "S";
+        //                        else
+        //                            dc.sign_flag = "L";
+        //                        dc.SaveDepositCustomer(dc);
+        //                    }
+        //                }
+        //                msg = "Saved Successfully";
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                msg = "Unable To Save " + Convert.ToString(ex);
+        //            }
+
+        //        }
+        //    }
+        //    return Json(msg);
+        //}
+
+
+
+
+        //public JsonResult getFdIntrate(string AcHd, string TdRenewDate, string TdDd, string TdMm, string TdYy, string SplStatus)
+        //{
+        //    utility u = new utility();
+
+
+
+        //    u = u.IntRateForFD(AcHd, TdRenewDate, TdDd, TdMm, TdYy, SplStatus);
+        //    return Json(u);
+        //}
+
+        //public JsonResult getInterestforFD(string TdIntfrqMm, string AcHd, string TdFaceVal, string TdRenewDate, string TdIntRate)
+        //{
+        //    decimal interest = 0;
+        //    double finalinterest = 0;
+        //    if (AcHd == "FD")
+        //    {
+        //        if (TdIntfrqMm == "Yearly Payable")
+        //        {
+        //            interest = (Convert.ToDecimal(TdFaceVal) * Convert.ToDecimal(TdIntRate) * 12) / 1200;
+
+        //        }
+        //        if (TdIntfrqMm == "Payable On Closure")
+        //        {
+        //            interest = 0;
+
+        //        }
+        //        if (TdIntfrqMm == "Monthly Payable")
+        //        {
+        //            //CAL_FD_PERINT = (100 * XINT_RATE) / (1200 + XINT_RATE)
+        //            //CAL_FD_PERINT = Round(CAL_FD_PERINT, 4)
+        //            //CAL_FD_PERINT = (XAMT / 100) * CAL_FD_PERINT
+
+        //            interest = (100 * Convert.ToDecimal(TdIntRate)) / (1200 + Convert.ToDecimal(TdIntRate));
+        //            interest = Math.Round(interest, 4);
+        //            interest = (Convert.ToDecimal(TdFaceVal) / 100) * interest;
+
+
+        //        }
+        //        if (TdIntfrqMm == "Quaterly Payable")
+        //        {
+        //            //CAL_FD_PERINT = (XAMT * XINT_RATE * 3) / 1200
+
+        //            interest = (Convert.ToDecimal(TdFaceVal) * Convert.ToDecimal(TdIntRate) * 3) / 1200;
+
+        //        }
+        //        if (TdIntfrqMm == "Half Yearly Payable")
+        //        {
+        //            //CAL_FD_PERINT = (XAMT * XINT_RATE * 6) / 1200
+
+        //            interest = (Convert.ToDecimal(TdFaceVal) * Convert.ToDecimal(TdIntRate) * 6) / 1200;
+
+        //        }
+        //        finalinterest = Convert.ToDouble(interest) + 0.002;
+        //        finalinterest = Math.Round(finalinterest, 0);
+        //    }
+
+
+
+        //    return Json(finalinterest);
+        //}
+
+        //public JsonResult getMatValforFD(string TdIntfrqMm, string TdFaceVal, string TdRenewDate, string TdDd, string TdMm, string TdYy, string PeriodicInt, string TdIntRate)
+        //{
+        //    decimal matval = 0;
+        //    if (TdIntfrqMm == "Payable On Closure")
+        //    {
+        //        //XAMT + ((XAMT * XINT_RATE * xmm) / 1200) + ((XAMT * XINT_RATE * xdd) / 36500)
+        //        matval = Convert.ToDecimal(TdFaceVal) + (Convert.ToDecimal(TdFaceVal) * Convert.ToDecimal(TdIntRate) * Convert.ToInt32(TdMm) / 1200) + (Convert.ToDecimal(TdFaceVal) * Convert.ToDecimal(TdIntRate) * Convert.ToInt32(TdDd) / 36500);
+
+
+        //    }
+        //    if (TdIntfrqMm == "Yearly Payable")
+        //    {
+        //        int monthcount = (Convert.ToInt32(TdYy) * 12) + (Convert.ToInt32(TdMm) * 1);
+        //        decimal monthlyint = Convert.ToDecimal(PeriodicInt) / 12;
+        //        decimal totint = monthlyint * monthcount;
+        //        matval = Convert.ToDecimal(TdFaceVal) + totint;
+
+        //    }
+        //    if (TdIntfrqMm == "Half Yearly Payable")
+        //    {
+        //        int monthcount = (Convert.ToInt32(TdYy) * 12) + (Convert.ToInt32(TdMm) * 1);
+        //        decimal monthlyint = Convert.ToDecimal(PeriodicInt) / 6;
+
+        //        matval = Convert.ToDecimal(TdFaceVal) + (monthlyint * monthcount);
+
+        //    }
+        //    if (TdIntfrqMm == "Quaterly Payable")
+        //    {
+        //        int monthcount = (Convert.ToInt32(TdYy) * 12) + (Convert.ToInt32(TdMm) * 1);
+        //        decimal monthlyint = Convert.ToDecimal(PeriodicInt) / 3;
+
+        //        matval = Convert.ToDecimal(TdFaceVal) + (monthlyint * monthcount);
+
+        //    }
+        //    if (TdIntfrqMm == "Monthly Payable")
+        //    {
+        //        int monthcount = (Convert.ToInt32(TdYy) * 12) + (Convert.ToInt32(TdMm) * 1);
+        //        decimal monthlyint = Convert.ToDecimal(PeriodicInt) / 1;
+
+        //        matval = Convert.ToDecimal(TdFaceVal) + (monthlyint * monthcount);
+
+        //    }
+
+        //    return Json(matval);
+        //}
+
+        //************************************end of account openning***********************************************************
+
+    }
+}
