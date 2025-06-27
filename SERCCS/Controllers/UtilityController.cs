@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using SERCCS.Models.Views;
 
 namespace SERCCS.Controllers
 {
@@ -87,6 +88,17 @@ namespace SERCCS.Controllers
             }); ;
 
             return m.relgns;
+        }
+        public IEnumerable<SelectListItem> getbranchmast()
+        {
+            UsersViewModel uvm = new UsersViewModel();
+            BranchMast mtm = new BranchMast();
+            uvm.brmst = mtm.getbranch().ToList().Select(x => new SelectListItem
+            {
+                Value = x.branch_id.ToString(),
+                Text = x.branch_name.ToString()
+            }); ;
+            return uvm.brmst;
         }
 
         public IEnumerable<SelectListItem> getAcHdDescForSB()

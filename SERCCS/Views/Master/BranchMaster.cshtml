@@ -1,0 +1,312 @@
+﻿@model SERCCS.Models.Views.BranchMasterViewModel
+@{
+    ViewData["Title"] = "BranchMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .size {
+        width: 180px;
+        height: 25px;
+        text-transform: uppercase;
+    }
+
+    .sizeS {
+        width: 60px;
+        height: 25px;
+        text-transform: uppercase;
+    }
+
+    .sizebig {
+        width: 400px;
+        height: 25px;
+        text-transform: uppercase;
+    }
+
+    .heading {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color: #4335A7;
+        font-size: 30px;
+        text-align: center;
+    }
+
+    .tab {
+        font-size: 12px;
+        border-collapse: collapse;
+        width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: bold
+    }
+
+        .tab tbody {
+            display: block;
+            width: 1000px;
+            overflow: auto;
+            height: 280px;
+            text-align: center;
+            color: #133E87;
+        }
+
+        .tab td, .tab th {
+            border: 1px solid #ddd;
+            padding: 5px;
+            border-collapse: collapse;
+            width: 1000px;
+        }
+
+        .tab tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .tab tr:hover {
+            background-color: rgba(255, 182, 193, 0.4);
+        }
+
+        .tab th {
+            padding: 7px;
+            text-align: center;
+            /*background-color: #04AA6D;*/
+            background-color: #BC7C7C;
+            font-size: 14px;
+            color: #492929;
+            position: sticky;
+            top: 0;
+            border: 1px solid #ddd;
+        }
+
+    input:focus {
+        background-color: rgba( 255, 182, 193, 0.3);
+    }
+
+    input {
+        background-color: rgba( 255, 182, 193, 0.4);
+        color: #4335A7;
+        font-weight: bold;
+        font-size: 14px;
+        padding-left: 5px;
+        padding-top: 2px;
+        padding-bottom: 2px
+    }
+
+    select {
+        background-color: rgba( 255, 182, 193, 0.4);
+        color: crimson;
+        font-weight: bold;
+        font-size: 14px;
+        padding-left: 5px;
+        padding-top: 2px;
+        padding-bottom: 2px
+    }
+
+        select:focus {
+            background-color: rgba( 255, 182, 193, 0.3);
+        }
+
+    input[readonly] {
+        background-color: whitesmoke;
+        color: gray;
+    }
+
+    .divbox {
+        background-color: #eaeef3;
+        color: #474E93;
+        border: 2px solid #474E93;
+        border-radius: 20px;
+        font-weight: bold
+    }
+</style>
+
+<form asp-controller="Master" asp-action="BranchMaster" method="post">
+    <div class="heading mt-4">
+        Branch Master
+    </div>
+    <div class="container mt-1" cellpadding="0" cellspacing="0" border="1">
+        <div class="row mt-3 justify-content-md-center">
+            <div class="col-md-12 col-lg-12 col-12 pl-5 divbox">
+                <div class="row mt-3">
+                    <div class="col-md-6 col-sm-12 col-12">
+                        Branch Code:
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-12">
+                        @Html.TextBoxFor(p => p.branch_id, new { @class = "size", @maxlength = "3" })
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                        Branch Name:
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                        @Html.TextBoxFor(p => p.branch_name, new { @class = "size", @maxlength = "30" })
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                        Address 1:
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                        @Html.TextBoxFor(p => p.branch_add1, new { @class = "size", @maxlength = "60" })
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                        Address 2:
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                        @Html.TextBoxFor(p => p.branch_add2, new { @class = "size", @maxlength = "60" })
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6 col-sm-12 col-12">
+                        Branch Phone:
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-12">
+                        @Html.TextBoxFor(p => p.branch_phone, new { @class = "size", @maxlength = "10" })
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                        Branch SName:
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                        @Html.TextBoxFor(p => p.branch_sname, new { @class = "size", @maxlength = "6" })
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                        Branch DEFA:
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                        @Html.TextBoxFor(p => p.branch_defa, new { @class = "size", @maxlength = "1" })
+                    </div>
+                </div>
+
+                <div class="row mt-2 mb-2">
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-12">
+                        <input id="btnsave" type="button" name="btnsave" Height="40" Width="100" class="btn btn-primary btn-sm pull-right" value="SAVE" onclick="SaveData()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mb-1 mt-1" align="center">     
+        <div class="table-responsive mt-1">
+            <table id="Branchlist" class="tab">
+            </table>
+        </div>
+    </div>
+</form>
+
+@section scripts
+{
+    <script src="~/js/jquery-3.6.1.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#branch_id').focus();
+            ShowTable();
+        });
+
+        function SaveData() {
+            if ($('#branch_id').val() == null || $('#branch_id').val() == "") {
+                alert("Branch Code cannot Be Blanked");
+                $('#branch_id').focus();
+            }
+            else if ($('#branch_name').val() == null || $('#branch_name').val() == "") {
+                alert("Branch Name Cannot be Blank");
+                $('#branch_name').focus();
+            }
+            else {
+                    let ModelObject = {
+                        branch_id: $('#branch_id').val(),
+                        branch_name: $('#branch_name').val(),
+                        branch_add1: $('#branch_add1').val(),
+                        branch_add2: $('#branch_add2').val(),
+                        branch_phone: $('#branch_phone').val(),
+                        branch_sname: $('#branch_sname').val(),
+                        branch_defa: $('#branch_defa').val()
+                    };
+                    /*alert(JSON.stringify(ModelObject));*/
+                    $.ajax({
+                        url: '@Url.Action("SaveBranchMaster", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            alert(data);
+                            if (data == "Saved Successfully" || data == "Updated Successfully") {
+                                ClearAll();
+                            }
+                            else {
+                                alert(data);
+                            }
+                            ShowTable();
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+                 }
+        }
+
+        function ShowTable() {
+            /*let ModelObject = { caste_id: $('#caste_id').val()};*/
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetBranchMasterDetails", "Master")',
+                //data: ModelObject,
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("Branchlist").innerHTML = data;
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
+        }
+
+        (function () {
+            if (window.addEventListener) {
+                window.addEventListener('load', run, false);
+            }
+            else if (window.attachEvent) {
+                window.attachEvent('onload', run);
+            }
+
+            function run() {
+                var t = document.getElementById('Branchlist');
+                t.onclick = function (event) {
+                    event = event || window.event;
+                    var target = event.target || event.srcElement;
+                    while (target && target.nodeName != 'TR') {
+                        target = target.parentElement;
+                    }
+
+                    var cells = target.cells;
+                    if (!cells.length || target.parentNode.nodeName == 'THEAD') {
+                        return;
+                    }
+                    var f1 = document.getElementById('branch_id');
+                    var f2 = document.getElementById('branch_name');
+                    var f3 = document.getElementById('branch_add1');
+                    var f4 = document.getElementById('branch_add2');
+                    var f5 = document.getElementById('branch_phone');
+                    var f6 = document.getElementById('branch_sname');
+                    var f7 = document.getElementById('branch_defa');
+
+                    f1.value = cells[1].innerHTML;
+                    f2.value = cells[2].innerHTML;
+                    f3.value = cells[3].innerHTML;
+                    f4.value = cells[4].innerHTML;
+                    f5.value = cells[5].innerHTML;
+                    f6.value = cells[6].innerHTML;
+                    f7.value = cells[7].innerHTML;
+                   
+                };
+            }
+        })();
+
+        function ClearAll() {
+            $('#branch_id').val("");
+            $('#branch_name').val("");
+            $('#branch_add1').val("");
+            $('#branch_add2').val("");
+            $('#branch_phone').val("");
+            $('#branch_sname').val("");
+            $('#branch_defa').val("");
+        }
+
+    </script>
+}
+
