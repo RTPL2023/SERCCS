@@ -76,6 +76,7 @@ namespace SERCCS.Models.Database
         public string mcomputer_name { get; set; }
         public string td_term { get; set; }
         public string Date { get; set; }
+        public string opening_branch { get; set; }
 
         public string barcodepath { get; set; }
         public string barcode { get; set; }
@@ -91,11 +92,11 @@ namespace SERCCS.Models.Database
         public string occup_id { get; set; }
 
         //from Member_Mast*****************
-        public string Nom_name { get; set; }
-        public string nom_DoB { get; set; }
-        public string Nom_Reln { get; set; }
-        public string Nom_Pan { get; set; }
-        public string Nom_aadhar { get; set; }
+        public string nom_name { get; set; }
+        public string nom_dob { get; set; }
+        public string nom_reln { get; set; }
+        public string nom_pan { get; set; }
+        public string nom_aadhar { get; set; }
         public Int32 if_lti { get; set; }
         public string lti { get; set; }
         public string sign { get; set; }
@@ -146,7 +147,7 @@ namespace SERCCS.Models.Database
         public DepositMast GetDepositOrMemberMastbyContNo(string branchid, string achd, string Contno)
         {
             DepositMast dm = new DepositMast();
-            string sql = "SELECT * FROM DEPOSIT_MAST WHERE BRANCH_ID = 'MN' AND AC_HD = '" + achd + "' AND CONTNO = '" + Contno + "'";
+            string sql = "SELECT * FROM DEPOSIT_MAST WHERE BRANCH_ID = '"+branchid+"' AND AC_HD = '" + achd + "' AND CONTNO = '" + Contno + "'";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {
@@ -172,7 +173,19 @@ namespace SERCCS.Models.Database
                     dm.ac_dist = Convert.ToString(dr["ac_dist"]);
                     dm.ac_state = Convert.ToString(dr["ac_state"]);
                     dm.ac_pin = Convert.ToString(dr["ac_pin"]);
+                    dm.spl_status = Convert.ToString(dr["spl_status"]);
+                    dm.oprn_mode = Convert.ToString(dr["oprn_mode"]);
+                    dm.chq_facility = Convert.ToString(dr["chq_facility"]);
+                    if (dm.chq_facility == "1")
+                    {
+                        dm.chq_facility = "YES";
+                    }
+                    else
+                    {
+                        dm.chq_facility = "NO";
 
+                    }
+                 
                     dm.is_minor = Convert.ToString(dr["is_minor"]);
                     if (dm.is_minor != null && dm.is_minor != "")
                     {
@@ -189,14 +202,14 @@ namespace SERCCS.Models.Database
 
             }
 
-            sql = "SELECT * FROM MEMBER_MAST WHERE BRANCH_ID = 'MN' AND EMPLOYEE_ID = '" + Contno + "'";
+            sql = "SELECT * FROM MEMBER_MAST WHERE BRANCH_ID = '"+branchid+"' AND EMPLOYEE_ID = '" + Contno + "'";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
                     dm.contno = Contno;
-                    dm.member_id = dr["member_id"].ToString();
+                    
                     dm.grdn_name = dr["grdn_name"].ToString();
                     dm.reln_id = dr["reln_id"].ToString();
                     dm.occup_id = dr["occup_id"].ToString();
@@ -235,11 +248,11 @@ namespace SERCCS.Models.Database
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    dm.Nom_name = dr["nom_name"].ToString();
-                    dm.Nom_aadhar = dr["Nom_Aadhar"].ToString();
-                    dm.Nom_Pan = dr["Nom_Pan"].ToString();
-                    dm.nom_DoB = dr["Nom_Dob"].ToString();
-                    dm.Nom_Reln = dr["Nom_Reln"].ToString();
+                    dm.nom_name = dr["nom_name"].ToString();
+                    dm.nom_aadhar = dr["nom_aadhar"].ToString();
+                    dm.nom_pan = dr["nom_pan"].ToString();
+                    dm.nom_dob = dr["nom_dob"].ToString();
+                    dm.nom_reln = dr["nom_reln"].ToString();
                     dm.pan = dr["pan_No"].ToString();
 
                 }
@@ -281,7 +294,6 @@ namespace SERCCS.Models.Database
                 foreach (DataRow dr in config.dt.Rows)
                 {
                     DepositMast dm = new DepositMast();
-
                     dm.ac_no = dr["ac_no"].ToString();
                     dm.td_face_val = Convert.ToDecimal(dr["td_face_val"]);
                     dm.td_mat_date = !Convert.IsDBNull(dr["td_mat_date"]) ? Convert.ToDateTime(dr["td_mat_date"]) : Convert.ToDateTime("01/01/0001");
@@ -293,18 +305,227 @@ namespace SERCCS.Models.Database
                     dm.td_term = Convert.ToString(!Convert.IsDBNull(dr["td_yy"]) ? Convert.ToInt32(dr["td_yy"]) : Convert.ToInt32("00")) + "Yr ";
                     dm.td_term = dm.td_term + Convert.ToString(!Convert.IsDBNull(dr["td_mm"]) ? Convert.ToInt32(dr["td_mm"]) : Convert.ToInt32("00")) + "Mn ";
                     dm.td_term = dm.td_term + Convert.ToString(!Convert.IsDBNull(dr["td_dd"]) ? Convert.ToInt32(dr["td_dd"]) : Convert.ToInt32("00")) + "Dy ";
-
-
-
-
-
                     dmlist.Add(dm);
-
                 }
             }
             return dmlist;
         }
+        public string GetAcnoByContnoForAcOpening(string cont_no)
+        {
+            string sql;
+            sql = "select * from DEPOSIT_MAST WHERE AC_HD = 'SB' AND CONTNO='" + cont_no + "'";
+            config.singleResult(sql);
+            DepositMast dm = new DepositMast();
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    dm.ac_no = dr["ac_no"].ToString();
+                    dm.msg = "This Member Is Already a Savings Account Holder. A/C No : " + dm.ac_no;
+                }
+            }
+            else
+            {
+                dm.msg = null;
+            }
+            return dm.msg;
+        }
+        public DepositMast GetDepositMastByAcNo(String branchid, string achd, string acno)
+        {
+            DepositMast dm = new DepositMast();
 
+            string sql = "SELECT * FROM DEPOSIT_MAST WHERE BRANCH_ID = '"+ branchid + "' AND AC_HD = '" + achd + "' AND AC_NO = '" + acno + "'";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    dm.ac_hd = dr["ac_hd"].ToString();
+                    dm.ac_no = dr["ac_no"].ToString();
+                    dm.branch_id = dr["branch_id"].ToString();
+                    dm.contno = dr["contno"].ToString();
+                    dm.open_date = Convert.ToDateTime(dr["open_date"]);
+                    dm.oprn_mode = dr["oprn_mode"].ToString();
+                    dm.chq_facility = dr["chq_facility"].ToString();
+                    dm.is_minor = dr["is_minor"].ToString();
+                    dm.minor_adult_dt = !Convert.IsDBNull(dr["minor_adult_dt"]) ? Convert.ToDateTime(dr["minor_adult_dt"]) : Convert.ToDateTime("01/01/0001");
+                    dm.ac_no = dr["ac_no"].ToString();
+                    dm.ac_name = dr["ac_name"].ToString();
+                    dm.ac_add1 = dr["ac_add1"].ToString();
+                    dm.ac_add2 = dr["ac_add2"].ToString();
+                    dm.ac_city = dr["ac_city"].ToString();
+                    dm.ac_dist = dr["ac_dist"].ToString();
+                    dm.ac_state = dr["ac_state"].ToString();
+                    dm.ac_pin = dr["ac_pin"].ToString();
+                    dm.spl_status = dr["spl_status"].ToString();
+                    dm.td_term = dm.td_term + ((Convert.ToString(dr["td_yy"])).Length > 0 ? (Convert.ToString(dr["td_yy"]) + "Yr") : "");
+                    dm.td_term = dm.td_term + ((Convert.ToString(dr["td_mm"])).Length > 0 ? (Convert.ToString(dr["td_mm"]) + "Mn") : "");
+                    dm.td_term = dm.td_term + ((Convert.ToString(dr["td_dd"])).Length > 0 ? (Convert.ToString(dr["td_dd"]) + "Dy") : "");
+                    dm.td_face_val = Convert.ToDecimal(dr["td_face_val"].ToString() == "" ? "0" : dr["td_face_val"].ToString());
+                    dm.td_int_rate = Convert.ToDecimal(dr["td_int_rate"].ToString() == "" ? "0" : dr["td_int_rate"].ToString());
+                    dm.td_intfrq_mm = Convert.ToInt32(dr["td_intfrq_mm"].ToString() == "" ? "0" : dr["td_intfrq_mm"].ToString());
+                    dm.td_inst_intr = Convert.ToDecimal(dr["td_inst_intr"].ToString() == "" ? "0" : dr["td_inst_intr"].ToString());
+                    dm.td_mat_date = !Convert.IsDBNull(dr["td_mat_date"]) ? Convert.ToDateTime(dr["td_mat_date"]) : Convert.ToDateTime("01/01/0001");
+                    dm.td_mat_val = Convert.ToDecimal(dr["td_mat_val"].ToString() == "" ? "0" : dr["td_mat_val"].ToString());
+                    dm.ac_closed = dr["ac_closed"].ToString();
+                    dm.ac_clos_date = dr["ac_clos_date"].ToString();
+                    dm.msg1 = "Data Found";
+                    if (achd == "FD")
+                    {
+                        dm.msg = "Account No already exist for Fixed Deposit";
+                    }
+                    if (achd == "SB")
+                    {
+                        dm.msg = "Account No already blocked to : " + dm.contno;
+                    }
+                }
+            }
+            else
+            {
+                dm = null;
+            }
+            return dm;
+        }
+        public void SaveDepositMast(DepositMast dm)
+        {
+            try
+            {
+                config.Insert("Deposit_Mast", new Dictionary<String, object>()
+                {
+                    { "branch_id",dm.branch_id },
+                    { "ac_hd",dm.ac_hd },
+                    { "ac_no",dm.ac_no },
+                    { "contno",dm.contno },
+                    { "created_by",dm.created_by },
+                    { "created_on",dm.created_on },
+                    { "computer_name",dm.computer_name },
+                    { "open_date",dm.open_date },
+                    { "spl_status",dm.spl_status },
+                    { "chq_facility",dm.chq_facility },
+                    { "oprn_mode",dm.oprn_mode },
+                    { "ac_name",dm.ac_name },
+                    { "ac_add1",dm.ac_add1 },
+                    { "ac_add2",dm.ac_add2 },
+                    { "ac_city",dm.ac_city },
+                    { "ac_dist",dm.ac_dist },
+                    { "ac_state",dm.ac_state },
+                    { "ac_pin",dm.ac_pin },
+                    { "is_minor",dm.is_minor },
+                    { "minor_dob",dm.minor_dob },
+                    { "minor_adult_dt",dm.minor_adult_dt },
+                    { "OPENING_BRANCH",dm.branch_id },
+                });
+            }
+            catch (Exception ex)
+            {
+                msg = "Unable To Save. Error : " + Convert.ToString(ex);
+            }
+        }
+        public DepositMast GetDepositOrMemberMastbyACNo(string branchid, string achd, string Acno)
+        {
+            DepositMast dm = new DepositMast();
+            string sql = "SELECT * FROM DEPOSIT_MAST WHERE BRANCH_ID = '"+ branchid + "' AND AC_HD = '" + achd + "' AND ac_no = '" + Acno + "'";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    dm.contno = Convert.ToString(dr["contno"]);
+                    dm.ac_name = Convert.ToString(dr["ac_name"]);
+                    dm.ac_hd = Convert.ToString(dr["ac_hd"]);
+                    dm.ac_no = Convert.ToString(dr["ac_no"]);
+                    dm.branch_id = Convert.ToString(dr["branch_id"]);
+                    if ((!Convert.IsDBNull(dr["open_date"]) ? Convert.ToDateTime(dr["open_date"]) : Convert.ToDateTime("01/01/0001")) != Convert.ToDateTime("01/01/0001"))
+                    {
+                        dm.str_open_date = (Convert.ToDateTime(dr["open_date"])).ToString("dd/MM/yyyy");
+                    }
+                    else
+                    {
+                        dm.str_open_date = "";
+                    }
+                    dm.ac_add1 = Convert.ToString(dr["ac_add1"]);
+                    dm.ac_add2 = Convert.ToString(dr["ac_add2"]);
+                    dm.ac_city = Convert.ToString(dr["ac_city"]);
+                    dm.ac_dist = Convert.ToString(dr["ac_dist"]);
+                    dm.ac_state = Convert.ToString(dr["ac_state"]);
+                    dm.ac_pin = Convert.ToString(dr["ac_pin"]);
+                    dm.spl_status = Convert.ToString(dr["spl_status"]);
+                    dm.oprn_mode = Convert.ToString(dr["oprn_mode"]);
+                    dm.chq_facility = Convert.ToString(dr["chq_facility"]);
+                    if (dm.chq_facility == "1")
+                    {
+                        dm.chq_facility = "YES";
+                    }
+                    else
+                    {
+                        dm.chq_facility = "NO";
+                    }
+                    dm.is_minor = Convert.ToString(dr["is_minor"]);
+                    if (dm.is_minor != null && dm.is_minor != "")
+                    {
+                        dm.str_minor_dob = (!Convert.IsDBNull(dr["minor_dob"]) ? Convert.ToDateTime(dr["minor_dob"]) : Convert.ToDateTime("01/01/0001")).ToString("dd/MM/yyyy");
+                        dm.str_minor_adult_dt = (!Convert.IsDBNull(dr["minor_adult_dt"]) ? Convert.ToDateTime(dr["minor_adult_dt"]) : Convert.ToDateTime("01/01/0001")).ToString("dd/MM/yyyy");
+                    }
+                    else
+                    {
+                        dm.str_minor_dob = "";
+                        dm.str_minor_adult_dt = "";
+                    }
+                }
+            }
+            sql = "SELECT * FROM MEMBER_MAST WHERE BRANCH_ID = '"+branchid+"' AND EMPLOYEE_ID = '" + dm.contno + "'";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    dm.grdn_name = dr["grdn_name"].ToString();
+                    dm.reln_id = dr["reln_id"].ToString();
+                    dm.occup_id = dr["occup_id"].ToString();
+                    dm.if_lti = !Convert.IsDBNull(dr["if_lti"]) ? Convert.ToInt32(dr["if_lti"]) : Convert.ToInt32("0");
+                    if (if_lti == 0)
+                    {
+                        dm.lti = "NO";
+                        dm.sign = "YES";
+                    }
+                    else
+                    {
+                        dm.lti = "YES";
+                        dm.sign = "NO";
+                    }
+                    dm.sex = dr["sex"].ToString();
+                    if (dm.sex == "M")
+                        dm.sex = "Male";
+                    else if (dm.sex == "F")
+                        dm.sex = "Female";
+                    else if (dm.sex == "O")
+                        dm.sex = "Other";
+                    dm.ac_name = dr["member_name"].ToString();
+                    dm.ac_add1 = dr["mail_add1"].ToString();
+                    dm.ac_add2 = dr["mail_add2"].ToString();
+                    dm.ac_city = dr["mail_city"].ToString();
+                    dm.ac_dist = dr["mail_dist"].ToString();
+                    dm.ac_state = dr["mail_state"].ToString();
+                    dm.ac_pin = dr["mail_pin"].ToString();
+
+                }
+            }
+            sql = "SELECT * FROM Kyc_details WHERE CONT_NO = '" + dm.contno + "'";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    dm.nom_name = dr["nom_name"].ToString();
+                    dm.nom_aadhar = dr["Nom_Aadhar"].ToString();
+                    dm.nom_pan = dr["Nom_Pan"].ToString();
+                    dm.nom_dob = dr["Nom_Dob"].ToString();
+                    dm.nom_reln = dr["Nom_Reln"].ToString();
+                    dm.pan = dr["pan_No"].ToString();
+                }
+            }
+            return dm;
+        }
     }
 
 }

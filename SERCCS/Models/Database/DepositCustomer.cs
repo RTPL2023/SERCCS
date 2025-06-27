@@ -25,6 +25,20 @@ namespace SERCCS.Models.Database
         public String sex { get; set; }
         public String pan_no { get; set; }
         public string if_lti { get; set; }
+        public void SaveDepositCustomer(DepositCustomer dc)
+        {
 
+            config.Insert("Deposit_Customer", new Dictionary<String, object>()
+            {
+                    { "branch_id",dc.branch_id },
+                    { "ac_hd",dc.ac_hd },
+                    { "ac_no",dc.ac_no },
+                    { "cust_srl",dc.cust_srl },
+                    { "sign_flag",dc.sign_flag },
+                    { "member_id",dc.member_id }
+
+
+            });
+        }
     }
 }

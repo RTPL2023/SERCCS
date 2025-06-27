@@ -995,25 +995,7 @@ namespace SERCCS.Controllers
         }
 
 
-        //[HttpPost]
-        //public JsonResult GetDetailByContNo(string contno, string achd)
-        //{
-
-        //    CashDepositWthdrawViewModel cashDepositWthdrawViewModel = new CashDepositWthdrawViewModel();
-
-
-
-        //    //if (model.WithAmount != null && model.WithAmount.ToString().Length > 0)
-        //    //{
-        //    //    //SaveData(model);
-        //    //}
-
-
-        //    //model = cashDepositWthdrawViewModel;
-
-        //    //  return View(cashDepositWthdrawViewModel);
-        //    return Json(cashDepositWthdrawViewModel);
-        //}
+        
 
         [HttpPost]
         public JsonResult GeneratePoNo(string counterno, string depwith, string achd, string trndate)
@@ -1658,253 +1640,109 @@ namespace SERCCS.Controllers
         [HttpGet]
         public IActionResult AccountOpening(AccountOpeningViewModel model)
         {
-            model.Ac_Hd_DESC = uc.getAcHdDescForSB();
-            model.Md_Of_Op_DESC = uc.getOprnMode();
-            model.Ac_Category_DESC = uc.getStatusDesc();
-            model.OpenDate = DateTime.Now.ToShortDateString();
+            model.ac_hd_desc = uc.getAcHdDescForSB();
+            model.md_of_op_desc = uc.getOprnMode();
+            model.ac_category_desc = uc.getStatusDesc();
+            model.opendate = DateTime.Now.ToShortDateString();
+            model.branchid = "GRC";
             return View(model);
         }
 
-        public JsonResult GetDetailByContNo(string AcHd, string ContNo)
+        public JsonResult GetDetailByContNo(string achd, string contno,string branchid)
         {
-
             DepositMast dm = new DepositMast();
-
-
-            dm = dm.GetDepositOrMemberMastbyContNo("MN", AcHd, ContNo);
-
+            dm = dm.GetDepositOrMemberMastbyContNo(branchid, achd, contno);
             return Json(dm);
         }
-        //public JsonResult GetDetailByAcNo(string AcHd, string AcNo)
-        //{
+        public JsonResult SaveDepositMast(AccountOpeningViewModel model)
+        {
+            string msg = "";
+            DepositMast dpm = new DepositMast();
+            msg = dpm.GetAcnoByContnoForAcOpening(model.contno);
+            if (msg == null)
+            {
+                dpm = dpm.GetDepositMastByAcNo(model.branchid, model.achd, model.acno);
+                if (dpm != null)
+                {
+                    msg = dpm.msg;
+                }
+                else
+                {
+                    try
+                    {
+                        DepositMast dm = new DepositMast();
+                        dm.branch_id = model.branchid;
+                        dm.ac_hd = model.achd;
+                        dm.ac_no = model.acno;
+                        dm.created_by = User.Identity.Name;
+                        dm.created_on = DateTime.Now;
+                        dm.computer_name = Environment.MachineName.ToString();
+                        dm.open_date = Convert.ToDateTime(model.opendate);
+                        dm.spl_status = model.splstatus;
+                        dm.contno = model.contno;
+                        if (model.chqfacility == "YES")
+                            dm.chq_facility = "1";
+                        else
+                            dm.chq_facility = "0";
+                        dm.oprn_mode = model.oprnmode;
+                        dm.ac_name = model.acname;
+                        dm.ac_add1 = model.acadd1;
+                        dm.ac_add2 = model.acadd2;
+                        dm.ac_city = model.accity;
+                        dm.ac_dist = model.acdist;
+                        dm.ac_state = model.acstate;
+                        dm.ac_pin = model.acpin;
+                        if (model.isminor == "YES")
+                        {
+                            dm.is_minor = "1";
+                            dm.minor_dob = Convert.ToDateTime(model.minordob);
+                            dm.minor_adult_dt = Convert.ToDateTime(model.minoradultdt);
+                        }
+                        dm.SaveDepositMast(dm);
+                        DepositCustomer dc = new DepositCustomer();
+                        dc.cust_srl = Convert.ToInt32(model.srl1);
+                        dc.branch_id = model.branchid;
+                        dc.ac_hd = model.achd;
+                        dc.ac_no = model.acno;
+                        dc.member_id = model.memberid1;
+                        if (model.sign1 == "YES")
+                            dc.sign_flag = "S";
+                        else
+                            dc.sign_flag = "L";
+                        dc.SaveDepositCustomer(dc);
+                        if (model.srl2 != null && model.srl2 != "")
+                        {
+                            if (model.memberid2 != null && model.memberid2 != "")
+                            {
+                                dc.cust_srl = Convert.ToInt32(model.srl2);
+                                dc.branch_id = model.branchid;
+                                dc.ac_hd = model.achd;
+                                dc.ac_no = model.acno;
+                                dc.member_id = model.memberid2;
+                                if (model.sign1 == "YES")
+                                    dc.sign_flag = "S";
+                                else
+                                    dc.sign_flag = "L";
+                                dc.SaveDepositCustomer(dc);
+                            }
+                        }
+                        msg = "Saved Successfully";
+                    }
+                    catch (Exception ex)
+                    {
+                        msg = "Unable To Save " + Convert.ToString(ex);
+                    }
 
-        //    DepositMast dm = new DepositMast();
-
-        //    dm = dm.GetDepositOrMemberMastbyACNo("MN", AcHd, AcNo);
-
-
-
-        //    return Json(dm);
-        //}
-
-        //public JsonResult GetFDDetailByContNo(string AcHd, string ContNo)
-        //{
-        //    DepositMast dm = new DepositMast();
-        //    List<DepositMast> dmlist = new List<DepositMast>();
-        //    dmlist = dm.GetDepositMastFDDetail("FD", ContNo);
-        //    string fd = string.Empty;
-        //    //ViewBag.dmlist = dmlist;
-        //    decimal TOTFD = 0;
-        //    fd = "<thead><tr><th> Srl </th><th> A/C No </th><th> FD Amount </th></tr></thead>";
-        //    foreach (var a in dmlist)
-        //    {
-        //        int i = 1;
-        //        fd = fd + "<tr><td>" + i.ToString() + "</td><td>" + a.ac_no + "</td><td>" + a.td_face_val + "</td></tr>";
-        //        //TOTFD = TOTFD + a.td_face_val;
-        //        i = i + 1;
-        //    }
-        //    //model.TxtFd = Convert.ToString(TOTFD);
-        //    return Json(fd);
-        //}
-
-
-        //public JsonResult SaveDepositMast(AccountOpeningViewModel model)
-        //{
-        //    string msg = "";
-        //    DepositMast dpm = new DepositMast();
-        //    msg = dpm.GetAcnoByContnoForAcOpening(model.ContNo);
-        //    if (msg == null)
-        //    {
-        //        dpm = dpm.GetDepositMastByAcNo("MN", model.AcHd, model.AcNo);
-        //        if (dpm != null)
-        //        {
-        //            msg = dpm.msg;
-        //        }
-        //        else
-        //        {
-        //            try
-        //            {
-        //                DepositMast dm = new DepositMast();
-        //                dm.branch_id = model.BranchId;
-        //                dm.ac_hd = model.AcHd;
-        //                dm.ac_no = model.AcNo;
-        //                dm.created_by = User.Identity.Name;
-        //                dm.created_on = DateTime.Now;
-        //                dm.computer_name = Environment.MachineName.ToString();
-
-
-        //                dm.open_date = Convert.ToDateTime(model.OpenDate);
-        //                dm.spl_status = model.SplStatus;
-        //                dm.contno = model.ContNo;
-        //                if (model.ChqFacility == "YES")
-        //                    dm.chq_facility = "1";
-        //                else
-        //                    dm.chq_facility = "0";
-        //                dm.oprn_mode = model.OprnMode;
-        //                dm.ac_name = model.AcName;
-        //                dm.ac_add1 = model.AcAdd1;
-        //                dm.ac_add2 = model.AcAdd2;
-        //                dm.ac_city = model.AcCity;
-        //                dm.ac_dist = model.AcDist;
-        //                dm.ac_state = model.AcState;
-        //                dm.ac_pin = model.AcPin;
-        //                if (model.IsMinor == "YES")
-        //                {
-        //                    dm.is_minor = "1";
-        //                    dm.minor_dob = Convert.ToDateTime(model.MinorDob);
-        //                    dm.minor_adult_dt = Convert.ToDateTime(model.MinorAdultDt);
-        //                }
-        //                dm.SaveDepositMast(dm);
-
-
-        //                DepositCustomer dc = new DepositCustomer();
-        //                dc.cust_srl = Convert.ToInt32(model.Srl1);
-        //                dc.branch_id = model.BranchId;
-        //                dc.ac_hd = model.AcHd;
-        //                dc.ac_no = model.AcNo;
-        //                dc.member_id = model.MemberId1;
-        //                if (model.Sign1 == "YES")
-        //                    dc.sign_flag = "S";
-        //                else
-        //                    dc.sign_flag = "L";
-        //                dc.SaveDepositCustomer(dc);
-        //                if (model.Srl2 != null && model.Srl2 != "")
-        //                {
-        //                    if (model.MemberId2 != null && model.MemberId2 != "")
-        //                    {
-        //                        dc.cust_srl = Convert.ToInt32(model.Srl2);
-        //                        dc.branch_id = model.BranchId;
-        //                        dc.ac_hd = model.AcHd;
-        //                        dc.ac_no = model.AcNo;
-        //                        dc.member_id = model.MemberId2;
-        //                        if (model.Sign1 == "YES")
-        //                            dc.sign_flag = "S";
-        //                        else
-        //                            dc.sign_flag = "L";
-        //                        dc.SaveDepositCustomer(dc);
-        //                    }
-        //                }
-        //                msg = "Saved Successfully";
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                msg = "Unable To Save " + Convert.ToString(ex);
-        //            }
-
-        //        }
-        //    }
-        //    return Json(msg);
-        //}
-
-
-
-
-        //public JsonResult getFdIntrate(string AcHd, string TdRenewDate, string TdDd, string TdMm, string TdYy, string SplStatus)
-        //{
-        //    utility u = new utility();
-
-
-
-        //    u = u.IntRateForFD(AcHd, TdRenewDate, TdDd, TdMm, TdYy, SplStatus);
-        //    return Json(u);
-        //}
-
-        //public JsonResult getInterestforFD(string TdIntfrqMm, string AcHd, string TdFaceVal, string TdRenewDate, string TdIntRate)
-        //{
-        //    decimal interest = 0;
-        //    double finalinterest = 0;
-        //    if (AcHd == "FD")
-        //    {
-        //        if (TdIntfrqMm == "Yearly Payable")
-        //        {
-        //            interest = (Convert.ToDecimal(TdFaceVal) * Convert.ToDecimal(TdIntRate) * 12) / 1200;
-
-        //        }
-        //        if (TdIntfrqMm == "Payable On Closure")
-        //        {
-        //            interest = 0;
-
-        //        }
-        //        if (TdIntfrqMm == "Monthly Payable")
-        //        {
-        //            //CAL_FD_PERINT = (100 * XINT_RATE) / (1200 + XINT_RATE)
-        //            //CAL_FD_PERINT = Round(CAL_FD_PERINT, 4)
-        //            //CAL_FD_PERINT = (XAMT / 100) * CAL_FD_PERINT
-
-        //            interest = (100 * Convert.ToDecimal(TdIntRate)) / (1200 + Convert.ToDecimal(TdIntRate));
-        //            interest = Math.Round(interest, 4);
-        //            interest = (Convert.ToDecimal(TdFaceVal) / 100) * interest;
-
-
-        //        }
-        //        if (TdIntfrqMm == "Quaterly Payable")
-        //        {
-        //            //CAL_FD_PERINT = (XAMT * XINT_RATE * 3) / 1200
-
-        //            interest = (Convert.ToDecimal(TdFaceVal) * Convert.ToDecimal(TdIntRate) * 3) / 1200;
-
-        //        }
-        //        if (TdIntfrqMm == "Half Yearly Payable")
-        //        {
-        //            //CAL_FD_PERINT = (XAMT * XINT_RATE * 6) / 1200
-
-        //            interest = (Convert.ToDecimal(TdFaceVal) * Convert.ToDecimal(TdIntRate) * 6) / 1200;
-
-        //        }
-        //        finalinterest = Convert.ToDouble(interest) + 0.002;
-        //        finalinterest = Math.Round(finalinterest, 0);
-        //    }
-
-
-
-        //    return Json(finalinterest);
-        //}
-
-        //public JsonResult getMatValforFD(string TdIntfrqMm, string TdFaceVal, string TdRenewDate, string TdDd, string TdMm, string TdYy, string PeriodicInt, string TdIntRate)
-        //{
-        //    decimal matval = 0;
-        //    if (TdIntfrqMm == "Payable On Closure")
-        //    {
-        //        //XAMT + ((XAMT * XINT_RATE * xmm) / 1200) + ((XAMT * XINT_RATE * xdd) / 36500)
-        //        matval = Convert.ToDecimal(TdFaceVal) + (Convert.ToDecimal(TdFaceVal) * Convert.ToDecimal(TdIntRate) * Convert.ToInt32(TdMm) / 1200) + (Convert.ToDecimal(TdFaceVal) * Convert.ToDecimal(TdIntRate) * Convert.ToInt32(TdDd) / 36500);
-
-
-        //    }
-        //    if (TdIntfrqMm == "Yearly Payable")
-        //    {
-        //        int monthcount = (Convert.ToInt32(TdYy) * 12) + (Convert.ToInt32(TdMm) * 1);
-        //        decimal monthlyint = Convert.ToDecimal(PeriodicInt) / 12;
-        //        decimal totint = monthlyint * monthcount;
-        //        matval = Convert.ToDecimal(TdFaceVal) + totint;
-
-        //    }
-        //    if (TdIntfrqMm == "Half Yearly Payable")
-        //    {
-        //        int monthcount = (Convert.ToInt32(TdYy) * 12) + (Convert.ToInt32(TdMm) * 1);
-        //        decimal monthlyint = Convert.ToDecimal(PeriodicInt) / 6;
-
-        //        matval = Convert.ToDecimal(TdFaceVal) + (monthlyint * monthcount);
-
-        //    }
-        //    if (TdIntfrqMm == "Quaterly Payable")
-        //    {
-        //        int monthcount = (Convert.ToInt32(TdYy) * 12) + (Convert.ToInt32(TdMm) * 1);
-        //        decimal monthlyint = Convert.ToDecimal(PeriodicInt) / 3;
-
-        //        matval = Convert.ToDecimal(TdFaceVal) + (monthlyint * monthcount);
-
-        //    }
-        //    if (TdIntfrqMm == "Monthly Payable")
-        //    {
-        //        int monthcount = (Convert.ToInt32(TdYy) * 12) + (Convert.ToInt32(TdMm) * 1);
-        //        decimal monthlyint = Convert.ToDecimal(PeriodicInt) / 1;
-
-        //        matval = Convert.ToDecimal(TdFaceVal) + (monthlyint * monthcount);
-
-        //    }
-
-        //    return Json(matval);
-        //}
+                }
+            }
+            return Json(msg);
+        }
+        public JsonResult GetDetailByAcNo(string achd, string acno,string branchid)
+        {
+            DepositMast dm = new DepositMast();
+            dm = dm.GetDepositOrMemberMastbyACNo(branchid, achd, acno);
+            return Json(dm);
+        }
 
         //************************************end of account openning***********************************************************
 

@@ -252,9 +252,9 @@
                         <table>
                             <tr>
                                 <td>
-                                    <input id="ButtonSAVE" type="button" value="SAVE" name="ButtonSAVE" class="btn btn-primary btn_size" onclick="SaveData()" />
-                                    <input id="ButtonAddNew" type="button" value="ADD NEW" name="ButtonAddNew" class="btn btn-primary btn_size" onclick="Reload()" />
-                                    <input id="ButtonEXIT" type="button" value="EXIT" name="ButtonEXIT" class="btn btn-primary btn_size" onclick="Home()" />
+                                    <input id="buttonsave" type="button" value="SAVE" name="ButtonSAVE" class="btn btn-primary" onclick="SaveData()" />
+                                    <input id="buttonaddnew" type="button" value="ADD NEW" name="ButtonAddNew" class="btn btn-primary " onclick="Reload()" />
+                                    <input id="ButtonEXIT" type="button" value="EXIT" name="ButtonEXIT" class="btn btn-primary " onclick="Home()" />
 
                                 </td>
                             </tr>
@@ -263,60 +263,60 @@
                             <tr>
                                 <td>
                                     Branch<br />
-                                    @Html.DropDownListFor(p => p.BranchId, new SelectList(new string[] { "MN" }), new { @class = "sizeS" })
+                                    @*@Html.DropDownListFor(p => p.BranchId, new SelectList(new string[] { "MN" }), new { @class = "sizeS" })*@
+                                    @Html.TextBoxFor(p => p.branchid, new { @class = "size", @type = "text" })
+
                                 </td>
                                 <td class="gap">
                                 </td>
                                 <td>
                                     Account Head<br />
-                                    @Html.DropDownListFor(p => p.AcHd, new SelectList(Model.Ac_Hd_DESC, "Value", "Text"), new { @class = "size" })
+                                    @Html.DropDownListFor(p => p.achd, new SelectList(Model.ac_hd_desc, "Value", "Text"), new { @class = "size" })
                                 </td>
                                 <td class="gap">
                                 </td>
                                 <td>
                                     Control No<br />
-                                    @Html.TextBoxFor(p => p.ContNo, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtContNo(event); " })
+                                    @Html.TextBoxFor(p => p.contno, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtContNo(event); " })
                                 </td>
                                 <td class="gap">
                                 </td>
                                 <td>
                                     Account No<br />
-                                    @Html.TextBoxFor(p => p.AcNo, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtAcNo(event); " })
+                                    @Html.TextBoxFor(p => p.acno, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtAcNo(event); " })
                                 </td>
-
-
-
                             </tr>
                         </table>
                     </td>
                 </tr>
             </table>
-            <table align="center" class="mt-2">
+            <table align="center" class="mt-2 mb-2">
                 <tr>
                     <td>
                         Opening Date<br />
-                        @Html.TextBoxFor(p => p.OpenDate, new { @class = "size", @type = "text" })
+                        @Html.TextBoxFor(p => p.opendate, new { @class = "size", @type = "text" })
                     </td>
                     <td>
                         Category of Account<br />
-                        @Html.DropDownListFor(p => p.SplStatus, new SelectList(Model.Ac_Category_DESC, "Value", "Text"), new { @class = "size" })
+                        @Html.DropDownListFor(p => p.splstatus, new SelectList(Model.ac_category_desc, "Value", "Text"), new { @class = "size" })
                     </td>
 
                     <td>
                         Mode of Operation<br />
-                        @Html.DropDownListFor(p => p.OprnMode, new SelectList(Model.Md_Of_Op_DESC, "Value", "Text"), new { @class = "size" })
+                        @Html.DropDownListFor(p => p.oprnmode, new SelectList(Model.md_of_op_desc, "Value", "Text"), new { @class = "size" })
                     </td>
-                    <td id="chqfacility">
+                    <td>
                         Cheque Facility<br />
-                        @Html.DropDownListFor(p => p.ChqFacility, new SelectList(new string[] { "NO", "YES" }), new { @class = "sizeS" })
+                        @Html.DropDownListFor(p => p.chqfacility, new SelectList(new string[] { "NO", "YES" }), new { @class = "sizeS" })
                     </td>
                 </tr>
             </table>
+
+            <br />
             <h6 class="text-center bg-danger p-1 mt-2" style="color:whitesmoke">MEMBER HOLDER'S PARTICULARS</h6>
             <table class="table table-bordered tableT" style="margin-top:-8px">
                 <tr style="background-color: #145f9f; color: white;">
                     <th>Srl</th>
-                    <th>Member ID</th>
                     <th>Member Name</th>
                     <th>Guardian's Name'</th>
                     <th>Relation</th>
@@ -329,30 +329,28 @@
                 </tr>
                 <tr>
 
-                    <td>@Html.TextBoxFor(p => p.Srl1, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
-                    <td>@Html.TextBoxFor(p => p.MemberId1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
-                    <td>@Html.TextBoxFor(p => p.MemberName1, new { @class = "sizeL", @type = "text", @readonly = "true" })</td>
-                    <td>@Html.TextBoxFor(p => p.GuardianName1, new { @class = "sizeL", @type = "text", @readonly = "true" })</td>
-                    <td>@Html.TextBoxFor(p => p.Relation1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
-                    <td>@Html.TextBoxFor(p => p.Sex1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
-                    <td>@Html.TextBoxFor(p => p.Occupation1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
-                    <td>@Html.DropDownListFor(p => p.Sign1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
-                    <td>@Html.DropDownListFor(p => p.Lti1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
-                    <td>@Html.TextBoxFor(p => p.PanNo1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.srl1, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.membername1, new { @class = "sizeL", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.guardianname1, new { @class = "sizeL", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.relation1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.sex1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.occupation1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.DropDownListFor(p => p.sign1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                    <td>@Html.DropDownListFor(p => p.lti1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                    <td>@Html.TextBoxFor(p => p.panno1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
                     <td id="addbutton"><img src="~/Images/Plus.png" width="30" height="30" onclick="OpenNewRowForMember()" /></td>
 
                 </tr>
                 <tr id="NewMem">
-                    <td>@Html.TextBoxFor(p => p.Srl2, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
-                    <td>@Html.TextBoxFor(p => p.MemberId2, new { @class = "sizeM", @type = "text" })</td>
-                    <td>@Html.TextBoxFor(p => p.MemberName2, new { @class = "sizeL", @type = "text" })</td>
-                    <td>@Html.TextBoxFor(p => p.GuardianName2, new { @class = "sizeL", @type = "text" })</td>
-                    <td>@Html.TextBoxFor(p => p.Relation2, new { @class = "sizeM", @type = "text" })</td>
-                    <td>@Html.TextBoxFor(p => p.Sex2, new { @class = "sizeM", @type = "text" })</td>
-                    <td>@Html.TextBoxFor(p => p.Occupation2, new { @class = "sizeS", @type = "text" })</td>
-                    <td>@Html.DropDownListFor(p => p.Sign2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
-                    <td>@Html.DropDownListFor(p => p.Lti2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
-                    <td>@Html.TextBoxFor(p => p.PanNo2, new { @class = "sizeM", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.srl2, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.membername2, new { @class = "sizeL", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.guardianname2, new { @class = "sizeL", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.relation2, new { @class = "sizeM", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.sex2, new { @class = "sizeM", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.occupation2, new { @class = "sizeS", @type = "text" })</td>
+                    <td>@Html.DropDownListFor(p => p.sign2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                    <td>@Html.DropDownListFor(p => p.lti2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                    <td>@Html.TextBoxFor(p => p.panno2, new { @class = "sizeM", @type = "text" })</td>
                     <th><img src="~/Images/Minus.png" width="30" height="30" onclick="CloseNewRowForMember()" /></th>
                 </tr>
             </table>
@@ -365,7 +363,7 @@
                                     A/C Name
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcName, new { @class = "sizebig", @type = "text", @readonly = "true" })
+                                    @Html.TextBoxFor(p => p.acname, new { @class = "sizebig", @type = "text", @readonly = "true" })
                                 </td>
                             </tr>
                             <tr>
@@ -373,8 +371,8 @@
                                     Address
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcAdd1, new { @class = " sizebig", @type = "text", @readonly = "true" })<br />
-                                    @Html.TextBoxFor(p => p.AcAdd2, new { @class = " sizebig", @type = "text", @readonly = "true" })<br />
+                                    @Html.TextBoxFor(p => p.acadd1, new { @class = " sizebig", @type = "text", @readonly = "true" })<br />
+                                    @Html.TextBoxFor(p => p.acadd2, new { @class = " sizebig", @type = "text", @readonly = "true" })<br />
                                 </td>
                             </tr>
                             <tr>
@@ -383,13 +381,13 @@
                                     State
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcState, new { @class = "sizeM1", @type = "text", @readonly = "true" })
+                                    @Html.TextBoxFor(p => p.acstate, new { @class = "sizeM1", @type = "text", @readonly = "true" })
                                 </td>
                                 <td>
                                     District
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcDist, new { @class = "sizeM1", @type = "text", @readonly = "true" })
+                                    @Html.TextBoxFor(p => p.acdist, new { @class = "sizeM1", @type = "text", @readonly = "true" })
                                 </td>
 
                             </tr>
@@ -398,13 +396,13 @@
                                     City
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcCity, new { @class = "sizeM1", @type = "text", @readonly = "true" })
+                                    @Html.TextBoxFor(p => p.accity, new { @class = "sizeM1", @type = "text", @readonly = "true" })
                                 </td>
                                 <td>
                                     Pin
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcPin, new { @class = "sizeM1", @type = "text", @readonly = "true" })
+                                    @Html.TextBoxFor(p => p.acpin, new { @class = "sizeM1", @type = "text", @readonly = "true" })
                                 </td>
                             </tr>
                         </table>
@@ -418,17 +416,17 @@
                                             <td>
 
                                                 Minor Account:
-                                                @Html.DropDownListFor(p => p.IsMinor, new SelectList(new string[] { "NO", "YES" }), new { @class = "sizeS", @onchange = "showhideminor()" })
+                                                @Html.DropDownListFor(p => p.isminor, new SelectList(new string[] { "NO", "YES" }), new { @class = "sizeS", @onchange = "showhideminor()" })
                                             </td>
                                         <tr id="minor">
 
                                             <td>
                                                 Date of Birth
-                                                @Html.TextBoxFor(p => p.MinorDob, new { @class = "size", @type = "text" })
+                                                @Html.TextBoxFor(p => p.minordob, new { @class = "size", @type = "text" })
                                             </td>
                                             <td>
                                                 Attain Majority On
-                                                @Html.TextBoxFor(p => p.MinorAdultDt, new { @class = "size", @type = "text" })
+                                                @Html.TextBoxFor(p => p.minoradultdt, new { @class = "size", @type = "text" })
                                             </td>
                                         </tr>
                                     </table>
@@ -444,10 +442,10 @@
                                 <th>Aadhar No</th>
                             </tr>
                             <tr>
-                                <td>@Html.TextBoxFor(p => p.NomName, new { @class = " sizeL", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.NomReln, new { @class = " sizeM", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.NomPan, new { @class = " sizeM", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.NomAadhar, new { @class = " sizeM", @type = "text", @readonly = "true" })</td>
+                                <td>@Html.TextBoxFor(p => p.nomname, new { @class = " sizeL", @type = "text", @readonly = "true" })</td>
+                                <td>@Html.TextBoxFor(p => p.nomreln, new { @class = " sizeM", @type = "text", @readonly = "true" })</td>
+                                <td>@Html.TextBoxFor(p => p.nompan, new { @class = " sizeM", @type = "text", @readonly = "true" })</td>
+                                <td>@Html.TextBoxFor(p => p.nomaadhar, new { @class = " sizeM", @type = "text", @readonly = "true" })</td>
                             </tr>
                         </table>
 
@@ -460,193 +458,148 @@
 
 
     </div>
-    @if (ViewBag.ErrorMsg != null)
-    {
-        <script type="text/javascript">
-            window.onload = function () {
-                $("#lblError").html('@Html.Raw(ViewBag.ErrorMsg)');
-                $("#MyPopup").modal("show");
-            };
-        </script>
-    }
+
 </form>
 @section scripts
 {
 
-    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap-datepicker.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <script src="~/js/jquery-3.6.1.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script type="text/javascript">
 
 
         function OpenNewRowForMember() {
             $("#NewMem").show();
             $("#addbutton").hide();
-            $("#Srl2").val("2");
-            $("#MemberId2").focus();
-
+            $("#srl2").val("2");
         }
 
         function CloseNewRowForMember() {
             $("#NewMem").hide();
             $("#addbutton").show();
             $("#Srl2").val("");
-            $("#MemberId2").val("");
         }
 
         function EvtContNo(evt) {
-
             var charCode = (evt.which) ? evt.which : event.keyCode;
-            //if ((charCode != 46 && charCode > 31
-            //    && (charCode < 48 || charCode > 57)) && charCode != 13 && charCode != 193)
-            //if ((charCode < 106 && charCode > 95) || (charCode < 58 && charCode > 47) || charCode != 13 || charCode != 193 || charCode != 111)
-            //    return false;
             if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
                 return false;
             else if (charCode == 13) {
                 GetDetailByContNo();
             }
         }
-
         function EvtAcNo(evt) {
-
             var charCode = (evt.which) ? evt.which : event.keyCode;
-            //if ((charCode != 46 && charCode > 31
-            //    && (charCode < 48 || charCode > 57)) && charCode != 13 && charCode != 193)
-            //if ((charCode < 106 && charCode > 95) || (charCode < 58 && charCode > 47) || charCode != 13 || charCode != 193 || charCode != 111)
-            //    return false;
-            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+              if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
                 return false;
             else if (charCode == 13) {
                 GetDetailByAcNo();
             }
         }
 
-
-
-
-
-
         function GetDetailByContNo() {
-
-
             let ModelObject = {
-                Achd: $('#AcHd').val(), ContNo: $('#ContNo').val()};
-
-
+                achd: $('#achd').val(), contno: $('#contno').val(), branchid: $('#branchid').val()};
             $.ajax({
-
                 type: "POST",
-                    url: '@Url.Action("GetDetailByContNo", "Accounts")',
+                    url: '@Url.Action("GetDetailByContNo", "Deposits")',
                     data: ModelObject,
                     dataType: "json",
                 success: function (data) {
-
-                        $('#AcNo').val(data.ac_no);
-                        $('#ContNo').val(data.contno);
-                        $('#MemberId1').val(data.member_id);
-                        $('#MemberName1').val(data.ac_name);
-                        $('#GuardianName1').val(data.grdn_name);
-                        $('#Relation1').val(data.reln_id);
-                        $('#Sex1').val(data.sex);
-                        $('#Occupation1').val(data.occup_id);
-                        $('#Sign1').val(data.sign);
-                        $('#Lti1').val(data.lti);
-                        $('#PanNo1').val(data.pan);
-                        $('#AcName').val(data.ac_name);
-                        $('#AcAdd1').val(data.ac_add1);
-                        $('#AcAdd2').val(data.ac_add2);
-                        $('#AcCity').val(data.ac_city);
-                        $('#AcDist').val(data.ac_dist);
-                        $('#AcState').val(data.ac_state);
-                        $('#AcPin').val(data.ac_pin);
-                        $('#NomName').val(data.nom_name);
-                        $('#NomReln').val(data.nom_Reln);
-                        $('#NomPan').val(data.nom_Pan);
-                        $('#NomAadhar').val(data.nom_aadhar);
-                        $('#MinorDob').val(data.str_minor_dob);
-                        $('#MinorAdultDt').val(data.str_minor_adult_dt);
+                    $('#acno').val(data.ac_no);
+                    $('#contno').val(data.contno);
+                    $('#memberid1').val(data.member_id);
+                    $('#membername1').val(data.ac_name);
+                    $('#guardianname1').val(data.grdn_name);
+                    $('#relation1').val(data.reln_id);
+                    $('#sex1').val(data.sex);
+                    $('#occupation1').val(data.occup_id);
+                    $('#sign1').val(data.sign);
+                    $('#lti1').val(data.lti);
+                    $('#panno1').val(data.pan);
+                    $('#acname').val(data.ac_name);
+                    $('#acadd1').val(data.ac_add1);
+                    $('#acadd2').val(data.ac_add2);
+                    $('#accity').val(data.ac_city);
+                    $('#acdist').val(data.ac_dist);
+                    $('#acstate').val(data.ac_state);
+                    $('#acpin').val(data.ac_pin);
+                    $('#nomname').val(data.nom_name);
+                    $('#nomreln').val(data.nom_reln);
+                    $('#nompan').val(data.nom_pan);
+                    $('#nomaadhar').val(data.nom_aadhar);
+                    $('#minordob').val(data.str_minor_dob);
+                    $('#minoradultdt').val(data.str_minor_adult_dt);
+                    if (data.ac_no != null) {
+                        $('#splstatus').val(data.spl_status);
+                        $('#oprnmode').val(data.oprn_mode);
+                        $('#chqfacility').val(data.chq_facility);
+                    }
                     if (data.is_minor != "" && data.is_minor != null) {
-                        $("#IsMinor").val("YES")
+                        $("#isminor").val("YES")
                         $("#minor").show();
                     }
-                    $('#AcNo').focus();
-
+                    $('#acno').focus();
                     if (data.ac_no != "" && data.ac_no != null) {
-                        document.getElementById('AcNo').readOnly = true;
-                        $('#OpenDate').val(data.str_open_date);
-                        document.getElementById('OpenDate').readOnly = true;
-                        $("#ButtonSAVE").hide();
-                        $('#ContNo').focus();
+                        $('#opendate').val(data.str_open_date);
+                        $("#buttonsave").hide();
+                        $('#contno').focus();
+                        document.getElementById('acno').readOnly = true;
+                        document.getElementById('opendate').readOnly = true;
                     }
-
                 },
-
                 error: function (err) {
                 alert("Error Occured");
                 }
-
             });
         }
 
         function GetDetailByAcNo() {
-
-
             let ModelObject = {
-                Achd: $('#AcHd').val(), AcNo: $('#AcNo').val()};
-
-
+                achd: $('#achd').val(), acno: $('#acno').val(), branchid: $('#branchid').val()};
             $.ajax({
-
                 type: "POST",
-                    url: '@Url.Action("GetDetailByAcNo", "Accounts")',
+                    url: '@Url.Action("GetDetailByAcNo", "Deposits")',
                     data: ModelObject,
                     dataType: "json",
                 success: function (data) {
 
-                        $('#AcNo').val(data.ac_no);
-                        $('#ContNo').val(data.contno);
-                        $('#MemberId1').val(data.member_id);
-                        $('#MemberName1').val(data.ac_name);
-                        $('#GuardianName1').val(data.grdn_name);
-                        $('#Relation1').val(data.reln_id);
-                        $('#Sex1').val(data.sex);
-                        $('#Occupation1').val(data.occup_id);
-                        $('#Sign1').val(data.sign);
-                        $('#Lti1').val(data.lti);
-                        $('#PanNo1').val(data.pan);
-                        $('#AcName').val(data.ac_name);
-                        $('#AcAdd1').val(data.ac_add1);
-                        $('#AcAdd2').val(data.ac_add2);
-                        $('#AcCity').val(data.ac_city);
-                        $('#AcDist').val(data.ac_dist);
-                        $('#AcState').val(data.ac_state);
-                        $('#AcPin').val(data.ac_pin);
-                        $('#NomName').val(data.nom_name);
-                        $('#NomReln').val(data.nom_Reln);
-                        $('#NomPan').val(data.nom_Pan);
-                        $('#NomAadhar').val(data.Nom_aadhar);
-                        $('#MinorDob').val(data.str_minor_dob);
-                        $('#MinorAdultDt').val(data.str_minor_adult_dt);
+                    $('#acno').val(data.ac_no);
+                    $('#contno').val(data.contno);
+                    $('#memberid1').val(data.member_id);
+                    $('#membername1').val(data.ac_name);
+                    $('#guardianname1').val(data.grdn_name);
+                    $('#relation1').val(data.reln_id);
+                    $('#sex1').val(data.sex);
+                    $('#occupation1').val(data.occup_id);
+                    $('#sign1').val(data.sign);
+                    $('#lti1').val(data.lti);
+                    $('#panno1').val(data.pan);
+                    $('#acname').val(data.ac_name);
+                    $('#acadd1').val(data.ac_add1);
+                    $('#acadd2').val(data.ac_add2);
+                    $('#accity').val(data.ac_city);
+                    $('#acdist').val(data.ac_dist);
+                    $('#acstate').val(data.ac_state);
+                    $('#acpin').val(data.ac_pin);
+                    $('#nomname').val(data.nom_name);
+                    $('#nomreln').val(data.nom_reln);
+                    $('#nompan').val(data.nom_pan);
+                    $('#nomaadhar').val(data.nom_aadhar);
+                    $('#minordob').val(data.str_minor_dob);
+                    $('#minoradultdt').val(data.str_minor_adult_dt);
+                    $('#splstatus').val(data.spl_status);
+                    $('#oprnmode').val(data.oprn_mode);
+                    $('#chqfacility').val(data.chq_facility);
                     if (data.is_minor != "" && data.is_minor != null) {
-                        $("#IsMinor").val("YES")
+                        $("#isminor").val("YES")
                         $("#minor").show();
                     }
-
-
                     if (data.ac_no != "" && data.ac_no != null) {
-                        document.getElementById('AcNo').readOnly = true;
-                        $('#OpenDate').val(data.str_open_date);
-                        document.getElementById('OpenDate').readOnly = true;
-                        $("#ButtonSAVE").hide();
+                        document.getElementById('acno').readOnly = true;
+                        $('#opendate').val(data.str_open_date);
+                        document.getElementById('opendate').readOnly = true;
+                        $("#buttonsave").hide();
                     }
-
                 },
-
                 error: function (err) {
                 alert("Error Occured");
                 }
@@ -658,99 +611,88 @@
         $(document).ready(function () {
             $("#minor").hide();
             $("#NewMem").hide();
-            $("#Srl1").val("1");
+            $("#srl1").val("1");
 
         });
 
 
         function showhideminor() {
 
-            if ($("#IsMinor option:Selected").text() == "YES") {
+            if ($("#isminor option:Selected").text() == "YES") {
                 $("#minor").show();
-
             }
             else {
                 $("#minor").hide();
-
             }
-
         }
         function SaveData() {
+            if ($('#acno').val() == "" || $('#acno').val() == null) {
+                alert("Account No Can't Blank !!");
+            } else {
+                let ModelObject = {
+                    branchid: $('#branchid').val(),
+                    achd: $('#achd').val(),
+                    acno: $('#acno').val(),
+                    contno: $('#contno').val(),
+                    opendate: $('#opendate').val(),
+                    splstatus: $('#splstatus').val(),
+                    oprnmode: $('#oprnmode').val(),
+                    chqfacility: $('#chqfacility').val(),
+                    srl1: $('#srl1').val(),
+                    srl2: $('#srl2').val(),
+                    memberid1: $('#memberid1').val(),
+                    memberid2: $('#memberid2').val(),
+                    membername1: $('#membername1').val(),
+                    membername2: $('#membername2').val(),
+                    guardianname1: $('#guardianname1').val(),
+                    guardianname2: $('#guardianname2').val(),
+                    relation1: $('#relation1').val(),
+                    relation2: $('#relation2').val(),
+                    sex1: $('#sex1').val(),
+                    sex1: $('#sex1').val(),
+                    occupation1: $('#occupation1').val(),
+                    occupation2: $('#occupation2').val(),
+                    sign1: $('#sign1').val(),
+                    sign2: $('#sign2').val(),
+                    lti1: $('#lti1').val(),
+                    lti1: $('#lti1').val(),
+                    panno1: $('#panno1').val(),
+                    panno2: $('#panno2').val(),
+                    acname: $('#acname').val(),
+                    acadd1: $('#acadd1').val(),
+                    acadd2: $('#acadd2').val(),
+                    accity: $('#accity').val(),
+                    acdist: $('#acdist').val(),
+                    acstate: $('#acstate').val(),
+                    acpin: $('#acpin').val(),
+                    isminor: $('#isminor').val(),
+                    minordob: $('#minordob').val(),
+                    minoradultdt: $('#minoradultdt').val(),
+                };
+                $.ajax({
 
-
-            let ModelObject = {
-                BranchId: $('#BranchId').val(),
-                Achd: $('#AcHd').val(),
-                AcNo: $('#AcNo').val(),
-                ContNo: $('#ContNo').val(),
-                OpenDate: $('#OpenDate').val(),
-                SplStatus: $('#SplStatus').val(),
-                OprnMode: $('#OprnMode').val(),
-                ChqFacility: $('#ChqFacility').val(),
-                Srl1: $('#Srl1').val(),
-                Srl1: $('#Srl1').val(),
-                MemberId1: $('#MemberId1').val(),
-                MemberId1: $('#MemberId1').val(),
-                MemberName1: $('#MemberName1').val(),
-                MemberName1: $('#MemberName1').val(),
-                GuardianName1: $('#GuardianName1').val(),
-                GuardianName1: $('#GuardianName1').val(),
-                Relation1: $('#Relation1').val(),
-                Relation1: $('#Relation1').val(),
-                Sex1: $('#Sex1').val(),
-                Sex1: $('#Sex1').val(),
-                Occupation1: $('#Occupation1').val(),
-                Occupation1: $('#Occupation1').val(),
-                Sign1: $('#Sign1').val(),
-                Sign1: $('#Sign1').val(),
-                Lti1: $('#Lti1').val(),
-                Lti1: $('#Lti1').val(),
-                PanNo1: $('#PanNo1').val(),
-                PanNo1: $('#PanNo1').val(),
-                AcName: $('#AcName').val(),
-                AcAdd1: $('#AcAdd1').val(),
-                AcAdd1: $('#AcAdd1').val(),
-                AcCity: $('#AcCity').val(),
-                AcDist: $('#AcDist').val(),
-                AcState: $('#AcState').val(),
-                AcPin: $('#AcPin').val(),
-                IsMinor: $('#IsMinor').val(),
-                MinorDob: $('#MinorDob').val(),
-                MinorAdultDt: $('#MinorAdultDt').val(),
-
-            };
-
-
-            $.ajax({
-
-                type: "POST",
-                    url: '@Url.Action("SaveDepositMast", "Accounts")',
+                    type: "POST",
+                    url: '@Url.Action("SaveDepositMast", "Deposits")',
                     data: ModelObject,
                     dataType: "json",
-                success: function (data) {
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function (err) {
+                        alert("Error Occured");
+                    }
 
-                    alert(data);
-
-                },
-
-                error: function (err) {
-                alert("Error Occured");
-                }
-
-            });
+                });
+            }
         }
 
         function Reload() {
-            window.location.href = "@Url.Action("AccountOpening", "Accounts")";
+            window.location.href = "@Url.Action("AccountOpening", "Deposits")";
         }
         function Home() {
             window.location.href = "@Url.Action("Index", "Home")";
         }
-        function Edit() {
-            document.getElementById('AcNo').readOnly = false;
-            document.getElementById('OpenDate').readOnly = false;
-            $("#ButtonSAVE").show();
-        }
+        
     </script>
 }
 
