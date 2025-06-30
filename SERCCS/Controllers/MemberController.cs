@@ -34,7 +34,7 @@ namespace SERCCS.Controllers
         public JsonResult getDataByEmployeeId(MemberMasterViewModel model)
         {
             MemberMast mm = new MemberMast();
-            var data =mm.GetRecByEmployeeId(model.employeeid,"GRC");
+            var data =mm.GetRecByEmployeeId(model.employeeid);
 
 
             return Json(data);

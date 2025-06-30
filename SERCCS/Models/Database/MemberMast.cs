@@ -112,10 +112,10 @@ namespace SERCCS.Models.Database
         public string brth_dt { get; set; }
         public string tag { get; set; }
         public string msg { get; set; }
-        public MemberMast GetRecByEmployeeId(String EmployeeId, string branch)
+        public MemberMast GetRecByEmployeeId(String EmployeeId)
         {
             MemberMast mm = new MemberMast();
-            string sql = "select * from MEMBER_MAST where branch_id='" + branch + "' AND EMPLOYEE_ID='" + EmployeeId + "'";
+            string sql = "select * from MEMBER_MAST where EMPLOYEE_ID='" + EmployeeId + "'";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {

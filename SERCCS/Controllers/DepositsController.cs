@@ -521,8 +521,7 @@ namespace SERCCS.Controllers
 
         
 
-        [HttpPost]
-        public JsonResult GeneratePoNo(string counterno, string depwith, string achd, string trndate)
+        
 
 
 
