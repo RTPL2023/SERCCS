@@ -108,26 +108,26 @@ namespace SERCCS.Controllers
             AccountOpeningViewModel m = new AccountOpeningViewModel();
             DepTypeMast dtm = new DepTypeMast();
 
-            m.Ac_Hd_DESC = dtm.getAchdfromDeptypeMastForSB().ToList().Select(x => new SelectListItem
+            m.ac_hd_desc = dtm.getAchdfromDeptypeMastForSB().ToList().Select(x => new SelectListItem
             {
                 Value = x.ac_hd.ToString(),
                 Text = x.dep_desc.ToString()
             }); ;
 
-            return m.Ac_Hd_DESC;
+            return m.ac_hd_desc;
         }
         public IEnumerable<SelectListItem> getAcHdDesc()
         {
             AccountOpeningViewModel m = new AccountOpeningViewModel();
             DepTypeMast dtm = new DepTypeMast();
 
-            m.Ac_Hd_DESC = dtm.getAchdfromDeptypeMast().ToList().Select(x => new SelectListItem
+            m.ac_hd_desc = dtm.getAchdfromDeptypeMast().ToList().Select(x => new SelectListItem
             {
                 Value = x.ac_hd.ToString(),
                 Text = x.dep_desc.ToString()
             }); ;
 
-            return m.Ac_Hd_DESC;
+            return m.ac_hd_desc;
         }
 
         public IEnumerable<SelectListItem> getStatusDesc()
@@ -135,13 +135,13 @@ namespace SERCCS.Controllers
             AccountOpeningViewModel m = new AccountOpeningViewModel();
             DepositSplStatMast dssm = new DepositSplStatMast();
 
-            m.Ac_Category_DESC = dssm.getStatusDescfromDepositSplStatMast().ToList().Select(x => new SelectListItem
+            m.ac_category_desc = dssm.getStatusDescfromDepositSplStatMast().ToList().Select(x => new SelectListItem
             {
                 Value = x.spl_status.ToString(),
                 Text = x.status_desc.ToString()
             }); ;
 
-            return m.Ac_Category_DESC;
+            return m.ac_category_desc;
         }
 
         public IEnumerable<SelectListItem> getOprnMode()
@@ -149,13 +149,13 @@ namespace SERCCS.Controllers
             AccountOpeningViewModel m = new AccountOpeningViewModel();
             DepositOprnMast dom = new DepositOprnMast();
 
-            m.Md_Of_Op_DESC = dom.getOprnModeFromDepositOprnMast().ToList().Select(x => new SelectListItem
+            m.md_of_op_desc = dom.getOprnModeFromDepositOprnMast().ToList().Select(x => new SelectListItem
             {
                 Value = x.oprn_mode.ToString(),
                 Text = x.oprn_desc.ToString()
             }); ;
 
-            return m.Md_Of_Op_DESC;
+            return m.md_of_op_desc;
         }
         public MemoryStream DownloadTextFiles(string filename, string uploadPath)
         {

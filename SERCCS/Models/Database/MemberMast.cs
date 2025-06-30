@@ -75,6 +75,7 @@ namespace SERCCS.Models.Database
         public string strexpiry_date { get; set; }
         public string strmember_closdt { get; set; }
         public string strdate_of_remember { get; set; }
+        public string opening_branch { get; set; }
 
         public string strdo50pwcm { get; set; }
         public string pan_no { get; set; }
@@ -453,6 +454,7 @@ namespace SERCCS.Models.Database
                         {"if_lti", det.if_lti },
                         {"is_dead", det.is_dead },
                         {"member_retired", det.member_retired },
+                        {"OPENING_BRANCH", det.branch_id },
 
                     });
                     msg = "Member details saved successfully.";
