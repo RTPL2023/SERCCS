@@ -53,7 +53,8 @@ namespace SERCCS
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Auth}/{action=loginpage}/{id?}");
+                    //pattern: "{controller=Auth}/{action=loginpage}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

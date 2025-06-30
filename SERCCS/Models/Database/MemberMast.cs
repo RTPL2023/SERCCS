@@ -150,7 +150,7 @@ namespace SERCCS.Models.Database
                         mm.strdate_of_joining = "";
                     }
                     mm.strdate_of_retirement = mm.date_of_retirement.ToString("dd/MM/yyyy").Replace("-", "/");
-                    if (mm.date_of_retirement.ToString("dd/MM/yyyy") == "01/01/0001")
+                    if (mm.strdate_of_retirement == "01/01/0001")
                     {
                         mm.strdate_of_retirement = "";
                     }
@@ -160,7 +160,7 @@ namespace SERCCS.Models.Database
                         mm.strdate_of_remember = "";
                     }
                     mm.strdo50pwcm = mm.do50pwcm.ToString("dd/MM/yyyy").Replace("-", "/");
-                    if (mm.do50pwcm.ToString("dd/MM/yyyy") == "01/01/0001")
+                    if (mm.strdo50pwcm == "01/01/0001")
                     {
                         mm.strdo50pwcm = "";
                     }
