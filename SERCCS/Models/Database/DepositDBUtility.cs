@@ -13,10 +13,10 @@ namespace SERCCS.Models.Database
     public class DepositDBUtility
     {
         DBConfig config = new DBConfig();
-        public DepositMast getDepositMastDetailByAcno(string acno, string achd)
+        public DepositMast getDepositMastDetailByAcno(string branchid, string acno, string achd)
         {
             //  sql = "SELECT * from deposit_mast WHERE BRANCH_ID = 'MN' AND AC_HD =  user_id = '" + _UserName + "'  and user_password = '" + encpwd + "'";
-            string sql = "SELECT * FROM DEPOSIT_MAST WHERE BRANCH_ID = 'MN' AND AC_HD = '" + achd + "' AND AC_NO = '" + acno + "' ORDER BY AC_NO";
+            string sql = "SELECT * FROM DEPOSIT_MAST WHERE BRANCH_ID = '" + branchid + "' AND AC_HD = '" + achd + "' AND AC_NO = '" + acno + "' ORDER BY AC_NO";
             config.singleResult(sql);
 
             DepositMast dm = new DepositMast();
@@ -39,9 +39,9 @@ namespace SERCCS.Models.Database
             }
             return dm;
         }
-        public DepositMast getDepositMastDetailByConNo(string conno, string achd)
+        public DepositMast getDepositMastDetailByConNo(string branchid, string conno, string achd)
         {
-            string sql = "SELECT * FROM DEPOSIT_MAST WHERE BRANCH_ID = 'MN' AND AC_HD = '" + achd + "' AND CONTNO = '" + conno + "' ORDER BY ac_no";
+            string sql = "SELECT * FROM DEPOSIT_MAST WHERE BRANCH_ID = '" + branchid + "' AND AC_HD = '" + achd + "' AND CONTNO = '" + conno + "' ORDER BY ac_no";
             config.singleResult(sql);
             DepositMast dm = new DepositMast();
             if (config.dt.Rows.Count > 0)

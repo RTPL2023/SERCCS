@@ -14,7 +14,7 @@ namespace SERCCS.Controllers
 
 
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public IActionResult MemberMaster(MemberMasterViewModel mmv)
         {

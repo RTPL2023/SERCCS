@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using SERCCS.Models.Views;
 using SERCCS.Models.Database;
 using SERCCS.Includes;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SERCCS.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         /***************************************Users Master Start***************************************/

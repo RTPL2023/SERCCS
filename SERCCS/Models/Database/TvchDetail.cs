@@ -142,9 +142,9 @@ namespace SERCCS.Models.Database
             }
             return tv;
         }
-        public TvchDetail getTvchDetailWithdrowCounter(string achd, String trndate, string counterno)
+        public TvchDetail getTvchDetailWithdrowCounter(string branchid, string achd, String trndate, string counterno)
         {
-            string sql = "SELECT * FROM TVCH_DETAIL WHERE TO_CHAR(TRN_DATE, 'DD-MM-YYYY')= '" + trndate + "' AND AC_HD='" + achd + "' AND COUNTER_NO='" + counterno + "' AND VCH_DRCR='D' ORDER BY TRN_DATE, TRN_NO, TRN_SRL";
+            string sql = "SELECT * FROM TVCH_DETAIL WHERE branch_id='" + branchid + "' and TO_CHAR(TRN_DATE, 'DD-MM-YYYY')= '" + trndate + "' AND AC_HD='" + achd + "' AND COUNTER_NO='" + counterno + "' AND VCH_DRCR='D' ORDER BY TRN_DATE, TRN_NO, TRN_SRL";
             // "SELECT * FROM TVCH_DETAIL WHERE TO_CHAR(TRN_DATE, 'DD/MM/YYYY')= '" & Me.DTPicker1 & "' AND AC_HD='" & Me.Combo1.Text & "' AND COUNTER_NO='" & Me.Combo2.Text & "' AND VCH_DRCR='D' ORDER BY TRN_DATE, TRN_NO, TRN_SRL"
 
 
@@ -164,9 +164,9 @@ namespace SERCCS.Models.Database
             return tv;
         }
 
-        public TvchDetail getTvchDetailDepositCounter(string achd, String trndate, string counterno)
+        public TvchDetail getTvchDetailDepositCounter(string branchid, string achd, String trndate, string counterno)
         {
-            string sql = "SELECT * FROM TVCH_DETAIL WHERE TO_CHAR(TRN_DATE, 'DD-MM-YYYY')= '" + trndate + "' AND AC_HD='" + achd + "' AND COUNTER_NO='" + counterno + "' AND VCH_DRCR='C' ORDER BY TRN_DATE, TRN_NO, TRN_SRL";
+            string sql = "SELECT * FROM TVCH_DETAIL WHERE branch_id='" + branchid + "' and TO_CHAR(TRN_DATE, 'DD-MM-YYYY')= '" + trndate + "' AND AC_HD='" + achd + "' AND COUNTER_NO='" + counterno + "' AND VCH_DRCR='C' ORDER BY TRN_DATE, TRN_NO, TRN_SRL";
 
 
             config.singleResult(sql);
@@ -184,7 +184,6 @@ namespace SERCCS.Models.Database
             }
             return tv;
         }
-
         public void SaveVoucher(TvchDetail tv)
         {
 

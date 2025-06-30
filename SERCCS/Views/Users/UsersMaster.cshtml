@@ -4,106 +4,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
-    .size {
-        width: 180px;
-        height: 25px;
-        text-transform: uppercase;
-    }
-
-    .sizeS {
-        width: 180px;
-        height: 25px;       
-    }
-
-    .sizebig {
-        width: 400px;
-        height: 25px;
-        text-transform: uppercase;
-    }
-
     .heading {
-        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-        color: #4335A7;
+        /*  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;*/
+        color: #083669;
         font-size: 30px;
         text-align: center;
     }
 
-    .tab {
-        font-size: 12px;
-        border-collapse: collapse;
-        width: 1000px;
-        margin-left: auto;
-        margin-right: auto;
-        font-weight: bold
+    body {
+        font-family: "Roboto", sans-serif;
     }
 
-        .tab tbody {
-            display: block;
-            width: 1000px;
-            overflow: auto;
-            height: 280px;
-            text-align: center;
-            color: #133E87;
-        }
-
-        .tab td, .tab th {
-            border: 1px solid #ddd;
-            padding: 5px;
-            border-collapse: collapse;
-            width: 1000px;
-        }
-
-        .tab tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .tab tr:hover {
-            background-color: rgba(255, 182, 193, 0.4);
-        }
-
-        .tab th {
-            padding: 7px;
-            text-align: center;
-            /*background-color: #04AA6D;*/
-            background-color: #BC7C7C;
-            font-size: 14px;
-            color: #492929;
-            position: sticky;
-            top: 0;
-            border: 1px solid #ddd;
-        }
-
-    input:focus {
-        background-color: rgba( 255, 182, 193, 0.3);
+    .size {
+        height: 30px;
+        width: 180px;
     }
 
-    input {
-        background-color: rgba( 255, 182, 193, 0.4);
-        color: #4335A7;
-        font-weight: bold;
-        font-size: 14px;
-        padding-left: 5px;
-        padding-top: 2px;
-        padding-bottom: 2px
-    }
-
-    select {
-        background-color: rgba( 255, 182, 193, 0.4);
-        color: crimson;
-        font-weight: bold;
-        font-size: 14px;
-        padding-left: 5px;
-        padding-top: 2px;
-        padding-bottom: 2px
-    }
-
-        select:focus {
-            background-color: rgba( 255, 182, 193, 0.3);
-        }
-
-    input[readonly] {
-        background-color: whitesmoke;
-        color: gray;
+    .sizebig {
+        height: 30px;
+        width: 300px;
     }
 
     .divbox {
@@ -113,6 +32,59 @@
         border-radius: 20px;
         font-weight: bold
     }
+
+    .tab {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        border-collapse: collapse;
+        width: 950px;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: bold
+    }
+
+        .tab tbody {
+            display: block;
+            width: 950px;
+            overflow: auto;
+            height: 250px;
+            text-align: center;
+            color: #133E87;
+        }
+
+        .tab td, .tab th {
+            border: 1px solid #004085;
+            border-collapse: collapse;
+            width: 950px;
+        }
+
+        .tab td {
+            padding: 5px;
+        }
+
+        .tab tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .tab tr:nth-child(odd) {
+            background-color: white;
+        }
+
+        .tab tr:hover {
+            background-color: #E1F7F5;
+        }
+
+        .tab th {
+            padding: 5px;
+            text-align: center;
+            background-color: #0c2253;
+            font-size: 13px;
+            color: white;
+            position: sticky;
+            top: 0;
+            border: 1px solid #ddd;
+            /* border-radius: 5px*/
+        }
 </style>
 
 <form asp-controller="Users" asp-action="UsersMaster" method="post">
@@ -123,59 +95,67 @@
         <div class="row mt-3 justify-content-md-center">
             <div class="col-md-12 col-lg-12 col-12 pl-5 divbox">
                 <div class="row mt-3">
-                    <div class="col-md-6 col-sm-12 col-12">
+                    <div class="col-md-3 col-sm-12 col-12">
                         Allocated Branch:
                     </div>
-                    <div class="col-md-6 col-sm-12 col-12">
-                        @Html.DropDownListFor(p => p.allocated_branch_id, new SelectList(Model.brmst, "Value", "Text"), "Select Branch", new { @class = "size" })
+                    <div class="col-md-9 col-sm-12 col-12">
+                        @Html.DropDownListFor(p => p.allocated_branch_id, new SelectList(Model.brmst, "Value", "Text"), "Select Branch", new { @class = "sizebig" })
                     </div>
-                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                    <div class="col-md-3 col-sm-12 col-12 mt-2">
                         UserId:
                     </div>
-                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                    <div class="col-md-9 col-sm-12 col-12 mt-2">
                         @Html.TextBoxFor(p => p.user_id, new { @class = "size", @maxlength = "50", onkeypress = "javascript:return evt_user_id(event);" })
                     </div>
-                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                    <div class="col-md-3 col-sm-12 col-12 mt-2">
                         UserName:
                     </div>
-                    <div class="col-md-6 col-sm-12 col-12 mt-2">
-                        @Html.TextBoxFor(p => p.user_name, new { @class = "size", @maxlength = "60" })
+                    <div class="col-md-9 col-sm-12 col-12 mt-2">
+                        @Html.TextBoxFor(p => p.user_name, new { @class = "sizebig", @maxlength = "60" })
                     </div>
-                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                    <div class="col-md-3 col-sm-12 col-12 mt-2">
                         Password:
                     </div>
-                    <div class="col-md-6 col-sm-12 col-12 mt-2">
-                        @Html.TextBoxFor(p => p.user_password, new { @class = "sizeS", @maxlength = "30" })
+                    <div class="col-md-9 col-sm-12 col-12 mt-2">
+                        @Html.TextBoxFor(p => p.user_password, new { @class = "size", @maxlength = "30" })
                     </div>
                 </div>
 
                 <div class="row mt-3">
-                    <div class="col-md-6 col-sm-12 col-12">
+                    <div class="col-md-3 col-sm-12 col-12">
                         Emailid:
                     </div>
-                    <div class="col-md-6 col-sm-12 col-12">
-                        @Html.TextBoxFor(p => p.email_id, new { @class = "sizeS", @maxlength = "100" })
+                    <div class="col-md-9 col-sm-12 col-12">
+                        @Html.TextBoxFor(p => p.email_id, new { @class = "sizebig", @maxlength = "100" })
                     </div>
-                    <div class="col-md-6 col-sm-12 col-12 mt-2">
+                    <div class="col-md-3 col-sm-12 col-12 mt-2">
                         Role:
                     </div>
                     <div class="col-md-6 col-sm-12 col-12 mt-2">
                         @Html.DropDownListFor(p => p.user_role, new SelectList(new string[] { "SUPER-ADMIN", "BANK-ADMIN", "ADMIN", "CASHIER", "LOAN-DEPT", "ACCOUNTANT" }), new { @class = "size" })
                     </div>
-                    <div>
+                    <div class="col-md-3 col-sm-12 col-12 mt-2">
                         @Html.CheckBoxFor(P => P.blocked) Blocked
                     </div>
                 </div>
 
-                <div class="row mt-2 mb-2">
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-12">
-                        <input id="btnsave" type="button" name="btnsave" Height="40" Width="100" class="btn btn-primary btn-sm pull-right" value="SAVE" onclick="SaveData()" />
+                
+                <div class="row mt-2 mb-2 justify-content-lg-center">
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center">
+                        <button id="btnsave" type="button" name="btnsave" Height="40" Width="100" class="btn btn-sm" value="SAVE" onclick="SaveData()">
+                            Save | <i class="fa fa-check"></i>
+                        </button>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-12">
-                        <input id="btnupdate" type="button" name="btnupdate" Height="40" Width="100" class="btn btn-primary btn-sm pull-right" value="UPDATE" onclick="UpdateData()" />
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-12 text-center">
+                        <button id="btnupdate" type="button" name="btnupdate" Height="40" Width="100" class="btn btn-sm" value="UPDATE" onclick="UpdateData()">
+                            Update | <i class="fa fa-edit"></i>
+                        </button>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-12">
-                        <input id="btnaddnew" type="button" name="btnaddnew" Height="40" Width="100" class="btn btn-primary btn-sm pull-right" value="ADD NEW" onclick="AddNew()" />
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 text-center">
+                        <button id="btnaddnew" type="button" name="btnaddnew" Height="40" Width="100" class="btn btn-sm" value="ADD NEW" onclick="AddNew()">
+                            Add New | <i class="fa fa-plus"></i>
+                        </button>
                     </div>
                 </div>
             </div>

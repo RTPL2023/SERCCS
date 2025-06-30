@@ -2,7 +2,7 @@
 @{
     Layout = null;
     ViewBag.Title = "login";
-    
+
 }
 <html>
 <head>
@@ -10,81 +10,260 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - NewProject</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
+        @@import url('https://fonts.googleapis.com/css?family=Raleway:400,700');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Raleway, sans-serif;
+        }
+
         body {
-            background: linear-gradient(to right,#94BBE9, #EEAECA, #A7B8E2);
-            min-height: 100vh;
+            position: relative;
+            background-image: url(/Images/Corporation-office-ppt-backgrounds.jpg);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow: hidden;
+        }
+
+            body::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #8e909352;
+                z-index: 0;
+            }
+
+
+        .screen__background__shape4 {
+            height: 400px;
+            width: 200px;
+            background: #21456d;
+            top: 350px;
+            right: 50px;
+            border-radius: 60px;
+        }
+
+
+        .container {
+            display: flex;
+            align-items: inherit;
+            justify-content: right;
+        }
+
+        .screen {
+            background: linear-gradient(90deg, #9ACBD0, #2E5077);
+            position: relative;
+            height: 450px;
+            width: 400px;
+            box-shadow: 0px 0px 24px #081f3969;
+        }
+
+        .screen__content {
+            z-index: 1;
+            position: relative;
+            height: 100%;
+        }
+
+        .screen__background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            -webkit-clip-path: inset(0 0 0 0);
+            clip-path: inset(0 0 0 0);
+        }
+
+        .screen__background__shape {
+            transform: rotate(45deg);
+            position: absolute;
+        }
+
+        .screen__background__shape1 {
+            height: 520px;
+            width: 520px;
+            background: #FFF;
+            top: -50px;
+            right: 120px;
+            border-radius: 0 72px 0 0;
+        }
+
+        .screen__background__shape2 {
+            height: 220px;
+            width: 220px;
+            background: #2c5077;
+            top: -172px;
+            right: 0;
+            border-radius: 32px;
+        }
+
+        .screen__background__shape3 {
+            height: 540px;
+            width: 190px;
+            background: linear-gradient(270deg, #7e9ab7, #193e65);
+            top: -24px;
+            right: 0;
+            border-radius: 32px;
+        }
+
+        /*  .screen__background__shape4 {
+            height: 400px;
+            width: 200px;
+            background: #7E7BB9;
+            top: 420px;
+            right: 50px;
+            border-radius: 60px;
+        }*/
+
+        .login {
+            width: 320px;
+            padding: 30px;
+            padding-top: 42px;
+        }
+
+        .login__field {
+            padding: 20px 0px;
+            position: relative;
+        }
+
+        .login__icon {
+            position: absolute;
+            top: 30px;
+            color: #031d389c;
+        }
+
+        .login__input {
+            border: none;
+            border-bottom: 2px solid #D1D1D4;
+            background: none;
+            padding: 10px;
+            padding-left: 24px;
+            font-weight: 700;
+            width: 75%;
+            transition: .2s;
+            color: #033b77;
+        }
+
+            .login__input:active,
+            .login__input:focus,
+            .login__input:hover {
+                outline: none;
+                border-bottom-color: #7798bb;
+            }
+
+        .login__submit {
+            background: #ffffff;
+            font-size: 14px;
+            margin-top: 30px;
+            padding: 16px 20px;
+            border-radius: 26px;
+            border: 1px solid #D4D3E8;
+            text-transform: uppercase;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        .login-wrapper {
-            background-color: #fff;
-            padding: 40px 30px;
-            border-radius: 12px;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
             width: 100%;
-            max-width: 400px;
+            color: #124377;
+            box-shadow: 0px 2px 2px #4f6a87;
+            cursor: pointer;
+            transition: .2s;
         }
 
-            .login-wrapper h2 {
-                text-align: center;
-                margin-bottom: 30px;
-                color: #333;
-                font-weight: 600;
+            .login__submit:active,
+            .login__submit:focus,
+            .login__submit:hover {
+                border-color: #6A679E;
+                outline: none;
             }
 
-        .form-label {
-            font-weight: 600;
-            margin-bottom: 5px;
+        .button__icon {
+            font-size: 24px;
+            margin-left: auto;
+            color: #103359a3;
         }
 
-        .form-control {
-            border-radius: 8px;
-            height: 45px;
+        .finpro_logo {
+            padding-top: 30px;
+            padding-left: 30px
         }
 
-        .btn-login {
-            background-color: #5a67d8;
-            color: white;
-            font-weight: 600;
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 15px;
+        .spinner {
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #124377;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 1s linear infinite;
+            margin-left: auto;
         }
 
-            .btn-login:hover {
-                background-color: #434190;
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
             }
 
-        .form-note {
-            margin-top: 20px;
-            font-size: 13px;
-            color: #555;
-            text-align: center;
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="login-wrapper">
-        <h2>Login</h2>
+    <div class="container-fluid" style="height:90px"></div>
+    <div class="container">
 
-        <div class="mb-3">
-            <label class="form-label">User ID</label>
-            @Html.TextBoxFor(p => p.userId, new { @class = "form-control", @id = "userId", placeholder = "Enter User ID" })
+        <div class="screen">
+            <div class="screen__content">
+                <div class="row">
+                    <div class="col-12">
+                        <img src="~/Images/finpro_logo.png" class="finpro_logo" style="width: 154px; height: 86px">
+                    </div>
+                </div>
+                <form class="login">
+                    <div class="login__field">
+                        <i class="login__icon fa fa-user-circle-o"></i>
+                        <input type="text" class="login__input" id="userId" placeholder="Enter Your UserId">
+                    </div>
+                    <div class="login__field">
+                        <i class="login__icon fa fa-lock"></i>
+                        @*<input type="password" class="login__input" id="password" placeholder="Enter Your Password" >*@
+                        <input type="password" class="login__input" id="password" placeholder="Enter Your Password" onkeypress="return evtpassword(event);" />
+
+                    </div>
+                    <button class="button login__submit" type="button" onclick="Login()" id="loginBtn">
+                        <span class="button__text">Log In Now</span>
+                        <i class="button__icon fas fa fa-arrow-right"></i>
+                    </button>
+                </form>
+
+            </div>
+            <div class="screen__background">
+                <span class="screen__background__shape screen__background__shape4"></span>
+                <span class="screen__background__shape screen__background__shape3"></span>
+                <span class="screen__background__shape screen__background__shape2"></span>
+                <span class="screen__background__shape screen__background__shape1"></span>
+            </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Password</label>
-            @Html.PasswordFor(p => p.password, new { @class = "form-control", @id = "password", placeholder = "Enter Password", @onkeypress = "javascript: return evtpassword(event);" })
-        </div>
-        <button id="btnlogin" type="button" class="btn btn-login" onclick="Login()">Login</button>
-        <div class="form-note">
-            Don't have an account? <a href="#">Register</a>
+
+    </div>
+    <div class="container">
+        <div class="row mt-2">
+            <div class="col-12" style="font-size:12px;font-weight:bold">
+                &copy; 2025 || &nbsp; Fin-Pro &nbsp;|| &nbsp;
+                <a href="https://www.rishiindia.net/" style="color: #e21f36; text-decoration:none" onmouseover="this.style.color = '#814141';"
+                   onmouseout="this.style.color='#e21f36'">Rishi Technovision Pvt. Ltd.</a>
+                &nbsp;|| &nbsp; <a href="/Privacy/Privacy">Privacy</a>
+            </div>
         </div>
     </div>
 
@@ -92,29 +271,60 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
 
-        function Login() {
-            let ModelObject = {
-                userId: $('#userId').val(),
-                password: $('#password').val()
-            };
-
-            $.ajax({
-                url: '@Url.Action("GetLogin", "Auth")',
-                type: "POST",
-                data: ModelObject,
-                dataType: "json",
-                success: function (data) {
-                    if (data.msg === "Success") {
-                        window.location.href = "@Url.Action("Index", "Home")";
-                    } else {
-                        alert(data.msg);
-                    }
-                },
-                error: function () {
-                    alert("Error occurred.");
-                }
-            });
+      function Login() {
+        if ($('#userId').val() == null || $('#userId').val().trim() == "") {
+            alert("Please Enter Your Valid User ID !!");
+            $('#userId').focus();
+            return;
         }
+        else if ($('#password').val() == null || $('#password').val().trim() == "") {
+            alert("Please Enter Your Correct Password !!");
+            $('#password').focus();
+            return;
+        }
+
+        const $btn = $('#loginBtn');
+        $btn.prop('disabled', true);
+        $btn.find('.button__text').text('Logging in...');
+        $btn.find('.button__icon')
+            .removeClass('fa fa-arrow-right')
+            .addClass('spinner');
+
+        let ModelObject = {
+            userId: $('#userId').val(),
+            password: $('#password').val()
+        };
+
+        $.ajax({
+            url: '@Url.Action("GetLogin", "Auth")',
+            type: "POST",
+            data: ModelObject,
+            dataType: "json",
+            success: function (data) {
+                if (data.msg == "Success") {
+                    $btn.find('.button__text').text('Login Successful !');
+                    $btn.find('.button__icon').removeClass('spinner').addClass('fa fa-check').css('color', '#28a745');
+                    setTimeout(function () {
+                        window.location.href = "@Url.Action("Index", "Home")";
+                    }, 1000);
+                } else {
+                    alert(data.msg);
+                    resetLoginButton();
+                }
+            },
+            error: function () {
+               /* alert("Error occurred.");*/
+                resetLoginButton();
+            }
+        });
+
+      function resetLoginButton() {
+        $btn.prop('disabled', false);
+        $btn.find('.button__text').text('Log In Now');
+        $btn.find('.button__icon').removeClass('spinner fa-check').addClass('fa fa-arrow-right').css('color', '#103359a3');
+      }
+}
+
 
         function evtpassword(evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode;

@@ -6,177 +6,238 @@
 
 <style>
     .heading {
-        /*  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;*/
-        color: #083669;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color: saddlebrown;
         font-size: 30px;
         text-align: center;
     }
 
     body {
-        font-family: "Roboto", sans-serif;
+        /*font-weight:bold;*/
+        color: darkslategrey;
     }
 
-    .size {
-        height: 30px;
-        width: 180px;
-    }
-    .sizeS {
-        height: 30px;
-        width: 80px;
-    }
-    .sizeXS {
-        height: 30px;
-        width: 50px;
-    }
-
-    .sizeM {
-        height: 30px;
-        width: 150px;
-    }
-
-    .sizebig {
-        height: 30px;
-        width: 300px;
-    }
-
-    .divbox {
-        background-color: #eaeef3;
-        color: #474E93;
-        border: 2px solid #474E93;
-        border-radius: 20px;
-        font-weight: bold;
-        font-size: 13px
+    .rounded-corners {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid green;
     }
 
     .rounded-corners1 {
-        background-color: #e5e7ff;
-        color: #474E93;
-        border: 2px solid #474E93;
-        border-radius: 20px;
-        font-weight: bold;
-        font-size: 13px;
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid brown;
     }
 
-    .tab {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 12px;
-        border-collapse: collapse;
-        width: 550px;
-        margin-left: auto;
-        margin-right: auto;
+    .rounded-corners2 {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid white;
+    }
+
+    .rounded-corners {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid green;
+    }
+
+    input {
+        background-color: rgba( 173,216,230, 0.4);
+        font-size: 14px;
         font-weight: bold
     }
 
-        .tab tbody {
+    select {
+        background-color: rgba( 173,216,230, 0.4);
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    input:focus {
+        background-color: rgba(249,98,159, 0.2);
+    }
+
+    select:focus {
+        background-color: rgba( 173,216,230, 0.4);
+    }
+
+    .table-bordered {
+        border: 2px solid white
+    }
+
+    .tableT {
+        background-color: #ece9fb;
+        text-align: center;
+        font-size: 13px
+    }
+
+    .fixed_header {
+        width: 1200px;
+        table-layout: fixed;
+        border-collapse: collapse;
+    }
+
+    .fixed_header1 {
+        width: 200px;
+        table-layout: auto;
+        border-collapse: collapse;
+    }
+
+        .fixed_header1 tbody {
             display: block;
-            width: 550px;
+            width: 100%;
+            overflow: auto;
+            height: 100px;
+        }
+
+    .fixed_header tbody {
+        display: block;
+        width: 100%;
+        overflow: auto;
+        height: 300px;
+    }
+
+    .fixed_header1 thead tr {
+        display: block;
+    }
+
+    .fixed_header thead tr {
+        display: block;
+    }
+
+    .fixed_header thead {
+        background: #00008B;
+        color: #fff;
+    }
+
+    .fixed_header1 thead {
+        background: #00008B;
+        color: #fff;
+        padding: 10px;
+        width: 100px;
+    }
+
+    .fixed_header th,
+    .fixed_header td {
+        padding: 5px;
+        text-align: left;
+        width: 200px;
+    }
+
+    .fixed_header1 th,
+    .fixed_header1 td {
+        padding: 5px;
+        text-align: left;
+        width: 110px;
+    }
+
+    .small-size {
+        width: 90px;
+    }
+
+    .small-size1 {
+        width: 30px;
+    }
+
+    .big-size {
+        width: 250px;
+    }
+
+    .tbl {
+        margin: 0 auto;
+    }
+
+    .itemtab {
+        font-family: Arial, Helvetica, sans-serif;
+        /*font-size: 15px;*/
+        border-collapse: collapse;
+        width: 80%;
+    }
+
+        .itemtab tbody {
+            display: block;
+            width: 1120px;
             overflow: auto;
             height: 250px;
+        }
+
+        .itemtab td {
+            border: 2px solid #ddd;
+            padding: 8px;
+            padding-left: 8px;
+            padding-right: 8px;
             text-align: center;
-            color: #133E87;
+            font-size: 12px
         }
 
-        .tab td, .tab th {
-            border: 1px solid #004085;
-            border-collapse: collapse;
-            width: 550px;
-        }
-
-        .tab td {
-            padding: 3px;
-        }
-
-        .tab tr:nth-child(even) {
+        .itemtab tr:nth-child(even) {
             background-color: #f2f2f2;
         }
 
-        .tab tr:nth-child(odd) {
-            background-color: white;
+        .itemtab tr:hover {
+            background-color: #F7C1D3;
         }
 
-        .tab tr:hover {
-            background-color: #E1F7F5;
-        }
-
-        .tab th {
-            padding: 5px;
+        .itemtab th {
+            border: 2px solid white;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            padding-left: 8px;
+            padding-right: 8px;
             text-align: center;
-            background-color: #0c2253;
-            font-size: 13px;
+            font-size: 15px;
+            /*background-color: #04AA6D;*/
+            background-color: #145f9f;
             color: white;
             position: sticky;
             top: 0;
-            border: 1px solid #ddd;
-            /* border-radius: 5px*/
         }
 
-    .rounded-corners1 td {
-        padding: 3px
-    }
-    .tableT {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 12px;
-        border-collapse: collapse;
-        width: 1200px;
-        margin-left: auto;
-        margin-right: auto;
-        font-weight: bold
-    }
-        .tableT tbody {
-            display: block;
-            width: 1200px;
-            overflow: auto;
-            text-align: center;
-            color: #133E87;
-        }
-
-        .tableT td, .tableT th {
-            border: 1px solid #004085;
-            border-collapse: collapse;
-            width: 1200px;
-            padding: 1px;
-        }
-    .tableT1 {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 12px;
-        border-collapse: collapse;
-        width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-        font-weight: bold
-    }
-        .tableT1 tbody {
-            display: block;
-            width: 800px;
-            overflow: auto;
-            text-align: center;
-            color: #133E87;
-        }
-
-        .tableT1 td, .tableT1 th {
-            border: 1px solid #004085;
-            border-collapse: collapse;
-            width: 800px;
-            padding: 1px;
-        }
-    .divbox2 {
-        background-color: #e5e7ff;
-        color: #474E93;
-        border: 2px solid #474E93;
-      /*  border-radius: 20px;*/
-        font-weight: bold;
-        font-size: 13px;
-    }
-    .rounded-corners2 {
-        background-color: #959ca35e;
-        color: #2f0b0f;
-        font-weight: bold;
-        font-size: 14px;
-        padding: :3px;
-        border: 2px solid #797777;
-        padding:3px
+    .btn_size {
+        width: 100px;
+        height: 30px;
     }
 
+    .sizeS {
+        width: 60px;
+        height: 30px
+    }
+
+    .sizeXS {
+        width: 40px;
+        height: 30px
+    }
+
+    .size {
+        width: 180px;
+        height: 30px
+    }
+
+    .sizeM {
+        width: 90px;
+        height: 30px
+    }
+
+    .sizeM1 {
+        width: 110px;
+        height: 30px
+    }
+
+    .sizeL {
+        width: 190px;
+        height: 30px;
+        font-size: 12px
+    }
+
+    .sizebig {
+        width: 220px;
+        height: 30px;
+        font-size: 13px
+    }
 </style>
 
 <form asp-controller="Deposits" asp-action="AccountOpening" method="post">
@@ -185,141 +246,135 @@
     </div>
     <div class="container mt-3" style="font-weight:bold">
         <div class="row">
-           
-            <div class="col-lg-2 col-12">
-                <button id="ButtonSAVE" type="button" name="ButtonSAVE" class="btn" onclick="SaveData()">
-                    Save | <i class="fa fa-check"></i>
-                </button>
-            </div>
-            <div class="col-lg-2 col-12">
-                <button id="ButtonAddNew" type="button"  name="ButtonAddNew" class="btn" onclick="Reload()">
-                    ADD NEW | <i class="fa fa-plus"></i>
-                </button>
-            </div>
-            <div class="col-lg-2 col-12">
-                <button id="ButtonEXIT" type="button" name="ButtonEXIT" class="btn" onclick="Home()">
-                    EXIT | <i class="fa fa-close"></i>
-                </button>
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-12 col-lg-12 col-12 pl-3 divbox">
-                <div class="row mt-2">
-                    <div class="col-lg-3 col-12">
-                        Branch<br />
-                        @Html.DropDownListFor(p => p.BranchId, new SelectList(new string[] { "MN" }), new { @class = "sizeS" })
-                    </div>
-                    <div class="col-lg-3 col-12">
-                        Account Head<br />
-                        @Html.DropDownListFor(p => p.AcHd, new SelectList(Model.Ac_Hd_DESC, "Value", "Text"), new { @class = "size" })
-                    </div>
-                    <div class="col-lg-3 col-12">
-                        Control No<br />
-                        @Html.TextBoxFor(p => p.ContNo, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtContNo(event); " })
-                    </div>
-                    <div class="col-lg-3 col-12">
-                        Account No<br />
-                        @Html.TextBoxFor(p => p.AcNo, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtAcNo(event); " })
-                    </div>
-                </div>
-                <div class="row mt-2 mb-2">
-                    <div class="col-lg-3 col-12">
-                        Opening Date<br />
-                        @Html.TextBoxFor(p => p.OpenDate, new { @class = "size", @type = "text" })
-                    </div>
-                    <div class="col-lg-3 col-12">
-                        Category of Account<br />
-                        @Html.DropDownListFor(p => p.SplStatus, new SelectList(Model.Ac_Category_DESC, "Value", "Text"), new { @class = "size" })
-                    </div>
-                    <div class="col-lg-3 col-12">
-                        Mode of Operation<br />
-                        @Html.DropDownListFor(p => p.OprnMode, new SelectList(Model.Md_Of_Op_DESC, "Value", "Text"), new { @class = "size" })
-                    </div>
-                    <div class="col-lg-3 col-12" id="chqfacility">
-                        Cheque Facility<br />
-                        @Html.DropDownListFor(p => p.ChqFacility, new SelectList(new string[] { "NO", "YES" }), new { @class = "sizeS" })
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            
-            <table align="center">
+            <table class="rounded-corners1" style="background-color: #f2dfb7; color: brown; font-size: 15px">
                 <tr>
                     <td>
-                        <h6 class="text-center p-1 mt-2" style="background: #474e93; color: #fff;">MEMBER HOLDER'S PARTICULARS</h6>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <table class="tableT" style="margin-top:-8px">
-                            <tr style="background-color: #0c2253; font-size: 13px; color: white;">
-                                <th>Srl</th>
-                                <th>Member ID</th>
-                                <th>Member Name</th>
-                                <th>Guardian's Name'</th>
-                                <th>Relation</th>
-                                <th>Sex</th>
-                                <th>Occupation</th>
-                                <th>Sign</th>
-                                <th>LTI</th>
-                                <th>Pan No</th>
-
-                            </tr>
+                        <table>
                             <tr>
+                                <td>
+                                    <input id="ButtonSAVE" type="button" value="SAVE" name="ButtonSAVE" class="btn btn-primary btn_size" onclick="SaveData()" />
+                                    <input id="ButtonAddNew" type="button" value="ADD NEW" name="ButtonAddNew" class="btn btn-primary btn_size" onclick="Reload()" />
+                                    <input id="ButtonEXIT" type="button" value="EXIT" name="ButtonEXIT" class="btn btn-primary btn_size" onclick="Home()" />
 
-                                <td>@Html.TextBoxFor(p => p.Srl1, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.MemberId1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.MemberName1, new { @class = "size", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.GuardianName1, new { @class = "size", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.Relation1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.Sex1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.Occupation1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.DropDownListFor(p => p.Sign1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
-                                <td>@Html.DropDownListFor(p => p.Lti1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
-                                <td>@Html.TextBoxFor(p => p.PanNo1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
-                                <td id="addbutton"><img src="~/Images/Plus.png" width="30" height="30" onclick="OpenNewRowForMember()" /></td>
-
+                                </td>
                             </tr>
-                            <tr id="NewMem">
-                                <td>@Html.TextBoxFor(p => p.Srl2, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.MemberId2, new { @class = "sizeS", @type = "text" })</td>
-                                <td>@Html.TextBoxFor(p => p.MemberName2, new { @class = "size", @type = "text" })</td>
-                                <td>@Html.TextBoxFor(p => p.GuardianName2, new { @class = "size", @type = "text" })</td>
-                                <td>@Html.TextBoxFor(p => p.Relation2, new { @class = "sizeS", @type = "text" })</td>
-                                <td>@Html.TextBoxFor(p => p.Sex2, new { @class = "sizeS", @type = "text" })</td>
-                                <td>@Html.TextBoxFor(p => p.Occupation2, new { @class = "sizeS", @type = "text" })</td>
-                                <td>@Html.DropDownListFor(p => p.Sign2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
-                                <td>@Html.DropDownListFor(p => p.Lti2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
-                                <td>@Html.TextBoxFor(p => p.PanNo2, new { @class = "sizeM", @type = "text" })</td>
-                                <th><img src="~/Images/Minus.png" width="30" height="30" onclick="CloseNewRowForMember()" /></th>
+                        </table>
+                        <table style="margin-top:10px">
+                            <tr>
+                                <td>
+                                    Branch<br />
+                                    @Html.DropDownListFor(p => p.BranchId, new SelectList(new string[] { "MN" }), new { @class = "sizeS" })
+                                </td>
+                                <td class="gap">
+                                </td>
+                                <td>
+                                    Account Head<br />
+                                    @Html.DropDownListFor(p => p.AcHd, new SelectList(Model.Ac_Hd_DESC, "Value", "Text"), new { @class = "size" })
+                                </td>
+                                <td class="gap">
+                                </td>
+                                <td>
+                                    Control No<br />
+                                    @Html.TextBoxFor(p => p.ContNo, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtContNo(event); " })
+                                </td>
+                                <td class="gap">
+                                </td>
+                                <td>
+                                    Account No<br />
+                                    @Html.TextBoxFor(p => p.AcNo, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtAcNo(event); " })
+                                </td>
+
+
+
                             </tr>
                         </table>
                     </td>
                 </tr>
             </table>
-           
-        </div>
-        <div class="row mt-2">
+            <table align="center" class="mt-2">
+                <tr>
+                    <td>
+                        Opening Date<br />
+                        @Html.TextBoxFor(p => p.OpenDate, new { @class = "size", @type = "text" })
+                    </td>
+                    <td>
+                        Category of Account<br />
+                        @Html.DropDownListFor(p => p.SplStatus, new SelectList(Model.Ac_Category_DESC, "Value", "Text"), new { @class = "size" })
+                    </td>
+
+                    <td>
+                        Mode of Operation<br />
+                        @Html.DropDownListFor(p => p.OprnMode, new SelectList(Model.Md_Of_Op_DESC, "Value", "Text"), new { @class = "size" })
+                    </td>
+                    <td id="chqfacility">
+                        Cheque Facility<br />
+                        @Html.DropDownListFor(p => p.ChqFacility, new SelectList(new string[] { "NO", "YES" }), new { @class = "sizeS" })
+                    </td>
+                </tr>
+            </table>
+            <h6 class="text-center bg-danger p-1 mt-2" style="color:whitesmoke">MEMBER HOLDER'S PARTICULARS</h6>
+            <table class="table table-bordered tableT" style="margin-top:-8px">
+                <tr style="background-color: #145f9f; color: white;">
+                    <th>Srl</th>
+                    <th>Member ID</th>
+                    <th>Member Name</th>
+                    <th>Guardian's Name'</th>
+                    <th>Relation</th>
+                    <th>Sex</th>
+                    <th>Occupation</th>
+                    <th>Sign</th>
+                    <th>LTI</th>
+                    <th>Pan No</th>
+
+                </tr>
+                <tr>
+
+                    <td>@Html.TextBoxFor(p => p.Srl1, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.MemberId1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.MemberName1, new { @class = "sizeL", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.GuardianName1, new { @class = "sizeL", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.Relation1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.Sex1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.Occupation1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.DropDownListFor(p => p.Sign1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                    <td>@Html.DropDownListFor(p => p.Lti1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                    <td>@Html.TextBoxFor(p => p.PanNo1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
+                    <td id="addbutton"><img src="~/Images/Plus.png" width="30" height="30" onclick="OpenNewRowForMember()" /></td>
+
+                </tr>
+                <tr id="NewMem">
+                    <td>@Html.TextBoxFor(p => p.Srl2, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
+                    <td>@Html.TextBoxFor(p => p.MemberId2, new { @class = "sizeM", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.MemberName2, new { @class = "sizeL", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.GuardianName2, new { @class = "sizeL", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.Relation2, new { @class = "sizeM", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.Sex2, new { @class = "sizeM", @type = "text" })</td>
+                    <td>@Html.TextBoxFor(p => p.Occupation2, new { @class = "sizeS", @type = "text" })</td>
+                    <td>@Html.DropDownListFor(p => p.Sign2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                    <td>@Html.DropDownListFor(p => p.Lti2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                    <td>@Html.TextBoxFor(p => p.PanNo2, new { @class = "sizeM", @type = "text" })</td>
+                    <th><img src="~/Images/Minus.png" width="30" height="30" onclick="CloseNewRowForMember()" /></th>
+                </tr>
+            </table>
             <table>
                 <tr>
                     <td>
-                        <table class="rounded-corners2" >
+                        <table class="rounded-corners2" style="background-color: rgb(216, 191, 216,0.6); color: rgb(119, 7, 55); font-weight: bold; font-size: 14px">
                             <tr>
                                 <td>
                                     A/C Name
                                 </td>
-                                <td colspan="3">
-                                    @Html.TextBoxFor(p => p.AcName, new { @class = " w-100", @type = "text", @readonly = "true", @style = "background-color: white" })
+                                <td>
+                                    @Html.TextBoxFor(p => p.AcName, new { @class = "sizebig", @type = "text", @readonly = "true" })
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     Address
                                 </td>
-                                <td colspan="3">
-                                    @Html.TextBoxFor(p => p.AcAdd1, new { @class = " w-100", @type = "text", @readonly = "true", @style = "background-color: white" })<br />
-                                    @Html.TextBoxFor(p => p.AcAdd2, new { @class = " w-100", @type = "text", @readonly = "true", @style = "background-color: white" })<br />
+                                <td>
+                                    @Html.TextBoxFor(p => p.AcAdd1, new { @class = " sizebig", @type = "text", @readonly = "true" })<br />
+                                    @Html.TextBoxFor(p => p.AcAdd2, new { @class = " sizebig", @type = "text", @readonly = "true" })<br />
                                 </td>
                             </tr>
                             <tr>
@@ -328,13 +383,13 @@
                                     State
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcState, new { @class = "sizeM", @type = "text", @readonly = "true", @style = "background-color: white" })
+                                    @Html.TextBoxFor(p => p.AcState, new { @class = "sizeM1", @type = "text", @readonly = "true" })
                                 </td>
                                 <td>
                                     District
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcDist, new { @class = "sizeM", @type = "text", @readonly = "true", @style = "background-color: white" })
+                                    @Html.TextBoxFor(p => p.AcDist, new { @class = "sizeM1", @type = "text", @readonly = "true" })
                                 </td>
 
                             </tr>
@@ -343,19 +398,19 @@
                                     City
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcCity, new { @class = "sizeM", @type = "text", @readonly = "true", @style = "background-color: white" })
+                                    @Html.TextBoxFor(p => p.AcCity, new { @class = "sizeM1", @type = "text", @readonly = "true" })
                                 </td>
                                 <td>
                                     Pin
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcPin, new { @class = "sizeM", @type = "text", @readonly = "true", @style = "background-color: white" })
+                                    @Html.TextBoxFor(p => p.AcPin, new { @class = "sizeM1", @type = "text", @readonly = "true" })
                                 </td>
                             </tr>
                         </table>
                     </td>
-                    <td class="divbox2">
-                        <table>
+                    <td>
+                        <table class="rounded-corners">
                             <tr>
                                 <td>
                                     <table>
@@ -380,9 +435,9 @@
                                 </td>
                             </tr>
                         </table>
-                        <h6 class="text-center p-1 mt-2" style="background: #474e93; color: #fff; padding: 5px ">N o m i n e e</h6>
-                        <table class="tableT1">
-                            <tr style="background-color: #0c2253; font-size: 13px; color: white;">
+                        <h6 class="text-center p-1 mt-2" style="background-color: #A95C68; color: white; font-size: 15px; font-weight: bold; text-align: center; text-transform: uppercase; border: 1px solid; border-color: rgb(170, 152, 169); border-radius: 20px ">N o m i n e e</h6>
+                        <table class="table tableT table-bordered" style="margin-top:-8px">
+                            <tr style="background-color: #ffd5b9; color: darkslateblue; font-weight: bold; text-align: center; font-size: 14px">
                                 <th>Nominee Name</th>
                                 <th>Relation</th>
                                 <th>Pan No</th>
@@ -396,10 +451,13 @@
                             </tr>
                         </table>
 
-            
-                        
-                       </table>
+            </table>
+
+
+
+
         </div>
+
 
     </div>
     @if (ViewBag.ErrorMsg != null)

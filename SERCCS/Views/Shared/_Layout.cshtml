@@ -6,10 +6,137 @@
     <title>@ViewData["Title"] - SERCCS</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+
+        .border-bottom_b {
+            border-bottom: 1px solid #4F959D;
+        }
+
+        .box-shadow {
+            box-shadow: 0 .25rem .75rem #2878a721;
+        }
+
+        .bg-nav {
+            background-color: #80bdff26 !important;
+        }
+
+        .font-style {
+            font-family: "Roboto", sans-serif;
+            font-weight: bold;
+            font-size: 12px;
+            color: gray;
+            /*text-align: left;*/
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            display: none;
+            float: left;
+            min-width: 10rem;
+            padding: .2rem 0;
+            margin: .125rem 0 0;
+            font-size: 1rem;
+            color: #212529;
+            text-align: left;
+            list-style: none;
+            background-color: #EEF5FF;
+            background-clip: padding-box;
+            border: 1px solid rgba(0, 0, 0, .15);
+            border-radius: .25rem;
+            margin-top: 8px;
+        }
+
+        .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: 3px 7px;
+            clear: both;
+            font-weight: 500;
+            color: #0a1391;
+            text-align: inherit;
+            white-space: nowrap;
+            /* background-color: #d1e2ff;*/
+            border: 2px solid #87b0e7bd;
+            border-radius: 20px;
+            /* border-bottom: 1px solid #86B6F6; */
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        li.nav-item {
+            padding-left: 10px;
+        }
+
+        .btn {
+            background-color: #06434d;
+            color: white;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 5px 10px 5px 10px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+            .btn:hover {
+                background-color: #384859;
+                color: white;
+            }
+
+            .btn:focus {
+                background-color: #4e757b;
+                border: 2px solid #092d51;
+                border-radius: 15px;
+            }
+
+        input {
+            color: darkslateblue;
+            border: 1px solid darkslateblue;
+            border-radius: 20px;
+            padding: 2px 8px 2px 8px;
+            font-size: 14px;
+            font-weight: bold
+        }
+
+            input:read-only {
+                color: #495057;
+                background-color: #d3d3d357;
+            }
+
+            input:focus {
+                color: #495057;
+                background-color: #e1d9fdf2;
+                border: 2px solid darkslateblue;
+            }
+
+        select {
+            color: darkslateblue;
+            border: 1px solid darkslateblue;
+            border-radius: 20px;
+            padding: 2px 8px 2px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            background-color: white;
+        }
+
+            select:read-only {
+                color: #495057;
+                background-color: #d3d3d357;
+            }
+
+            select:focus {
+                color: #495057;
+                background-color: #e1d9fdf2;
+                border: 2px solid darkslateblue;
+            }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-nav border-bottom_b box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SERCCS</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -17,51 +144,46 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
+                  
+                    <ul class="navbar-nav"  style="margin-left:500px">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Auth" asp-action="Logout" style="font-weight: bold; color: #0c3d71">Logout &nbsp; <i class="fa fa-sign-out"></i></a>
                         </li>
+                    </ul>
+
+                   
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" style="font-weight: bold; color: #074799">Home</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="masterDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Administrator
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="masterDropdown">
-                                <a class="dropdown-item" asp-controller="Users" asp-action="UsersMaster">User Management</a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="masterDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="masterDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                               style="font-weight: bold; color: #0c3d71">
                                 Master
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="masterDropdown">
+                            <div class="dropdown-menu" aria-labelledby="masterDropdown1">
                                 <a class="dropdown-item" asp-controller="Master" asp-action="AuMaster">Au Master</a>
-
                                 <a class="dropdown-item" asp-controller="Master" asp-action="ShareTypeMaster">Share Type Master</a>
-
                                 <a class="dropdown-item" asp-controller="Master" asp-action="MemberShipStatusMaster">MemberShip Status Master</a>
-
                                 <a class="dropdown-item" asp-area="" asp-controller="Master" asp-action="PayCategoryMaster">Pay Category Master</a>
-
                                 <a class="dropdown-item" asp-area="" asp-controller="Master" asp-action="BranchMaster">Branch Master</a>
+
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="masterDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle"  style="font-weight: bold; color: #0c3d71" href="#" id="memberDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Member
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="masterDropdown">
+                            <div class="dropdown-menu" aria-labelledby="masterDropdown2">
                                 <a class="dropdown-item" asp-controller="Member" asp-action="MemberMaster">Member Master</a>
                             </div>
                         </li>
-                        
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="masterDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" style="font-weight: bold; color: #0c3d71" href="#" id="depositeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Deposits
                             </a>
                             <div class="dropdown-menu" aria-labelledby="masterDropdown">
+                                <a class="dropdown-item" asp-controller="Deposits" asp-action="CashDepositAndWithdrawn">Cash Deposit And Withdrawn</a>
                                 <a class="dropdown-item" asp-controller="Deposits" asp-action="AccountOpening">Account Opening</a>
 
                             </div>
@@ -70,6 +192,8 @@
                 </div>
             </div>
         </nav>
+
+      
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -77,9 +201,9 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - SERCCS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer font-style">
+        <div class="container text-center">
+            &copy; 2025 || &nbsp; SERCCS &nbsp;|| &nbsp; <a href="https://www.rishiindia.net/" style="color: #e21f36; text-decoration:none" onmouseover="this.style.color = '#814141';" onmouseout="this.style.color='#e21f36'">Rishi Technovision Pvt. Ltd.</a> &nbsp;|| &nbsp; <a href="/Privacy/Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

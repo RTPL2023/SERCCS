@@ -331,6 +331,11 @@
                         <div class="col-lg-9 col-md-9 col-12 border border-1 rounded rounded-2" id="mytable" style="font-size:14px;font-weight:bold">
                             <div class="row mt-1">
                                 <div class="col-lg-3 col-md-3 col-12">
+                                    Branch <br />
+                                    
+                                    @Html.TextBoxFor(p => p.BranchID, new { @class = "size",@readonly="true" })
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-12">
                                     Ac Hd <br />
                                     @Html.DropDownListFor(p => p.AcHd, new SelectList(new string[] { "SB", "FD", "SH", "LTL", "FES", "CON", "STL", "CMTD", "LFC", "MISC", "DIV", "ADV" }), new { @class = "size", @onchange = "showhideLabel(this)" })
                                 </div>
@@ -614,6 +619,7 @@
         }
         function getdatabyContNo() {
              let ModelObject = {
+                 BranchID: $('#BranchID').val(),
                  ContNo: $('#ContNo').val(),
                  AcHd: $('#AcHd').val(),
                  TransDate: $('#datepicker1').val(),
@@ -650,6 +656,7 @@
         }
          function getdatabyAcNo() {
              let ModelObject = {
+                 BranchID: $('#BranchID').val(),
                  AcNo: $('#AcNo').val(),
                  AcHd: $('#AcHd').val(),
                  TransDate: $('#datepicker1').val(),
@@ -728,7 +735,8 @@
                 $('#WithAmount').focus();
             }
             else {
-                 let ModelObject = {
+                let ModelObject = {
+                 BranchID: $('#BranchID').val(),
                  AcNo: $('#AcNo').val(),
                  AcHd: $('#AcHd').val(),
                  CounterNo: $('#CounterNo').val(),
@@ -783,6 +791,7 @@
         function getPONO() {
 
             let ModelObject = {
+                BranchID: $('#BranchID').val(),
                 counterno: $("#CounterNo option:Selected").text(),
                 depwith: $("#DepositWithdrow option:Selected").text(),
                 achd: $("#AcHd option:Selected").text(),
