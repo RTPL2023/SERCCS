@@ -17,18 +17,20 @@ namespace SERCCS.Models.Database
 
         String sql;
 
-        public String getRole(String _UserName)
+        public Users getRole(String _UserName)
         {
-            String _role = String.Empty;
-            sql = "SELECT User_Role from Users WHERE User_Id = '" + _UserName + "' ";
+            Users u = new Users();
+            //String _role = String.Empty;
+            sql = "SELECT * from Users WHERE User_Id = '" + _UserName + "' ";
             try
             {
                 config.singleResult(sql);
                 if (config.dt.Rows.Count > 0)
                 {
-                    _role = config.dt.Rows[0]["USER_ROLE"].ToString();                                     
+                    u.user_role = config.dt.Rows[0]["USER_ROLE"].ToString();                                     
+                    u.allocated_branch_id = config.dt.Rows[0]["allocated_branch_id"].ToString();                                     
                 }
-                return _role;
+                return u;
             }
             catch (Exception ex)
             {
@@ -55,6 +57,12 @@ namespace SERCCS.Models.Database
                     else
                     {
                         RetValue = 1;
+                        config.Insert("login_details", new Dictionary<string, object>()
+                        {
+                        { "user_id", userid },
+                        { "logged_in",0},
+                        { "login_datetime", DateTime.Now },
+                        });
                     }
                 }
                 else
@@ -67,6 +75,27 @@ namespace SERCCS.Models.Database
                 RetValue = -1;
             }
             return Convert.ToInt32(RetValue);
+        }
+
+        public void setlogout(string _UserName)
+        {
+            sql = "SELECT * FROM login_details WHERE USER_ID = '" + _UserName + "' order by login_datetime";
+            config.singleResult(sql);
+            logindetails ld = new logindetails();
+            if (config.dt.Rows.Count > 0)
+            {
+                DataRow dr = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
+                ld.login_datetime = Convert.ToDateTime(dr["login_datetime"]);
+                config.Update("login_details", new Dictionary<string, object>()
+                {
+                { "logout_datetime", DateTime.Now},
+                { "logged_in", 0 }
+                }, new Dictionary<string, object>()
+                {
+                { "USER_ID", _UserName},
+                { "login_datetime", ld.login_datetime}
+                });
+            }
         }
 
     }

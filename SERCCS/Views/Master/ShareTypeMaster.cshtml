@@ -5,196 +5,39 @@
 }
 <style>
     .heading {
-        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-        color: saddlebrown;
+        /*  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;*/
+        color: #083669;
         font-size: 30px;
         text-align: center;
     }
 
     body {
-        /*font-weight:bold;*/
-        color: darkslategrey;
-        /*font-size: 12px*/
+        font-family: "Roboto", sans-serif;
     }
 
     .size {
         height: 30px;
-        width: 138px;
-    }
-
-    .sizeM {
-        height: 30px;
         width: 180px;
     }
 
-    .size2 {
-        height: 40px;
-        width: 320px;
-    }
-
-    .size1 {
-        height: 35px;
-        width: 270px;
-    }
-
-    .bsizetxt {
-        height: 25px;
-        width: 200px;
-    }
-
-    .sizegap {
-        height: 10px;
-        width: 30px;
-    }
-
-    .image {
-        height: 130px;
-        width: 100px;
-    }
-
-    .zoomimage {
-        height: 260px;
-        width: 200px;
-    }
-
-    .sign {
-        height: 40px;
-        width: 170px;
-    }
-
-    .zoomsign {
-        height: 100px;
+    .sizebig {
+        height: 30px;
         width: 300px;
     }
 
-    .fixed_header {
-        width: 700px;
-        table-layout: fixed;
-        border-collapse: collapse;
-    }
-
-        .fixed_header tbody {
-            display: block;
-            width: 100%;
-            overflow: auto;
-            height: 300px;
-        }
-
-        .fixed_header thead tr {
-            display: block;
-        }
-
-        .fixed_header thead {
-            background: #00008B;
-            color: #fff;
-        }
-
-        .fixed_header th,
-        .fixed_header td {
-            padding: 5px;
-            text-align: left;
-            width: 200px;
-        }
-
-    .rounded-corners {
-        border-spacing: 10px;
-        border-collapse: separate;
-        border-radius: 10px;
-        border: 1px solid green;
-    }
-
-    .rounded-corners_tr {
-        border-spacing: 10px;
-        border-collapse: separate;
-        border-radius: 10px;
-        border: 1px solid;
-        border-color: transparent
-    }
-
-    .rounded-corners1 {
-        border-spacing: 10px;
-        border-collapse: separate;
-        border-radius: 10px;
-        border: 1px solid brown;
-        background-color: rgb(247,217,211,0.3);
-        color: #ac371f;
-    }
-    /*.heading {
-        background-color: #4361b7;
-        text-align: center;
-        padding-bottom: 05px;
-        margin-top: 05px;
-        color: #fff;
-    }*/
-
-    table.bordered {
-        border-collapse: collapse;
-        font-size: 12px;
-    }
-
-        table.bordered td, table.bordered th {
-            border: 1px solid black;
-            text-align: center;
-            padding: 8px;
-        }
-
-    .outer-wrapper {
-        margin: 10px;
-        margin-left: 20px;
-        margin-right: 20px;
-        max-height: fit-content;
-    }
-
-    .table-wrapper {
-        overflow-y: scroll;
-        overflow-x: scroll;
-        height: fit-content;
-        max-height: 66.4vh;
-    }
-
-    .outer-wrapper2 {
-        margin: 10px;
-        max-height: fit-content;
-    }
-
-    .table-wrapper2 {
-        overflow-y: scroll;
-        overflow-x: scroll;
-        height: fit-content;
-        max-height: 66.4vh;
-    }
-
-    input {
-        background-color: rgba( 173,216,230, 0.4);
-        font-size: 14px;
+    .divbox {
+        background-color: #eaeef3;
+        color: #474E93;
+        border: 2px solid #474E93;
+        border-radius: 20px;
         font-weight: bold
-    }
-
-    select {
-        background-color: rgba( 173,216,230, 0.4);
-        font-size: 14px;
-        font-weight: bold
-    }
-
-    input:focus {
-        background-color: rgba(249,98,159, 0.4);
-    }
-
-    select:focus {
-        background-color: rgba( 173,216,230, 0.4);
-    }
-
-    .btn_size {
-        width: 180px;
-        height: 40px;
-        font-size: 14px;
     }
 
     .tab {
         font-family: Arial, Helvetica, sans-serif;
         font-size: 12px;
         border-collapse: collapse;
-        width: 800px;
+        width: 600px;
         margin-left: auto;
         margin-right: auto;
         font-weight: bold
@@ -202,7 +45,7 @@
 
         .tab tbody {
             display: block;
-            width: 800px;
+            width: 600px;
             overflow: auto;
             height: 250px;
             text-align: center;
@@ -210,9 +53,9 @@
         }
 
         .tab td, .tab th {
-            border: 1px solid #ddd;
+            border: 1px solid #004085;
             border-collapse: collapse;
-            width: 800px;
+            width: 600px;
         }
 
         .tab td {
@@ -223,17 +66,20 @@
             background-color: #f2f2f2;
         }
 
+        .tab tr:nth-child(odd) {
+            background-color: white;
+        }
+
         .tab tr:hover {
-            background-color: rgba(255, 182, 193, 0.4);
+            background-color: #E1F7F5;
         }
 
         .tab th {
             padding: 5px;
             text-align: center;
-            /*background-color: #04AA6D;*/
-            background-color: #BC7C7C;
+            background-color: #0c2253;
             font-size: 13px;
-            color: #492929;
+            color: white;
             position: sticky;
             top: 0;
             border: 1px solid #ddd;
@@ -255,7 +101,7 @@
                         Code:
                     </div>
                     <div class="col-md-8 col-sm-12 col-12 mt-3">
-                        @Html.TextBoxFor(p => p.code, new { @class = "size"})
+                        @Html.TextBoxFor(p => p.code, new { @class = "size", maxlength = "3" })
                     </div>
                 </div>
                 <div class="row mt-1">
@@ -263,18 +109,24 @@
                         Description:
                     </div>
                     <div class="col-md-8 col-sm-12 col-12 mt-3">
-                        @Html.TextBoxFor(p => p.description, new { @class = "sizebig"})
+                        @Html.TextBoxFor(p => p.description, new { @class = "sizebig", maxlength = "100" })
                     </div>
                 </div>
-                <div class="row mt-4">
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-12">
-                        <input id="btnSave" type="button" name="btnSave" Height="40" Width="100" class="btn btn-primary btn-sm" value="SAVE" onclick="SaveData()" />
+                <div class="row mt-4 mb-2 justify-content-lg-center">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center">
+                        <button id="btnSave" type="button" name="btnSave" Height="40" Width="100" class="btn btn-sm" onclick="SaveData()">
+                            Save | <i class="fa fa-check"></i>
+                        </button>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-12 text-center">
-                        <input id="btnupdate" type="button" name="btnupdate" Height="40" Width="100" class="btn btn-primary btn-sm" value="UPDATE" onclick="UpdateData()" />
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-12 text-center">
+                        <button id="btnupdate" type="button" name="btnupdate" Height="40" Width="100" class="btn btn-sm" onclick="UpdateData()">
+                            Update | <i class="fa fa-edit"></i>
+                        </button>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-12 text-center">
-                        <input id="btnAddnew" type="button" name="btnAddnew" Height="40" Width="100" class="btn btn-primary btn-sm" value="AddNew" onclick="AddNew()" />
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-12 text-center">
+                        <button id="btnAddnew" type="button" name="btnAddnew" Height="40" Width="100" class="btn btn-sm" onclick="AddNew()">
+                            Add New | <i class="fa fa-plus"></i>
+                        </button>
                     </div>
                 </div>
             </div>

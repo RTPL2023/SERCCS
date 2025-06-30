@@ -208,7 +208,7 @@ namespace SERCCS.Models.Database
 
         }
 
-        public Ledger getLedgerDetail(string acno, string achd, String conno)
+        public Ledger getLedgerDetail(string branchid, string acno, string achd, String conno)
         {
 
             Ledger dm = new Ledger();
@@ -218,22 +218,22 @@ namespace SERCCS.Models.Database
 
                 string sql = String.Empty;
                 if (achd == "SB")
-                    sql = "select * from DEPOSIT_LEDGER_TEMP WHERE BRANCH_ID='MN' AND AC_HD='SB' AND AC_NO='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
+                    sql = "select * from DEPOSIT_LEDGER_SB WHERE BRANCH_ID='" + branchid + "' AND AC_HD='SB' AND AC_NO='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
                 //sql = "select * from DEPOSIT_LEDGER_SB WHERE BRANCH_ID='MN' AND AC_HD='SB' AND AC_NO='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
                 else if (achd == "FD")
-                    sql = "select * from DEPOSIT_LEDGER_FD WHERE BRANCH_ID='MN' AND AC_HD='FD' AND AC_NO='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
+                    sql = "select * from DEPOSIT_LEDGER_FD WHERE BRANCH_ID='" + branchid + "' AND AC_HD='FD' AND AC_NO='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
                 else if (achd == "CMTD")
-                    sql = "select * from CMTD_LEDGER  WHERE BRANCH_ID='MN'  AND MEMBER_ID='" + conno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
+                    sql = "select * from CMTD_LEDGER  WHERE BRANCH_ID='" + branchid + "'  AND MEMBER_ID='" + conno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
                 else if (achd == "DIV")
-                    sql = "select * from DIVIDEND_LEDGER  WHERE BRANCH_ID='MN'  AND MEMBER_ID='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
+                    sql = "select * from DIVIDEND_LEDGER  WHERE BRANCH_ID='" + branchid + "'  AND MEMBER_ID='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
                 else if (achd == "SH")
-                    sql = "select * from SHARE_LEDGER   WHERE BRANCH_ID='MN'  AND MEMBER_ID='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
+                    sql = "select * from SHARE_LEDGER   WHERE BRANCH_ID='" + branchid + "'  AND MEMBER_ID='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
                 else if (achd == "LTL")
-                    sql = "select * from Loan_ledger_ltl   WHERE BRANCH_ID='MN'  AND loan_id='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
+                    sql = "select * from Loan_ledger_ltl   WHERE BRANCH_ID='" + branchid + "'  AND loan_id='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
                 else if (achd == "STL")
-                    sql = "select * from SHARE_LEDGER   WHERE BRANCH_ID='MN'  AND loan_id='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
+                    sql = "select * from SHARE_LEDGER   WHERE BRANCH_ID='" + branchid + "'  AND loan_id='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
                 else if (achd == "FES")
-                    sql = "select * from SHARE_LEDGER   WHERE BRANCH_ID='MN'  AND loan_id='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
+                    sql = "select * from SHARE_LEDGER   WHERE BRANCH_ID='" + branchid + "'  AND loan_id='" + acno + "' ORDER BY VCH_DATE, VCH_NO,VCH_SRL";
 
 
 
@@ -297,7 +297,7 @@ namespace SERCCS.Models.Database
         public void SaveDepositLedgerTemp(Ledger dlt)
         {
 
-            config.Insert("DEPOSIT_LEDGER_TEMP", new Dictionary<string, object>()
+            config.Insert("DEPOSIT_LEDGER_SB", new Dictionary<string, object>()
             {
                 { "branch_id", dlt.branch_id },
                 { "ac_hd",dlt.ac_hd },
