@@ -20,7 +20,8 @@ namespace SERCCS.Controllers
         {
             List<MemberMast> mml = new List<MemberMast>();
              UtilityController uc = new UtilityController();
-
+            var user = User;
+            mmv.branchid = user.FindFirst("branch_id")?.Value;
             mmv.shtypes = uc.getshareType();
             mmv.paycategorys = uc.getpaycategoryMaster();
             mmv.memstatuss = uc.getMembershipStatus();

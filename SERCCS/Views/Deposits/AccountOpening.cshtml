@@ -207,37 +207,37 @@
                 <div class="row mt-2">
                     <div class="col-lg-3 col-12">
                         Branch<br />
-                        @Html.DropDownListFor(p => p.BranchId, new SelectList(new string[] { "MN" }), new { @class = "sizeS" })
+                        @Html.DropDownListFor(p => p.branchid, new SelectList(new string[] { "MN" }), new { @class = "sizeS" })
                     </div>
                     <div class="col-lg-3 col-12">
                         Account Head<br />
-                        @Html.DropDownListFor(p => p.AcHd, new SelectList(Model.Ac_Hd_DESC, "Value", "Text"), new { @class = "size" })
+                        @Html.DropDownListFor(p => p.achd, new SelectList(Model.ac_hd_desc, "Value", "Text"), new { @class = "size" })
                     </div>
                     <div class="col-lg-3 col-12">
                         Control No<br />
-                        @Html.TextBoxFor(p => p.ContNo, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtContNo(event); " })
+                        @Html.TextBoxFor(p => p.contno, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtContNo(event); " })
                     </div>
                     <div class="col-lg-3 col-12">
                         Account No<br />
-                        @Html.TextBoxFor(p => p.AcNo, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtAcNo(event); " })
+                        @Html.TextBoxFor(p => p.acno, new { @class = "size", @type = "text", @onkeypress = "javascript: return EvtAcNo(event); " })
                     </div>
                 </div>
                 <div class="row mt-2 mb-2">
                     <div class="col-lg-3 col-12">
                         Opening Date<br />
-                        @Html.TextBoxFor(p => p.OpenDate, new { @class = "size", @type = "text" })
+                        @Html.TextBoxFor(p => p.opendate, new { @class = "size", @type = "text" })
                     </div>
                     <div class="col-lg-3 col-12">
                         Category of Account<br />
-                        @Html.DropDownListFor(p => p.SplStatus, new SelectList(Model.Ac_Category_DESC, "Value", "Text"), new { @class = "size" })
+                        @Html.DropDownListFor(p => p.splstatus, new SelectList(Model.ac_category_desc, "Value", "Text"), new { @class = "size" })
                     </div>
                     <div class="col-lg-3 col-12">
                         Mode of Operation<br />
-                        @Html.DropDownListFor(p => p.OprnMode, new SelectList(Model.Md_Of_Op_DESC, "Value", "Text"), new { @class = "size" })
+                        @Html.DropDownListFor(p => p.oprnmode, new SelectList(Model.md_of_op_desc, "Value", "Text"), new { @class = "size" })
                     </div>
                     <div class="col-lg-3 col-12" id="chqfacility">
                         Cheque Facility<br />
-                        @Html.DropDownListFor(p => p.ChqFacility, new SelectList(new string[] { "NO", "YES" }), new { @class = "sizeS" })
+                        @Html.DropDownListFor(p => p.chqfacility, new SelectList(new string[] { "NO", "YES" }), new { @class = "sizeS" })
                     </div>
                 </div>
             </div>
@@ -255,7 +255,7 @@
                         <table class="tableT" style="margin-top:-8px">
                             <tr style="background-color: #0c2253; font-size: 13px; color: white;">
                                 <th>Srl</th>
-                                <th>Member ID</th>
+                                @*<th>Member ID</th>*@
                                 <th>Member Name</th>
                                 <th>Guardian's Name'</th>
                                 <th>Relation</th>
@@ -268,30 +268,30 @@
                             </tr>
                             <tr>
 
-                                <td>@Html.TextBoxFor(p => p.Srl1, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.MemberId1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.MemberName1, new { @class = "size", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.GuardianName1, new { @class = "size", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.Relation1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.Sex1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.Occupation1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.DropDownListFor(p => p.Sign1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
-                                <td>@Html.DropDownListFor(p => p.Lti1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
-                                <td>@Html.TextBoxFor(p => p.PanNo1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
+                                <td>@Html.TextBoxFor(p => p.srl1, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
+                                @*<td>@Html.TextBoxFor(p => p.memberid1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>*@
+                                <td>@Html.TextBoxFor(p => p.membername1, new { @class = "size", @type = "text", @readonly = "true" })</td>
+                                <td>@Html.TextBoxFor(p => p.guardianname1, new { @class = "size", @type = "text", @readonly = "true" })</td>
+                                <td>@Html.TextBoxFor(p => p.relation1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
+                                <td>@Html.TextBoxFor(p => p.sex1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
+                                <td>@Html.TextBoxFor(p => p.occupation1, new { @class = "sizeS", @type = "text", @readonly = "true" })</td>
+                                <td>@Html.DropDownListFor(p => p.sign1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                                <td>@Html.DropDownListFor(p => p.lti1, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                                <td>@Html.TextBoxFor(p => p.panno1, new { @class = "sizeM", @type = "text", @readonly = "true" })</td>
                                 <td id="addbutton"><img src="~/Images/Plus.png" width="30" height="30" onclick="OpenNewRowForMember()" /></td>
 
                             </tr>
                             <tr id="NewMem">
-                                <td>@Html.TextBoxFor(p => p.Srl2, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
-                                <td>@Html.TextBoxFor(p => p.MemberId2, new { @class = "sizeS", @type = "text" })</td>
-                                <td>@Html.TextBoxFor(p => p.MemberName2, new { @class = "size", @type = "text" })</td>
-                                <td>@Html.TextBoxFor(p => p.GuardianName2, new { @class = "size", @type = "text" })</td>
-                                <td>@Html.TextBoxFor(p => p.Relation2, new { @class = "sizeS", @type = "text" })</td>
-                                <td>@Html.TextBoxFor(p => p.Sex2, new { @class = "sizeS", @type = "text" })</td>
-                                <td>@Html.TextBoxFor(p => p.Occupation2, new { @class = "sizeS", @type = "text" })</td>
-                                <td>@Html.DropDownListFor(p => p.Sign2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
-                                <td>@Html.DropDownListFor(p => p.Lti2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
-                                <td>@Html.TextBoxFor(p => p.PanNo2, new { @class = "sizeM", @type = "text" })</td>
+                                <td>@Html.TextBoxFor(p => p.srl2, new { @class = "sizeXS", @type = "text", @readonly = "true" })</td>
+                                @*<td>@Html.TextBoxFor(p => p.memberid2, new { @class = "sizeS", @type = "text" })</td>*@
+                                <td>@Html.TextBoxFor(p => p.membername2, new { @class = "size", @type = "text" })</td>
+                                <td>@Html.TextBoxFor(p => p.guardianname2, new { @class = "size", @type = "text" })</td>
+                                <td>@Html.TextBoxFor(p => p.relation2, new { @class = "sizeS", @type = "text" })</td>
+                                <td>@Html.TextBoxFor(p => p.sex2, new { @class = "sizeS", @type = "text" })</td>
+                                <td>@Html.TextBoxFor(p => p.occupation2, new { @class = "sizeS", @type = "text" })</td>
+                                <td>@Html.DropDownListFor(p => p.sign2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                                <td>@Html.DropDownListFor(p => p.lti2, new SelectList(new string[] { "YES", "NO" }), new { @class = "sizeS" })</td>
+                                <td>@Html.TextBoxFor(p => p.panno2, new { @class = "sizeM", @type = "text" })</td>
                                 <th><img src="~/Images/Minus.png" width="30" height="30" onclick="CloseNewRowForMember()" /></th>
                             </tr>
                         </table>
@@ -310,7 +310,7 @@
                                     A/C Name
                                 </td>
                                 <td colspan="3">
-                                    @Html.TextBoxFor(p => p.AcName, new { @class = " w-100", @type = "text", @readonly = "true", @style = "background-color: white" })
+                                    @Html.TextBoxFor(p => p.acname, new { @class = " w-100", @type = "text", @readonly = "true", @style = "background-color: white" })
                                 </td>
                             </tr>
                             <tr>
@@ -318,8 +318,8 @@
                                     Address
                                 </td>
                                 <td colspan="3">
-                                    @Html.TextBoxFor(p => p.AcAdd1, new { @class = " w-100", @type = "text", @readonly = "true", @style = "background-color: white" })<br />
-                                    @Html.TextBoxFor(p => p.AcAdd2, new { @class = " w-100", @type = "text", @readonly = "true", @style = "background-color: white" })<br />
+                                    @Html.TextBoxFor(p => p.acadd1, new { @class = " w-100", @type = "text", @readonly = "true", @style = "background-color: white" })<br />
+                                    @Html.TextBoxFor(p => p.acadd2, new { @class = " w-100", @type = "text", @readonly = "true", @style = "background-color: white" })<br />
                                 </td>
                             </tr>
                             <tr>
@@ -328,13 +328,13 @@
                                     State
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcState, new { @class = "sizeM", @type = "text", @readonly = "true", @style = "background-color: white" })
+                                    @Html.TextBoxFor(p => p.acstate, new { @class = "sizeM", @type = "text", @readonly = "true", @style = "background-color: white" })
                                 </td>
                                 <td>
                                     District
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcDist, new { @class = "sizeM", @type = "text", @readonly = "true", @style = "background-color: white" })
+                                    @Html.TextBoxFor(p => p.acdist, new { @class = "sizeM", @type = "text", @readonly = "true", @style = "background-color: white" })
                                 </td>
 
                             </tr>
@@ -343,13 +343,13 @@
                                     City
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcCity, new { @class = "sizeM", @type = "text", @readonly = "true", @style = "background-color: white" })
+                                    @Html.TextBoxFor(p => p.accity, new { @class = "sizeM", @type = "text", @readonly = "true", @style = "background-color: white" })
                                 </td>
                                 <td>
                                     Pin
                                 </td>
                                 <td>
-                                    @Html.TextBoxFor(p => p.AcPin, new { @class = "sizeM", @type = "text", @readonly = "true", @style = "background-color: white" })
+                                    @Html.TextBoxFor(p => p.acpin, new { @class = "sizeM", @type = "text", @readonly = "true", @style = "background-color: white" })
                                 </td>
                             </tr>
                         </table>
